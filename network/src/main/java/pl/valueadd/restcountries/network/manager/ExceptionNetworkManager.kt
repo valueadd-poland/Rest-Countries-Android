@@ -13,7 +13,7 @@ import pl.valueadd.restcountries.utility.exception.NetworkException.Constants.UN
 import pl.valueadd.restcountries.utility.exception.UnavailableNetworkException
 import pl.valueadd.restcountries.utility.exception.UnreachableServerException
 import com.google.gson.Gson
-import pl.valueadd.restcountries.R
+import pl.valueadd.restcountries.network.R
 import javax.inject.Inject
 import javax.inject.Singleton
 
