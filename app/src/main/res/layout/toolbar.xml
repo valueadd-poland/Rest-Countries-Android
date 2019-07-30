@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.appbar.AppBarLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/appBarLayout"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:theme="@style/AppTheme.ThemeOverlay.ActionBar">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:popupTheme="@style/AppTheme.ThemeOverlay" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="4dp">
+
+        <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+            android:id="@+id/actionBarProgress"
+            style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:mpb_indeterminateTint="@color/colorAccent"
+            app:mpb_progressStyle="horizontal"
+            app:mpb_useIntrinsicPadding="false"
+            tools:indeterminate="false"
+            tools:progress="20"
+            tools:visibility="visible" />
+    </LinearLayout>
+
+</com.google.android.material.appbar.AppBarLayout>

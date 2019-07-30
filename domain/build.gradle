@@ -1,0 +1,86 @@
+// Startup plugins
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
+
+// Android configuration
+android {
+
+    compileSdkVersion deps.build_version.compile_sdk
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion deps.build_version.min_sdk
+        targetSdkVersion deps.build_version.target_sdk
+        versionCode getAutoVersionCode()
+        versionName getAutoVersionName()
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+
+        debug {
+            useProguard false
+            minifyEnabled false
+        }
+
+        release {
+            useProguard true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    productFlavors {
+        dev {
+            // Do not remove empty product flavors.
+        }
+
+        uat {
+            // Do not remove empty product flavors.
+        }
+
+        prod {
+            // Do not remove empty product flavors.
+        }
+    }
+
+    flavorDimensions "todo"
+
+    lintOptions {
+        lintConfig file("$rootDir/scripts/lint-rules.xml")
+    }
+}
+
+// Dependencies configuration
+dependencies {
+
+    // Annotation processors
+    kapt deps.di.toothpick_compiler
+    kapt deps.utility.mapstruct_processor
+
+    // Application files
+    api fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+
+    // Application module
+    implementation project(":network")
+    implementation project(":persistence")
+    implementation project(":utility")
+
+    // Utility
+    implementation deps.utility.mapstruct
+
+    // Unit tests
+    testImplementation deps.test.mockito
+    testImplementation deps.test.junit
+    testImplementation deps.test.toothpick
+    testImplementation deps.test.matchers_ktx
+    testImplementation deps.test.mockito_ktx
+    testImplementation group: 'io.dropwizard', name: 'dropwizard-testing', version: "$versions.dropwizard_testing"
+
+}

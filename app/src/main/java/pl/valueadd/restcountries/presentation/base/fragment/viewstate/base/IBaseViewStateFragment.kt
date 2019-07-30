@@ -1,0 +1,3 @@
+package pl.valueadd.restcountries.presentation.base.fragment.viewstate.base
+
+interface IBaseViewStateFragment

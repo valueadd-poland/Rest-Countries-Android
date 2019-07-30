@@ -1,0 +1,39 @@
+import groovy.json.JsonSlurper
+
+task downloadTranslations {
+    ext {
+        destintationPath = "./app/src/main/res/"
+        apiKey = ""
+    }
+
+    doLast {
+        def connection = new URL("https://localise.biz/api/locales?key=$apiKey").openConnection() as HttpURLConnection
+        def localesResponse = new JsonSlurper().parseText(connection.inputStream.text)
+        assert localesResponse instanceof List
+
+        localesResponse.each { item ->
+            assert item instanceof Map
+            String code = item.get("code")
+            code = code.substring(0,2)
+
+            connection = new URL("https://localise.biz/api/export/locale/"+ code +".xml?key=$apiKey").openConnection() as HttpURLConnection
+            println "Country code: $code | Response code: " + connection.responseCode
+
+            def folder
+            if (code == "en") {
+                folder = new File(destintationPath + "values")
+            } else {
+                folder = new File(destintationPath + "values-$code")
+            }
+
+            if (!folder.exists()) {
+                folder.mkdirs()
+            }
+
+            File file = new File(folder, "strings.xml")
+            file.withWriter() { w ->
+                w << "$connection.inputStream.text"
+            }
+        }
+    }
+}

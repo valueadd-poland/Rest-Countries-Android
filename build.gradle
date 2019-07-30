@@ -1,0 +1,122 @@
+import java.text.SimpleDateFormat
+import com.android.build.gradle.internal.dsl.BuildType
+
+/**
+ * Top-level build dependencies and configuration options common to all sub-projects/modules.
+ */
+buildscript {
+    repositories {
+        apply from: "dependencies.gradle"
+        applyRepositories(repositories)
+    }
+    dependencies {
+        classpath deps.build.android_gradle_plugin
+        classpath deps.build.kotlin_gradle_plugin
+        //TODO classpath deps.build.google_services_plugin
+        //TODO classpath deps.build.fabric
+    }
+}
+
+plugins {
+    id "io.gitlab.arturbosch.detekt" version "1.0.0-RC14"
+}
+
+/**
+ * Dependencies for all projects
+ */
+allprojects {
+    repositories {
+        applyRepositories(repositories)
+    }
+    apply from: "$rootDir/scripts/detekt.gradle"
+    apply from: "$rootDir/scripts/ktlint.gradle"
+    apply from: "$rootDir/scripts/findbugs.gradle"
+    apply from: "$rootDir/scripts/pmd.gradle"
+    apply from: "$rootDir/scripts/translations.gradle"
+    apply from: "$rootDir/dependencies.gradle"
+
+
+}
+
+/**
+ * Clean task
+ */
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+/**
+ * Project configuration
+ */
+project.ext.setProperty("projectName", "REST Countries")
+project.ext.setProperty("betaEmails", "tester.valueadd@gmail.com")
+
+// Versioning. Default code number is 1.
+
+@SuppressWarnings("GroovyUnusedDeclaration")
+static def getAutoVersionName() {
+    def (major, minor, patch, build, sha) = getLastMasterGitTagVersion()
+    def code = getAutoVersionCode()
+    def date = getBuildDate()
+    return (getCurrentBranch() == "master") ? "${major}.${minor}.${patch}" : "${sha}-${date} ($code)"
+}
+
+@SuppressWarnings("GroovyUnusedDeclaration")
+static def getDevelopVersionCode() {
+    def count = getGitCommitsCount()
+    return (count == null || count.empty) ? 1 : count.toInteger()
+}
+
+@SuppressWarnings("GroovyUnusedDeclaration")
+static def getProductionVersionCode() {
+    def (major, minor, patch, build, sha) = getLastMasterGitTagVersion()
+    return major.toInteger() * 1_000_000 + minor.toInteger() * 1_000 + patch.toInteger()
+}
+
+@SuppressWarnings("GroovyUnusedDeclaration")
+static def getAutoVersionCode() {
+    def branch = getCurrentBranch()
+    if (branch == "master") {
+        return getProductionVersionCode()
+    }
+    return getDevelopVersionCode()
+}
+
+static def getCurrentBranch() {
+    return "git rev-parse --abbrev-ref HEAD".execute().text.trim()
+}
+
+static def getBuildDate() {
+    def df = new SimpleDateFormat("dd.MM.yyyy")
+    df.setTimeZone(TimeZone.getDefault())
+    return df.format(new Date())
+}
+
+static def getGitCommitsCount() {
+    return ("git rev-list ${getCurrentBranch()} --count").execute().text.trim()
+}
+
+static def getLastMasterGitTagVersion() {
+    def name = "git describe --tags ${getCurrentBranch()} --long".execute().text.replace("v", "").trim()
+    def (tag, build, sha) = name.tokenize('-')
+    def (major, minor, patch) = (tag != null) ? tag.tokenize('.') : [1, 1, 1]
+    return [major, minor, patch, build, sha]
+}
+
+// Functions
+
+static def setBuildProperty(BuildType it, String name, String value) {
+    it.buildConfigField "String", "${name.toUpperCase()}", "\"$value\""
+}
+
+static def setBuildProperty(BuildType it, String name, Integer value) {
+    it.buildConfigField "Integer", "${name.toUpperCase()}", "$value"
+}
+
+static def setBuildProperty(BuildType it, String name, Long value) {
+    it.buildConfigField "Long", "${name.toUpperCase()}", "$value" + 'L'
+}
+
+static def setBuildProperty(BuildType it, String name, boolean value) {
+    it.buildConfigField "boolean", "${name.toUpperCase()}", "$value"
+}

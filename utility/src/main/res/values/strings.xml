@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Network Exceptions -->
+
+    <string name="exception_network_not_available">No Internet connection</string>
+    <string name="exception_server_connection_failed">Server not reachable. Please check your connection</string>
+
+    <!-- Http exceptions -->
+
+    <string name="exception_unknown">Something went wrong.</string>
+    <string name="exception_400">Bad request.</string>
+    <string name="exception_401">Bad credentials.</string>
+    <string name="exception_403">Forbidden.</string>
+    <string name="exception_404">Not found.</string>
+    <string name="exception_500">Internal server error.</string>
+    <string name="exception_500plus">Server error.</string>
+    <string name="exception_400plus">Client error.</string>
+</resources>

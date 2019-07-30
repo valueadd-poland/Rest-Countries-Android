@@ -1,0 +1,142 @@
+// Startup plugins
+apply plugin: 'com.android.application'
+//TODO apply plugin: 'io.fabric'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
+
+// Android configuration
+android {
+
+    compileSdkVersion deps.build_version.compile_sdk
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        applicationId "com.valueadd.restcountries"
+        minSdkVersion deps.build_version.min_sdk
+        targetSdkVersion deps.build_version.target_sdk
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+
+    buildTypes {
+        debug {
+            useProguard false
+            minifyEnabled false
+        }
+
+        release {
+            useProguard true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    productFlavors {
+        dev {
+            versionNameSuffix '.dev'
+            applicationIdSuffix '.dev'
+            versionCode = getAutoVersionCode()
+            versionName = getAutoVersionName()
+            resValue "string", "app_name", "(DEV) " + projectName
+            dimension "todo"
+        }
+
+        uat {
+            versionNameSuffix '.uat'
+            applicationIdSuffix '.uat'
+            versionCode = getAutoVersionCode()
+            versionName = getAutoVersionName()
+            resValue "string", "app_name", "(UAT) " + projectName
+            dimension "todo"
+            ext.betaDistributionEmails = betaEmails
+            ext.betaDistributionNotifications = true
+        }
+
+        prod {
+            versionCode = getAutoVersionCode()
+            versionName = getAutoVersionName()
+            resValue "string", "app_name", projectName
+            dimension "todo"
+        }
+    }
+
+    flavorDimensions "todo"
+
+    lintOptions {
+        lintConfig file("$rootDir/scripts/lint-rules.xml")
+    }
+}
+
+// Dependencies configuration
+dependencies {
+
+
+    // Annotation Processor
+    kapt deps.di.toothpick_compiler
+    kapt deps.utility.glide_compiler
+
+    // Application files
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+
+    // Application modules
+    implementation project(":domain")
+    implementation project(":utility")
+
+    // MVP pattern
+    implementation deps.mvp.mosby_view_state
+    implementation deps.mvp.mosby_queuing
+
+    // Reactivex
+    implementation deps.rx.binding
+
+    // Permissions
+    implementation deps.permissions.no
+    
+    // View
+    implementation deps.view.material_progress_bar
+
+    // FastAdapter
+    implementation deps.fast_adapter.core
+    implementation deps.fast_adapter.scroll
+    implementation deps.fast_adapter.utils
+    implementation deps.fast_adapter.diff
+
+    // AndroidX
+    implementation deps.androidx.appcompat
+    implementation deps.androidx.core_ktx
+    implementation deps.androidx.constraint_layout
+    implementation deps.androidx.recycler_view
+    implementation deps.androidx.material
+    implementation deps.androidx.multidex
+    implementation deps.androidx.annotation
+
+    // Utility
+    implementation deps.utility.glide
+    implementation deps.utility.fragmentation
+
+    // Unit tests
+    testImplementation deps.test.mockito
+    testImplementation deps.test.junit
+    testImplementation deps.test.toothpick
+    testImplementation deps.test.matchers_ktx
+    testImplementation deps.test.mockito_ktx
+    testImplementation group: 'io.dropwizard', name: 'dropwizard-testing', version: "$versions.dropwizard_testing"
+
+    // Android tests.
+    androidTestImplementation deps.androidx.annotation
+    androidTestImplementation deps.test.androidx_core
+    androidTestImplementation deps.test.espresso
+    androidTestImplementation deps.test.espresso_intents
+    androidTestImplementation deps.test.junit_ext_ktx
+    androidTestImplementation deps.test.dexmaker_mockito
+    androidTestImplementation deps.test.androidx_runner
+    androidTestImplementation deps.test.androidx_rules
+}
+
+// Final plugins
+//TODO apply plugin: 'com.google.gms.google-services'
