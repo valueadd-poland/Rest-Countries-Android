@@ -9,9 +9,9 @@ node {
     args : args
   ]) {
     androidPipeline([
-      vcsHostingProvider       : 'BITBUCKET',
-      vcsRepo                  : 'valueadd/android-architecture-template',
-      projectName              : 'android-architecture-template',
+      vcsHostingProvider       : 'GITHUB',
+      vcsRepo                  : 'valueadd-poland/Rest-Countries-Android',
+      projectName              : 'android_rest_countries',
       slackTeamChannel         : [channel: 'android-builds', domain: 'valueadd-team']
     ])
   }
