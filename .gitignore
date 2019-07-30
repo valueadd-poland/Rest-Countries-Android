@@ -14,7 +14,6 @@ gen/
 out/
 
 # Gradle files
-gradle.properties
 .gradle/
 gradle/wrapper
 build/
