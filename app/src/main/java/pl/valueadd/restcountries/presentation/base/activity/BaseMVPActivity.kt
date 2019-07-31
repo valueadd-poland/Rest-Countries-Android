@@ -27,7 +27,8 @@ import javax.inject.Inject
 
 @Suppress("TooManyFunctions")
 abstract class BaseMVPActivity<V : BaseView, P : BasePresenter<V>>(
-        @LayoutRes protected val layoutResourceId: Int = R.layout.activity_base_layout) :
+    @LayoutRes protected val layoutResourceId: Int = R.layout.activity_base_layout
+) :
         MvpActivity<V, P>(),
         IBaseActivity,
         BaseView {
@@ -166,9 +167,9 @@ abstract class BaseMVPActivity<V : BaseView, P : BasePresenter<V>>(
     }
 
     override fun startWithPopTo(
-            toFragment: IBaseFragment,
-            targetFragmentClass: Class<*>,
-            includeTargetFragment: Boolean
+        toFragment: IBaseFragment,
+        targetFragmentClass: Class<*>,
+        includeTargetFragment: Boolean
     ) {
         delegate.startWithPopTo(toFragment, targetFragmentClass, includeTargetFragment)
     }
@@ -182,18 +183,18 @@ abstract class BaseMVPActivity<V : BaseView, P : BasePresenter<V>>(
     }
 
     override fun popTo(
-            targetFragmentClass: Class<*>,
-            includeTargetFragment: Boolean,
-            afterPopTransactionRunnable: Runnable
+        targetFragmentClass: Class<*>,
+        includeTargetFragment: Boolean,
+        afterPopTransactionRunnable: Runnable
     ) {
         delegate.popTo(targetFragmentClass, includeTargetFragment, afterPopTransactionRunnable)
     }
 
     override fun popTo(
-            targetFragmentClass: Class<*>,
-            includeTargetFragment: Boolean,
-            afterPopTransactionRunnable: Runnable,
-            popAnim: Int
+        targetFragmentClass: Class<*>,
+        includeTargetFragment: Boolean,
+        afterPopTransactionRunnable: Runnable,
+        popAnim: Int
     ) {
         delegate.popTo(
                 targetFragmentClass,
