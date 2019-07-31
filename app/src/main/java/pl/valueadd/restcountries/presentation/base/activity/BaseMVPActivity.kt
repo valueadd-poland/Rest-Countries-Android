@@ -29,12 +29,12 @@ import javax.inject.Inject
 abstract class BaseMVPActivity<V : BaseView, P : BasePresenter<V>>(
     @LayoutRes protected val layoutResourceId: Int = R.layout.activity_base_layout
 ) :
-        MvpActivity<V, P>(),
-        IBaseActivity,
-        BaseView {
+    MvpActivity<V, P>(),
+    IBaseActivity,
+    BaseView {
 
     private val delegate: SupportActivityDelegate
-            by lazy { SupportActivityDelegate(this) }
+        by lazy { SupportActivityDelegate(this) }
 
     @Inject
     lateinit var snackBarUtil: SnackbarUtil
@@ -50,13 +50,13 @@ abstract class BaseMVPActivity<V : BaseView, P : BasePresenter<V>>(
      * Contains disposable subscriptions of streams.
      */
     protected val disposables: CompositeDisposable
-            by lazy { CompositeDisposable() }
+        by lazy { CompositeDisposable() }
 
     /**
      * Add subscription to composite.
      */
     protected fun addDisposable(disposable: Disposable): Boolean =
-            disposables.add(disposable)
+        disposables.add(disposable)
 
     /**
      * Clear all subscriptions.
@@ -66,14 +66,14 @@ abstract class BaseMVPActivity<V : BaseView, P : BasePresenter<V>>(
     }
 
     protected fun showError(error: String, view: View) =
-            snackBarUtil.showMessage(view, error, ContextCompat.getColor(this, R.color.colorAccent))
+        snackBarUtil.showMessage(view, error, ContextCompat.getColor(this, R.color.colorAccent))
 
     /* MvpActivity */
 
     abstract val mPresenter: P
 
     override fun createPresenter(): P =
-            mPresenter
+        mPresenter
 
     /* BaseView */
 
@@ -126,7 +126,7 @@ abstract class BaseMVPActivity<V : BaseView, P : BasePresenter<V>>(
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean =
-            delegate.dispatchTouchEvent(ev) || super.dispatchTouchEvent(ev)
+        delegate.dispatchTouchEvent(ev) || super.dispatchTouchEvent(ev)
 
     /* ISupportActivity */
 
@@ -135,22 +135,22 @@ abstract class BaseMVPActivity<V : BaseView, P : BasePresenter<V>>(
     }
 
     override fun getFragmentAnimator(): FragmentAnimator =
-            delegate.fragmentAnimator
+        delegate.fragmentAnimator
 
     override fun onBackPressedSupport(): Unit =
-            delegate.onBackPressedSupport()
+        delegate.onBackPressedSupport()
 
     override fun extraTransaction(): ExtraTransaction =
-            delegate.extraTransaction()
+        delegate.extraTransaction()
 
     override fun onCreateFragmentAnimator(): FragmentAnimator =
-            delegate.onCreateFragmentAnimator()
+        delegate.onCreateFragmentAnimator()
 
     override fun getSupportDelegate(): SupportActivityDelegate =
-            delegate
+        delegate
 
     override fun post(runnable: Runnable?): Unit =
-            delegate.post(runnable)
+        delegate.post(runnable)
 
     /* IBaseActivity */
 
@@ -197,15 +197,15 @@ abstract class BaseMVPActivity<V : BaseView, P : BasePresenter<V>>(
         popAnim: Int
     ) {
         delegate.popTo(
-                targetFragmentClass,
-                includeTargetFragment,
-                afterPopTransactionRunnable,
-                popAnim
+            targetFragmentClass,
+            includeTargetFragment,
+            afterPopTransactionRunnable,
+            popAnim
         )
     }
 
     override fun <F : IBaseFragment> findFragment(fragmentClass: Class<F>): F? =
-            SupportHelper.findFragment(supportFragmentManager, fragmentClass)
+        SupportHelper.findFragment(supportFragmentManager, fragmentClass)
 
     override fun getTopFragment(): ISupportFragment {
         return SupportHelper.getTopFragment(supportFragmentManager)
