@@ -10,13 +10,15 @@ import pl.valueadd.restcountries.utility.view.snackbar.SnackbarUtil
 import com.hannesdorfmann.mosby3.mvp.delegate.FragmentMvpDelegate
 import com.hannesdorfmann.mosby3.mvp.delegate.FragmentMvpDelegateImpl
 import com.hannesdorfmann.mosby3.mvp.delegate.MvpDelegateCallback
+import pl.valueadd.restcountries.presentation.base.BasePresenter
+import pl.valueadd.restcountries.presentation.base.BaseView
 import javax.inject.Inject
 
 @Suppress("TooManyFunctions")
-abstract class BaseMVPFragment<V : pl.valueadd.restcountries.presentation.base.BaseView, P : pl.valueadd.restcountries.presentation.base.BasePresenter<V>>(@LayoutRes layoutId: Int) :
+abstract class BaseMVPFragment<V : BaseView, P : BasePresenter<V>>(@LayoutRes layoutId: Int) :
     BaseFragment(layoutId),
     MvpDelegateCallback<V, P>,
-    pl.valueadd.restcountries.presentation.base.BaseView {
+    BaseView {
 
     @Inject
     lateinit var snackBarUtil: SnackbarUtil
