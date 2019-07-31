@@ -9,10 +9,6 @@ import androidx.annotation.CallSuper
 import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
-import pl.valueadd.restcountries.R
-import pl.valueadd.restcountries.presentation.base.fragment.base.IBaseFragment
-import pl.valueadd.restcountries.utility.dependencyinjection.DependencyUtil
-import pl.valueadd.restcountries.utility.view.snackbar.SnackbarUtil
 import com.hannesdorfmann.mosby3.mvp.MvpActivity
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -21,16 +17,23 @@ import me.yokeyword.fragmentation.ISupportFragment
 import me.yokeyword.fragmentation.SupportActivityDelegate
 import me.yokeyword.fragmentation.SupportHelper
 import me.yokeyword.fragmentation.anim.FragmentAnimator
+import pl.valueadd.restcountries.R
+import pl.valueadd.restcountries.presentation.base.BasePresenter
+import pl.valueadd.restcountries.presentation.base.BaseView
+import pl.valueadd.restcountries.presentation.base.fragment.base.IBaseFragment
+import pl.valueadd.restcountries.utility.dependencyinjection.DependencyUtil
+import pl.valueadd.restcountries.utility.view.snackbar.SnackbarUtil
 import javax.inject.Inject
 
 @Suppress("TooManyFunctions")
-abstract class BaseMVPActivity<V : pl.valueadd.restcountries.presentation.base.BaseView, P : pl.valueadd.restcountries.presentation.base.BasePresenter<V>>(@LayoutRes protected val layoutResourceId: Int = R.layout.activity_base_layout) :
-    MvpActivity<V, P>(),
-    IBaseActivity,
-    pl.valueadd.restcountries.presentation.base.BaseView {
+abstract class BaseMVPActivity<V : BaseView, P : BasePresenter<V>>(
+        @LayoutRes protected val layoutResourceId: Int = R.layout.activity_base_layout) :
+        MvpActivity<V, P>(),
+        IBaseActivity,
+        BaseView {
 
     private val delegate: SupportActivityDelegate
-        by lazy { SupportActivityDelegate(this) }
+            by lazy { SupportActivityDelegate(this) }
 
     @Inject
     lateinit var snackBarUtil: SnackbarUtil
@@ -46,13 +49,13 @@ abstract class BaseMVPActivity<V : pl.valueadd.restcountries.presentation.base.B
      * Contains disposable subscriptions of streams.
      */
     protected val disposables: CompositeDisposable
-        by lazy { CompositeDisposable() }
+            by lazy { CompositeDisposable() }
 
     /**
      * Add subscription to composite.
      */
     protected fun addDisposable(disposable: Disposable): Boolean =
-        disposables.add(disposable)
+            disposables.add(disposable)
 
     /**
      * Clear all subscriptions.
@@ -62,14 +65,14 @@ abstract class BaseMVPActivity<V : pl.valueadd.restcountries.presentation.base.B
     }
 
     protected fun showError(error: String, view: View) =
-        snackBarUtil.showMessage(view, error, ContextCompat.getColor(this, R.color.colorAccent))
+            snackBarUtil.showMessage(view, error, ContextCompat.getColor(this, R.color.colorAccent))
 
     /* MvpActivity */
 
     abstract val mPresenter: P
 
     override fun createPresenter(): P =
-        mPresenter
+            mPresenter
 
     /* BaseView */
 
@@ -122,7 +125,7 @@ abstract class BaseMVPActivity<V : pl.valueadd.restcountries.presentation.base.B
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean =
-        delegate.dispatchTouchEvent(ev) || super.dispatchTouchEvent(ev)
+            delegate.dispatchTouchEvent(ev) || super.dispatchTouchEvent(ev)
 
     /* ISupportActivity */
 
@@ -131,22 +134,22 @@ abstract class BaseMVPActivity<V : pl.valueadd.restcountries.presentation.base.B
     }
 
     override fun getFragmentAnimator(): FragmentAnimator =
-        delegate.fragmentAnimator
+            delegate.fragmentAnimator
 
     override fun onBackPressedSupport(): Unit =
-        delegate.onBackPressedSupport()
+            delegate.onBackPressedSupport()
 
     override fun extraTransaction(): ExtraTransaction =
-        delegate.extraTransaction()
+            delegate.extraTransaction()
 
     override fun onCreateFragmentAnimator(): FragmentAnimator =
-        delegate.onCreateFragmentAnimator()
+            delegate.onCreateFragmentAnimator()
 
     override fun getSupportDelegate(): SupportActivityDelegate =
-        delegate
+            delegate
 
     override fun post(runnable: Runnable?): Unit =
-        delegate.post(runnable)
+            delegate.post(runnable)
 
     /* IBaseActivity */
 
@@ -163,9 +166,9 @@ abstract class BaseMVPActivity<V : pl.valueadd.restcountries.presentation.base.B
     }
 
     override fun startWithPopTo(
-        toFragment: IBaseFragment,
-        targetFragmentClass: Class<*>,
-        includeTargetFragment: Boolean
+            toFragment: IBaseFragment,
+            targetFragmentClass: Class<*>,
+            includeTargetFragment: Boolean
     ) {
         delegate.startWithPopTo(toFragment, targetFragmentClass, includeTargetFragment)
     }
@@ -179,29 +182,29 @@ abstract class BaseMVPActivity<V : pl.valueadd.restcountries.presentation.base.B
     }
 
     override fun popTo(
-        targetFragmentClass: Class<*>,
-        includeTargetFragment: Boolean,
-        afterPopTransactionRunnable: Runnable
+            targetFragmentClass: Class<*>,
+            includeTargetFragment: Boolean,
+            afterPopTransactionRunnable: Runnable
     ) {
         delegate.popTo(targetFragmentClass, includeTargetFragment, afterPopTransactionRunnable)
     }
 
     override fun popTo(
-        targetFragmentClass: Class<*>,
-        includeTargetFragment: Boolean,
-        afterPopTransactionRunnable: Runnable,
-        popAnim: Int
+            targetFragmentClass: Class<*>,
+            includeTargetFragment: Boolean,
+            afterPopTransactionRunnable: Runnable,
+            popAnim: Int
     ) {
         delegate.popTo(
-            targetFragmentClass,
-            includeTargetFragment,
-            afterPopTransactionRunnable,
-            popAnim
+                targetFragmentClass,
+                includeTargetFragment,
+                afterPopTransactionRunnable,
+                popAnim
         )
     }
 
     override fun <F : IBaseFragment> findFragment(fragmentClass: Class<F>): F? =
-        SupportHelper.findFragment(supportFragmentManager, fragmentClass)
+            SupportHelper.findFragment(supportFragmentManager, fragmentClass)
 
     override fun getTopFragment(): ISupportFragment {
         return SupportHelper.getTopFragment(supportFragmentManager)
