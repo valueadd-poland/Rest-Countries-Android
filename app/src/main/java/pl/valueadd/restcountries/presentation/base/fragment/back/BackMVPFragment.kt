@@ -12,8 +12,10 @@ import pl.valueadd.restcountries.presentation.base.fragment.back.delegation.Back
 import pl.valueadd.restcountries.presentation.base.fragment.back.delegation.BackFragmentDelegateImpl
 import pl.valueadd.restcountries.presentation.base.fragment.base.BaseMVPFragment
 import me.yokeyword.fragmentation.anim.FragmentAnimator
+import pl.valueadd.restcountries.presentation.base.BasePresenter
+import pl.valueadd.restcountries.presentation.base.BaseView
 
-abstract class BackMVPFragment<V : pl.valueadd.restcountries.presentation.base.BaseView, P : pl.valueadd.restcountries.presentation.base.BasePresenter<V>>(@LayoutRes layoutId: Int) :
+abstract class BackMVPFragment<V : BaseView, P : BasePresenter<V>>(@LayoutRes layoutId: Int) :
     BaseMVPFragment<V, P>(layoutId),
     BackFragmentDelegateCallback,
     IBackFragment {

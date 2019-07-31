@@ -13,8 +13,10 @@ import pl.valueadd.restcountries.presentation.base.fragment.back.delegation.Back
 import pl.valueadd.restcountries.presentation.base.fragment.viewstate.BaseViewState
 import pl.valueadd.restcountries.presentation.base.fragment.viewstate.base.BaseMVPViewStateFragment
 import me.yokeyword.fragmentation.anim.FragmentAnimator
+import pl.valueadd.restcountries.presentation.base.BasePresenter
+import pl.valueadd.restcountries.presentation.base.BaseView
 
-abstract class BackMVPViewStateFragment<V : pl.valueadd.restcountries.presentation.base.BaseView, P : pl.valueadd.restcountries.presentation.base.BasePresenter<V>, VS : BaseViewState<V>>(@LayoutRes layoutId: Int) :
+abstract class BackMVPViewStateFragment<V : BaseView, P : BasePresenter<V>, VS : BaseViewState<V>>(@LayoutRes layoutId: Int) :
     BaseMVPViewStateFragment<V, P, VS>(layoutId),
     BackFragmentDelegateCallback,
     IBackViewStateFragment {

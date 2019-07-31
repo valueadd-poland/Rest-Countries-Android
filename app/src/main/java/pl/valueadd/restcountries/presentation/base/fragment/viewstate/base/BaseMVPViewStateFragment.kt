@@ -7,8 +7,10 @@ import pl.valueadd.restcountries.presentation.base.fragment.viewstate.BaseViewSt
 import com.hannesdorfmann.mosby3.mvp.delegate.FragmentMvpDelegate
 import com.hannesdorfmann.mosby3.mvp.delegate.FragmentMvpViewStateDelegateImpl
 import com.hannesdorfmann.mosby3.mvp.delegate.MvpViewStateDelegateCallback
+import pl.valueadd.restcountries.presentation.base.BasePresenter
+import pl.valueadd.restcountries.presentation.base.BaseView
 
-abstract class BaseMVPViewStateFragment<V : pl.valueadd.restcountries.presentation.base.BaseView, P : pl.valueadd.restcountries.presentation.base.BasePresenter<V>, VS : BaseViewState<V>>(@LayoutRes layoutId: Int) :
+abstract class BaseMVPViewStateFragment<V : BaseView, P : BasePresenter<V>, VS : BaseViewState<V>>(@LayoutRes layoutId: Int) :
     BaseMVPFragment<V, P>(layoutId),
     MvpViewStateDelegateCallback<V, P, VS>,
     IBaseViewStateFragment {
