@@ -9,7 +9,6 @@ import pl.valueadd.restcountries.R
 import pl.valueadd.restcountries.presentation.base.fragment.base.BaseMVPFragment
 import pl.valueadd.restcountries.presentation.base.fragment.base.IBaseFragment
 import pl.valueadd.restcountries.presentation.main.countries.list.CountryListFragment
-import pl.valueadd.restcountries.utility.view.show
 import javax.inject.Inject
 
 class RootFragment : BaseMVPFragment<RootView, RootPresenter>(R.layout.root_fragment),

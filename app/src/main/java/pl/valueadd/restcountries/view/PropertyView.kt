@@ -17,7 +17,8 @@ class PropertyView
 @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = INTEGER_ZERO) : AbstractLinearLayoutView(context, attrs, defStyleAttr, R.layout.property_view) {
+    defStyleAttr: Int = INTEGER_ZERO
+) : AbstractLinearLayoutView(context, attrs, defStyleAttr, R.layout.property_view) {
 
     var title: String
         get() = propertyTitleTextView.text.toString()

@@ -14,6 +14,5 @@ annotation class RootNavigation {
     companion object Type {
 
         const val COUNTRIES = 0
-
     }
 }
