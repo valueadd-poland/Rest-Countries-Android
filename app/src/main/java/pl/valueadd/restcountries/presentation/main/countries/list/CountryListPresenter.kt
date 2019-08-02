@@ -1,26 +1,33 @@
-package pl.valueadd.restcountries.presentation.main.second
+package pl.valueadd.restcountries.presentation.main.countries.list
 
 import android.util.Log
+import io.reactivex.rxkotlin.addTo
 import pl.valueadd.restcountries.domain.manager.ExampleDomainManager
 import pl.valueadd.restcountries.domain.manager.ExceptionDomainManager
 import pl.valueadd.restcountries.domain.model.ExampleModel
-import pl.valueadd.restcountries.presentation.main.second.item.ExampleItem
+import pl.valueadd.restcountries.presentation.base.BasePresenter
+import pl.valueadd.restcountries.presentation.main.countries.list.item.ClickCountryItemEventHook
+import pl.valueadd.restcountries.presentation.main.countries.list.item.CountryItem
 import pl.valueadd.restcountries.utility.reactivex.observeOnMain
-import io.reactivex.rxkotlin.addTo
 import javax.inject.Inject
 
-class SecondPresenter
+class CountryListPresenter
 @Inject constructor(
     private val exampleManager: ExampleDomainManager,
     private val exceptionManager: ExceptionDomainManager
-) : pl.valueadd.restcountries.presentation.base.BasePresenter<SecondView>() {
+) : BasePresenter<CountryListView>(),
+    ClickCountryItemEventHook.Listener {
 
-    override fun attachView(view: SecondView) {
+    override fun attachView(view: CountryListView) {
         super.attachView(view)
 
         downloadAllExamples()
 
         observeAllExamples()
+    }
+
+    override fun onCountryItemClick() = onceViewAttached {
+        it.navigateToCountryDetailsView()
     }
 
     private fun downloadAllExamples() {
@@ -60,7 +67,7 @@ class SecondPresenter
 
     private fun handleObserveAllExamplesSuccess(list: List<ExampleModel>) = onceViewAttached { view ->
 
-        val items = list.map { ExampleItem(it) }
+        val items = list.map { CountryItem(it) }
 
         view.bindDataToList(items)
     }

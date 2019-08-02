@@ -66,7 +66,7 @@ abstract class BaseMVPActivity<V : BaseView, P : BasePresenter<V>>(
     }
 
     protected fun showError(error: String, view: View) =
-        snackBarUtil.showMessage(view, error, ContextCompat.getColor(this, R.color.colorAccent))
+        snackBarUtil.showMessage(view, error, ContextCompat.getColor(this, R.color.red))
 
     /* MvpActivity */
 

@@ -1,9 +1,9 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorAccent">@color/secondaryColor</item>
         <item name="android:textAppearance">@style/AppTheme.Font.Roboto</item>
     </style>
 
@@ -21,7 +21,7 @@
     </style>
 
     <style name="AppTheme.Widget.Button" parent="Widget.MaterialComponents.Button">
-        <item name="android:elevation">@dimen/margin_normal</item>
+        <item name="android:elevation">@dimen/size_normal</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textAllCaps">true</item>
         <item name="cornerRadius">@dimen/_1dp</item>
@@ -32,7 +32,7 @@
     </style>
 
     <style name="AppTheme.Widget.Button.Icon" parent="Widget.MaterialComponents.Button.Icon">
-        <item name="android:elevation">@dimen/margin_normal</item>
+        <item name="android:elevation">@dimen/size_normal</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textAllCaps">true</item>
         <item name="cornerRadius">@dimen/_1dp</item>
@@ -53,7 +53,7 @@
     </style>
 
     <style name="AppTheme.BottomNavigation">
-        <item name="itemBackground">@color/colorPrimary</item>
+        <item name="itemBackground">@color/primaryColor</item>
         <item name="itemIconTint">@color/selector_bottom_navigation</item>
         <item name="itemTextColor">@color/white</item>
     </style>

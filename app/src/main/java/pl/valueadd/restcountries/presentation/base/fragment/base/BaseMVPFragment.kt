@@ -24,11 +24,7 @@ abstract class BaseMVPFragment<V : BaseView, P : BasePresenter<V>>(@LayoutRes la
     lateinit var snackBarUtil: SnackbarUtil
 
     protected fun showError(error: String, view: View) {
-        snackBarUtil.showMessage(
-            view,
-            error,
-            ContextCompat.getColor(requireContext(), R.color.colorAccent)
-        )
+        snackBarUtil.showMessage(view, error, ContextCompat.getColor(requireContext(), R.color.red))
     }
 
     /* MvpFragment */
