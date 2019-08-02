@@ -126,9 +126,9 @@ abstract class AbstractLinearLayoutView : LinearLayoutCompat {
 
         constructor(superState: Parcelable?) : super(superState)
 
-        protected constructor(`in`: Parcel, classLoader: ClassLoader?) : super(`in`) {
-            childrenStates = `in`.readSparseArray(classLoader) as SparseArray<Parcelable>
-            serializable = `in`.readSerializable()
+        protected constructor(parcel: Parcel, classLoader: ClassLoader?) : super(parcel) {
+            childrenStates = parcel.readSparseArray(classLoader) as SparseArray<Parcelable>
+            serializable = parcel.readSerializable()
         }
 
         override fun writeToParcel(out: Parcel, flags: Int) {
