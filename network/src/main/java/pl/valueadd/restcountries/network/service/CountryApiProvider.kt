@@ -8,9 +8,10 @@ import javax.inject.Singleton
 
 @Singleton
 @ProvidesSingletonInScope
-class ExampleApiProvider @Inject constructor(
+class CountryApiProvider @Inject constructor(
     private val retrofit: Retrofit
-) : Provider<ExampleApi> {
-    override fun get(): ExampleApi =
-        retrofit.create(ExampleApi::class.java)
+) : Provider<CountryApi> {
+
+    override fun get(): CountryApi =
+        retrofit.create(CountryApi::class.java)
 }

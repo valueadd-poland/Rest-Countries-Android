@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
-import pl.valueadd.restcountries.persistence.dao.ExampleDao
 import pl.valueadd.restcountries.persistence.database.RestCountriesDatabase
 import toothpick.config.Module
 

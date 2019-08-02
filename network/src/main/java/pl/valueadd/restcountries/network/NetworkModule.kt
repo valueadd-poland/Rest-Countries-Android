@@ -15,7 +15,7 @@ import pl.valueadd.restcountries.network.http.OkHttpClientProvider
 import pl.valueadd.restcountries.network.http.RetrofitBuilderProvider
 import pl.valueadd.restcountries.network.http.RetrofitProvider
 import pl.valueadd.restcountries.network.service.ExampleApi
-import pl.valueadd.restcountries.network.service.ExampleApiProvider
+import pl.valueadd.restcountries.network.service.CountryApiProvider
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -69,7 +69,7 @@ class NetworkModule : Module() {
     }
 
     private fun bindServiceProviders() {
-        bind(ExampleApi::class.java).toProvider(ExampleApiProvider::class.java)
+        bind(ExampleApi::class.java).toProvider(CountryApiProvider::class.java)
     }
 
     internal fun provideConverterFactoryProvider(): ConverterFactoryProvider =
