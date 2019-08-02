@@ -26,7 +26,7 @@
             android:layout_height="4dp"
             android:indeterminate="true"
             android:visibility="gone"
-            app:mpb_indeterminateTint="@color/colorAccent"
+            app:mpb_indeterminateTint="@color/secondaryColor"
             app:mpb_progressStyle="horizontal"
             app:mpb_useIntrinsicPadding="false"
             tools:indeterminate="false"

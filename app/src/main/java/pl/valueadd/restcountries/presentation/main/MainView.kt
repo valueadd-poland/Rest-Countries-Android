@@ -1,3 +1,5 @@
 package pl.valueadd.restcountries.presentation.main
 
-interface MainView : pl.valueadd.restcountries.presentation.base.BaseView
+import pl.valueadd.restcountries.presentation.base.BaseView
+
+interface MainView : BaseView

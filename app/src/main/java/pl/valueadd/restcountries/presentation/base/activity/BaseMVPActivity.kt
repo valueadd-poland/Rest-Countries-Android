@@ -9,10 +9,6 @@ import androidx.annotation.CallSuper
 import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
-import pl.valueadd.restcountries.R
-import pl.valueadd.restcountries.presentation.base.fragment.base.IBaseFragment
-import pl.valueadd.restcountries.utility.dependencyinjection.DependencyUtil
-import pl.valueadd.restcountries.utility.view.snackbar.SnackbarUtil
 import com.hannesdorfmann.mosby3.mvp.MvpActivity
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -21,6 +17,10 @@ import me.yokeyword.fragmentation.ISupportFragment
 import me.yokeyword.fragmentation.SupportActivityDelegate
 import me.yokeyword.fragmentation.SupportHelper
 import me.yokeyword.fragmentation.anim.FragmentAnimator
+import pl.valueadd.restcountries.R
+import pl.valueadd.restcountries.presentation.base.fragment.base.IBaseFragment
+import pl.valueadd.restcountries.utility.dependencyinjection.DependencyUtil
+import pl.valueadd.restcountries.utility.view.snackbar.SnackbarUtil
 import javax.inject.Inject
 
 @Suppress("TooManyFunctions")
@@ -62,7 +62,7 @@ abstract class BaseMVPActivity<V : pl.valueadd.restcountries.presentation.base.B
     }
 
     protected fun showError(error: String, view: View) =
-        snackBarUtil.showMessage(view, error, ContextCompat.getColor(this, R.color.colorAccent))
+        snackBarUtil.showMessage(view, error, ContextCompat.getColor(this, R.color.red))
 
     /* MvpActivity */
 

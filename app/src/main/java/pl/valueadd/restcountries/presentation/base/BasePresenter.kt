@@ -4,7 +4,7 @@ import com.hannesdorfmann.mosby3.mvp.MvpQueuingBasePresenter
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
-abstract class BasePresenter<V : pl.valueadd.restcountries.presentation.base.BaseView> : MvpQueuingBasePresenter<V>() {
+abstract class BasePresenter<V : BaseView> : MvpQueuingBasePresenter<V>() {
 
     /**
      * Contains disposable subscription of streams.

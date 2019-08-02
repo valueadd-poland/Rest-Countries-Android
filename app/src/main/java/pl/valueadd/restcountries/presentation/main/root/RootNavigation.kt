@@ -1,15 +1,11 @@
 package pl.valueadd.restcountries.presentation.main.root
 
 import androidx.annotation.IntDef
-import pl.valueadd.restcountries.presentation.main.root.RootNavigation.Type.FIRST
-import pl.valueadd.restcountries.presentation.main.root.RootNavigation.Type.SECOND
-import pl.valueadd.restcountries.presentation.main.root.RootNavigation.Type.THIRD
+import pl.valueadd.restcountries.presentation.main.root.RootNavigation.Type.COUNTRIES
 
 @IntDef(
     value = [
-        FIRST,
-        SECOND,
-        THIRD
+        COUNTRIES
     ]
 )
 @Retention(AnnotationRetention.SOURCE)
@@ -17,10 +13,7 @@ annotation class RootNavigation {
 
     companion object Type {
 
-        const val FIRST = 0
+        const val COUNTRIES = 0
 
-        const val SECOND = 1
-
-        const val THIRD = 2
     }
 }
