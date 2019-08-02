@@ -18,16 +18,20 @@ import me.yokeyword.fragmentation.SupportActivityDelegate
 import me.yokeyword.fragmentation.SupportHelper
 import me.yokeyword.fragmentation.anim.FragmentAnimator
 import pl.valueadd.restcountries.R
+import pl.valueadd.restcountries.presentation.base.BasePresenter
+import pl.valueadd.restcountries.presentation.base.BaseView
 import pl.valueadd.restcountries.presentation.base.fragment.base.IBaseFragment
 import pl.valueadd.restcountries.utility.dependencyinjection.DependencyUtil
 import pl.valueadd.restcountries.utility.view.snackbar.SnackbarUtil
 import javax.inject.Inject
 
 @Suppress("TooManyFunctions")
-abstract class BaseMVPActivity<V : pl.valueadd.restcountries.presentation.base.BaseView, P : pl.valueadd.restcountries.presentation.base.BasePresenter<V>>(@LayoutRes protected val layoutResourceId: Int = R.layout.activity_base_layout) :
+abstract class BaseMVPActivity<V : BaseView, P : BasePresenter<V>>(
+    @LayoutRes protected val layoutResourceId: Int = R.layout.activity_base_layout
+) :
     MvpActivity<V, P>(),
     IBaseActivity,
-    pl.valueadd.restcountries.presentation.base.BaseView {
+    BaseView {
 
     private val delegate: SupportActivityDelegate
         by lazy { SupportActivityDelegate(this) }
