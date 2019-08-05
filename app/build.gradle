@@ -16,7 +16,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.valueadd.restcountries"
+        applicationId "pl.valueadd.restcountries"
         minSdkVersion deps.build_version.min_sdk
         targetSdkVersion deps.build_version.target_sdk
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

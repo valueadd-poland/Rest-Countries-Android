@@ -2,13 +2,13 @@ package pl.valueadd.restcountries.presentation.main.countries.list.item
 
 import android.view.View
 import pl.valueadd.restcountries.R
-import pl.valueadd.restcountries.domain.model.ExampleModel
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.ModelAbstractItem
 import kotlinx.android.synthetic.main.item_example.view.itemTitle
+import pl.valueadd.restcountries.domain.model.country.CountryModel
 
-class CountryItem(model: ExampleModel) :
-    ModelAbstractItem<ExampleModel, CountryItem.CountryViewHolder>(model) {
+class CountryItem(model: CountryModel) :
+    ModelAbstractItem<CountryModel, CountryItem.CountryViewHolder>(model) {
 
     override val layoutRes: Int
         get() = R.layout.item_example
@@ -17,7 +17,7 @@ class CountryItem(model: ExampleModel) :
         get() = R.id.item_example
 
     override var identifier: Long
-        get() = model.id
+        get() = model.numericCode.hashCode().toLong()
         set(_) = Unit
 
     override fun getViewHolder(v: View): CountryViewHolder =
@@ -26,7 +26,7 @@ class CountryItem(model: ExampleModel) :
     class CountryViewHolder(view: View) : FastAdapter.ViewHolder<CountryItem>(view) {
 
         override fun bindView(item: CountryItem, payloads: MutableList<Any>) = with(itemView) {
-            itemTitle.text = item.model.title
+            itemTitle.text = item.model.name
         }
 
         override fun unbindView(item: CountryItem) {

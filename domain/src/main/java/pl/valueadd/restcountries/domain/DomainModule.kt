@@ -1,10 +1,10 @@
 package pl.valueadd.restcountries.domain
 
 import android.app.Application
-import pl.valueadd.restcountries.domain.mapper.ExampleMapper
 import pl.valueadd.restcountries.network.NetworkModule
 import pl.valueadd.restcountries.persistence.PersistenceModule
 import org.mapstruct.factory.Mappers
+import pl.valueadd.restcountries.domain.mapper.CountryMapper
 import toothpick.config.Module
 
 class DomainModule : Module() {
@@ -18,6 +18,6 @@ class DomainModule : Module() {
 
     init {
         // Bind mapper instances.
-        bind(ExampleMapper::class.java).toInstance(Mappers.getMapper(ExampleMapper::class.java))
+        bind(CountryMapper::class.java).toInstance(Mappers.getMapper(CountryMapper::class.java))
     }
 }

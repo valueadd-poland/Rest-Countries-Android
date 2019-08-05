@@ -2,9 +2,9 @@ package pl.valueadd.restcountries.presentation.main.countries.list
 
 import android.util.Log
 import io.reactivex.rxkotlin.addTo
-import pl.valueadd.restcountries.domain.manager.ExampleDomainManager
+import pl.valueadd.restcountries.domain.manager.CountryDomainManager
 import pl.valueadd.restcountries.domain.manager.ExceptionDomainManager
-import pl.valueadd.restcountries.domain.model.ExampleModel
+import pl.valueadd.restcountries.domain.model.country.CountryModel
 import pl.valueadd.restcountries.presentation.base.BasePresenter
 import pl.valueadd.restcountries.presentation.main.countries.list.item.ClickCountryItemEventHook
 import pl.valueadd.restcountries.presentation.main.countries.list.item.CountryItem
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 class CountryListPresenter
 @Inject constructor(
-    private val exampleManager: ExampleDomainManager,
+    private val countryManager: CountryDomainManager,
     private val exceptionManager: ExceptionDomainManager
 ) : BasePresenter<CountryListView>(),
     ClickCountryItemEventHook.Listener {
@@ -21,19 +21,18 @@ class CountryListPresenter
     override fun attachView(view: CountryListView) {
         super.attachView(view)
 
-        downloadAllExamples()
+        downloadAllCountries()
 
-        observeAllExamples()
+        observeAllCountries()
     }
 
     override fun onCountryItemClick() = onceViewAttached {
         it.navigateToCountryDetailsView()
     }
 
-    private fun downloadAllExamples() {
-
-        exampleManager
-            .downloadMockedExamples()
+    private fun downloadAllCountries() {
+        countryManager
+            .downloadAllCountries()
             .observeOnMain()
             .subscribe(
                 ::handleDownloadAllExamplesSuccess,
@@ -44,7 +43,7 @@ class CountryListPresenter
 
     private fun handleDownloadAllExamplesSuccess() {
 
-        Log.d(this::class.java.simpleName, "Examples has been downloaded successfully.")
+        Log.d(this::class.java.simpleName, "Countries has been downloaded successfully.")
     }
 
     private fun handleDownloadAllExamplesFailed(throwable: Throwable) = onceViewAttached {
@@ -54,9 +53,9 @@ class CountryListPresenter
         it.showError(message)
     }
 
-    private fun observeAllExamples() {
-        exampleManager
-            .observeAllExamples()
+    private fun observeAllCountries() {
+        countryManager
+            .observeAllCountries()
             .observeOnMain()
             .subscribe(
                 ::handleObserveAllExamplesSuccess,
@@ -65,7 +64,7 @@ class CountryListPresenter
             .addTo(disposables)
     }
 
-    private fun handleObserveAllExamplesSuccess(list: List<ExampleModel>) = onceViewAttached { view ->
+    private fun handleObserveAllExamplesSuccess(list: List<CountryModel>) = onceViewAttached { view ->
 
         val items = list.map { CountryItem(it) }
 

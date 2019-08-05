@@ -1,5 +1,10 @@
 package pl.valueadd.restcountries.network.http
 
+import com.google.gson.FieldNamingPolicy
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import pl.valueadd.restcountries.network.definition.CallAdapterFactory
 import pl.valueadd.restcountries.network.definition.ConverterFactory
 import pl.valueadd.restcountries.network.definition.HttpLoggingLevel
@@ -7,11 +12,6 @@ import pl.valueadd.restcountries.network.definition.OkHttpBuilder
 import pl.valueadd.restcountries.network.definition.RetrofitBuilder
 import pl.valueadd.restcountries.network.definition.ServerUrl
 import pl.valueadd.restcountries.network.interceptor.HeaderAuthorizationInterceptor
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import pl.valueadd.restcountries.utility.BuildConfig
 import retrofit2.CallAdapter
 import retrofit2.Converter
@@ -30,6 +30,7 @@ class RetrofitProvider @Inject constructor(
     @ServerUrl private val url: String,
     @RetrofitBuilder private val builder: Retrofit.Builder
 ) : Provider<Retrofit> {
+
     override fun get(): Retrofit =
         builder
             .baseUrl(url)
@@ -41,8 +42,9 @@ class RetrofitProvider @Inject constructor(
 class RetrofitBuilderProvider @Inject constructor(
     @CallAdapterFactory private val callAdapterFactory: CallAdapter.Factory,
     @ConverterFactory private val converterFactory: Converter.Factory,
-    @pl.valueadd.restcountries.network.definition.OkHttpClient private val client: OkHttpClient
+    @pl.valueadd.restcountries.network.definition.OkHttpClientInstance private val client: OkHttpClient
 ) : Provider<Retrofit.Builder> {
+
     override fun get(): Retrofit.Builder =
         Retrofit.Builder()
             .addCallAdapterFactory(callAdapterFactory)
@@ -52,7 +54,8 @@ class RetrofitBuilderProvider @Inject constructor(
 
 @Singleton
 @ProvidesSingletonInScope
-class GsonProvider : Provider<Gson> {
+class GsonProvider @Inject constructor() : Provider<Gson> {
+
     override fun get(): Gson =
         GsonBuilder()
             .setLenient()
@@ -66,6 +69,7 @@ class GsonProvider : Provider<Gson> {
 class OkHttpClientProvider @Inject constructor(
     @OkHttpBuilder private val builder: OkHttpClient.Builder
 ) : Provider<OkHttpClient> {
+
     override fun get(): OkHttpClient =
         builder.build()
 }
@@ -73,6 +77,7 @@ class OkHttpClientProvider @Inject constructor(
 @Singleton
 @ProvidesSingletonInScope
 class CallAdapterFactoryProvider : Provider<CallAdapter.Factory> {
+
     override fun get(): CallAdapter.Factory =
         RxJava2CallAdapterFactory.create()
 }
@@ -80,6 +85,7 @@ class CallAdapterFactoryProvider : Provider<CallAdapter.Factory> {
 @Singleton
 @ProvidesSingletonInScope
 class ConverterFactoryProvider : Provider<Converter.Factory> {
+
     override fun get(): Converter.Factory =
         GsonConverterFactory.create()
 }
@@ -90,6 +96,7 @@ class OkHttpClientBuilderProvider @Inject constructor(
     private val headerAuthorizationInterceptor: HeaderAuthorizationInterceptor,
     @HttpLoggingLevel private val loggingLevel: HttpLoggingInterceptor.Level
 ) : Provider<OkHttpClient.Builder> {
+
     override fun get(): OkHttpClient.Builder {
 
         val loginInterceptor = HttpLoggingInterceptor().apply { level = loggingLevel }

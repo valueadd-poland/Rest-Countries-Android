@@ -5,6 +5,7 @@ import pl.valueadd.restcountries.network.dto.base.BaseDto
 import pl.valueadd.restcountries.network.dto.currency.CurrencyDto
 import pl.valueadd.restcountries.network.dto.language.LanguageDto
 import pl.valueadd.restcountries.network.dto.language.TranslationsDto
+import pl.valueadd.restcountries.network.dto.region.RegionalBlocDto
 
 data class CountryDto(
 
@@ -75,7 +76,7 @@ data class CountryDto(
     var flag: String? = null,
 
     @SerializedName("regionalBlocs")
-    var regionalBlocs: List<String>? = null,
+    var regionalBlocs: List<RegionalBlocDto>? = null,
 
     @SerializedName("cioc")
     var cioc: String? = null

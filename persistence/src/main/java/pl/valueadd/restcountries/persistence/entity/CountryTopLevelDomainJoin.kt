@@ -6,14 +6,14 @@ import androidx.room.ForeignKey
 import androidx.room.ForeignKey.CASCADE
 import org.apache.commons.lang3.StringUtils.EMPTY
 import org.apache.commons.lang3.math.NumberUtils.LONG_ZERO
-import pl.valueadd.restcountries.persistence.entity.CountryCurrencyJoin.Companion.COL_CURRENCY_ID
 import pl.valueadd.restcountries.persistence.entity.CountryTopLevelDomainJoin.Companion.COL_COUNTRY_ID
+import pl.valueadd.restcountries.persistence.entity.CountryTopLevelDomainJoin.Companion.COL_TOP_LEVEL_DOMAIN_ID
 
 @Entity(
     tableName = "country_top_level_domain_join",
     primaryKeys = [
         COL_COUNTRY_ID,
-        COL_CURRENCY_ID
+        COL_TOP_LEVEL_DOMAIN_ID
     ],
     foreignKeys = [
         ForeignKey(entity = CountryEntity::class,
@@ -22,7 +22,7 @@ import pl.valueadd.restcountries.persistence.entity.CountryTopLevelDomainJoin.Co
             onDelete = CASCADE),
         ForeignKey(entity = TopLevelDomainEntity::class,
             parentColumns = arrayOf("id"),
-            childColumns = arrayOf(COL_CURRENCY_ID),
+            childColumns = arrayOf(COL_TOP_LEVEL_DOMAIN_ID),
             onDelete = CASCADE)
     ]
 )

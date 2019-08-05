@@ -38,8 +38,8 @@ data class CountryEntity (
     @ColumnInfo(name = "population")
     var population: Long = NumberUtils.LONG_ZERO,
 
-//    @ColumnInfo(name = "latLng")
-//    var latLng: List<Double> = emptyList(),
+    @Embedded
+    var latLng: LatLngEntity = LatLngEntity(),
 
     @ColumnInfo(name = "demonym")
     var demonym: String = StringUtils.EMPTY,

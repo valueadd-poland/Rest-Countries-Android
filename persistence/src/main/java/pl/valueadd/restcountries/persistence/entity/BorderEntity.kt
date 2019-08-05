@@ -6,8 +6,8 @@ import androidx.room.PrimaryKey
 import org.apache.commons.lang3.StringUtils.EMPTY
 import org.apache.commons.lang3.math.NumberUtils.LONG_ZERO
 
-@Entity(tableName = "top_level_domains")
-data class TopLevelDomainEntity(
+@Entity(tableName = "borders")
+data class BorderEntity(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")

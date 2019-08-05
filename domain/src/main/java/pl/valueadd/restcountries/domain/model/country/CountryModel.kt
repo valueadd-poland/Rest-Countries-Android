@@ -7,6 +7,7 @@ import pl.valueadd.restcountries.domain.model.base.BaseModel
 import pl.valueadd.restcountries.domain.model.currency.CurrencyModel
 import pl.valueadd.restcountries.domain.model.language.LanguageModel
 import pl.valueadd.restcountries.domain.model.language.TranslationsModel
+import pl.valueadd.restcountries.domain.model.region.RegionalBlocModel
 
 data class CountryModel(
 
@@ -54,7 +55,7 @@ data class CountryModel(
 
     var flag: String = EMPTY,
 
-    var regionalBlocs: List<String> = emptyList(),
+    var regionalBlocs: List<RegionalBlocModel> = emptyList(),
 
     var cioc: String = EMPTY
 
