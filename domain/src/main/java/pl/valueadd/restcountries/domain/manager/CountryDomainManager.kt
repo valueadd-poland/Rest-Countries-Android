@@ -7,14 +7,20 @@ import pl.valueadd.restcountries.domain.mapper.CountryMapper
 import pl.valueadd.restcountries.domain.model.country.CountryModel
 import pl.valueadd.restcountries.network.dto.country.CountryDto
 import pl.valueadd.restcountries.network.manager.CountryNetworkManager
+import pl.valueadd.restcountries.persistence.entity.AltSpellingEntity
 import pl.valueadd.restcountries.persistence.entity.CallingCodeEntity
 import pl.valueadd.restcountries.persistence.entity.CountryEntity
 import pl.valueadd.restcountries.persistence.entity.CurrencyEntity
 import pl.valueadd.restcountries.persistence.entity.LanguageEntity
+import pl.valueadd.restcountries.persistence.entity.RegionalBlocEntity
+import pl.valueadd.restcountries.persistence.entity.TimeZoneEntity
 import pl.valueadd.restcountries.persistence.entity.TopLevelDomainEntity
+import pl.valueadd.restcountries.persistence.entity.join.CountryAltSpellingJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryCallingCodeJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryCurrencyJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryLanguageJoin
+import pl.valueadd.restcountries.persistence.entity.join.CountryRegionalBlocJoin
+import pl.valueadd.restcountries.persistence.entity.join.CountryTimeZoneJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryTopLevelDomainJoin
 import pl.valueadd.restcountries.persistence.manager.AltSpellingPersistenceManager
 import pl.valueadd.restcountries.persistence.manager.CallingCodePersistenceManager
@@ -59,15 +65,15 @@ class CountryDomainManager @Inject constructor(
             mutableListOf<CountryEntity>().also { entities ->
                 for (dto in list) {
 
-                    val entity = mapper.mapCountryDtoToEntity(dto)
+                    val entity: CountryEntity = mapper.mapCountryDtoToEntity(dto)
 
                     saveTasks.add(saveCallingCodesFor(entity.id, mapper.mapCallingCodeDtosToEntities(dto.callingCodes)))
                     saveTasks.add(saveTopLevelDomainsFor(entity.id, mapper.mapTopLevelDomainDtosToEntities(dto.topLevelDomain)))
-//                val altSpellings: List<AltSpellingEntity> = mapper.mapAltSpellingDtosToEntities(dto.altSpellings)
-//                val timezones: List<TimeZoneEntity> = mapper.mapTimeZoneDtosToEntities(dto.timezones)
+                    saveTasks.add(saveAltSpellingsFor(entity.id, mapper.mapAltSpellingDtosToEntities(dto.altSpellings)))
+                    saveTasks.add(saveTimeZonesFor(entity.id, mapper.mapTimeZoneDtosToEntities(dto.timezones)))
                     saveTasks.add(saveCurrenciesFor(entity.id, mapper.mapCurrencyDtosToEntities(dto.currencies)))
                     saveTasks.add(saveLanguagesFor(entity.id, mapper.mapLanguageDtosToEntities(dto.languages)))
-//                val regionalBlocs: List<RegionalBlocEntity> = mapper.mapRegionalBlocDtosToEntities(dto.regionalBlocs)
+                    saveTasks.add(saveRegionalBlocsFor(entity.id, mapper.mapRegionalBlocDtosToEntities(dto.regionalBlocs)))
 
                     entities.add(entity)
                 }
@@ -107,4 +113,26 @@ class CountryDomainManager @Inject constructor(
             .map { list ->
                 list.map { CountryTopLevelDomainJoin(countryId, it) }
             }.flatMapCompletable(persistence::saveCountryTopLevelDomainJoins)
+
+    private fun saveAltSpellingsFor(countryId: String, entities: List<AltSpellingEntity>): Completable =
+        altSpellingPersistence.saveAltSpellingsIds(entities)
+            .map { list ->
+                list.map { CountryAltSpellingJoin(countryId, it) }
+            }.flatMapCompletable(persistence::saveCountryAltSpellingJoins)
+
+    private fun saveTimeZonesFor(countryId: String, entities: List<TimeZoneEntity>): Completable =
+        timeZonePersistence.saveTimezonesIds(entities)
+            .map { list ->
+                list.map { CountryTimeZoneJoin(countryId, it) }
+            }.flatMapCompletable(persistence::saveCountryTimeZoneJoins)
+
+    private fun saveRegionalBlocsFor(countryId: String, entities: List<RegionalBlocEntity>): Completable {
+        val map: Single<List<CountryRegionalBlocJoin>> = immediateSingle {
+            entities.map { CountryRegionalBlocJoin(countryId, it.id) }
+        }
+
+        return regionalBlocPersistence.saveRegionalBlocs(entities)
+            .andThen(map)
+            .flatMapCompletable(persistence::saveCountryRegionalBlocJoins)
+    }
 }

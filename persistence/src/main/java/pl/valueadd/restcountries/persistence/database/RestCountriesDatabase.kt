@@ -5,10 +5,13 @@ import androidx.room.RoomDatabase
 import pl.valueadd.restcountries.persistence.dao.AltSpellingDao
 import pl.valueadd.restcountries.persistence.dao.BorderDao
 import pl.valueadd.restcountries.persistence.dao.CallingCodeDao
+import pl.valueadd.restcountries.persistence.dao.CountryAltSpellingDao
 import pl.valueadd.restcountries.persistence.dao.CountryCallingCodeDao
 import pl.valueadd.restcountries.persistence.dao.CountryCurrencyDao
 import pl.valueadd.restcountries.persistence.dao.CountryDao
 import pl.valueadd.restcountries.persistence.dao.CountryLanguageDao
+import pl.valueadd.restcountries.persistence.dao.CountryRegionalBlocDao
+import pl.valueadd.restcountries.persistence.dao.CountryTimeZoneDao
 import pl.valueadd.restcountries.persistence.dao.CountryTopLevelDomainDao
 import pl.valueadd.restcountries.persistence.dao.CurrencyDao
 import pl.valueadd.restcountries.persistence.dao.LanguageDao
@@ -24,9 +27,12 @@ import pl.valueadd.restcountries.persistence.entity.LanguageEntity
 import pl.valueadd.restcountries.persistence.entity.RegionalBlocEntity
 import pl.valueadd.restcountries.persistence.entity.TimeZoneEntity
 import pl.valueadd.restcountries.persistence.entity.TopLevelDomainEntity
+import pl.valueadd.restcountries.persistence.entity.join.CountryAltSpellingJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryCallingCodeJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryCurrencyJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryLanguageJoin
+import pl.valueadd.restcountries.persistence.entity.join.CountryRegionalBlocJoin
+import pl.valueadd.restcountries.persistence.entity.join.CountryTimeZoneJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryTopLevelDomainJoin
 
 @Database(
@@ -45,7 +51,10 @@ import pl.valueadd.restcountries.persistence.entity.join.CountryTopLevelDomainJo
         RegionalBlocEntity::class,
         AltSpellingEntity::class,
         BorderEntity::class,
-        TimeZoneEntity::class
+        TimeZoneEntity::class,
+        CountryAltSpellingJoin::class,
+        CountryRegionalBlocJoin::class,
+        CountryTimeZoneJoin::class
     ]
 )
 abstract class RestCountriesDatabase : RoomDatabase() {
@@ -70,11 +79,16 @@ abstract class RestCountriesDatabase : RoomDatabase() {
 
     abstract fun languageDao(): LanguageDao
 
-
     abstract fun regionalBlocDao(): RegionalBlocDao
 
     abstract fun timeZoneDao(): TimeZoneDao
 
     abstract fun topLevelDomainDao(): TopLevelDomainDao
+
+    abstract fun countryAltSpellingDao(): CountryAltSpellingDao
+
+    abstract fun countryRegionalBlocDao(): CountryRegionalBlocDao
+
+    abstract fun countryTimeZoneDao(): CountryTimeZoneDao
 
 }

@@ -7,10 +7,13 @@ import androidx.room.Room
 import pl.valueadd.restcountries.persistence.dao.AltSpellingDao
 import pl.valueadd.restcountries.persistence.dao.BorderDao
 import pl.valueadd.restcountries.persistence.dao.CallingCodeDao
+import pl.valueadd.restcountries.persistence.dao.CountryAltSpellingDao
 import pl.valueadd.restcountries.persistence.dao.CountryCallingCodeDao
 import pl.valueadd.restcountries.persistence.dao.CountryCurrencyDao
 import pl.valueadd.restcountries.persistence.dao.CountryDao
 import pl.valueadd.restcountries.persistence.dao.CountryLanguageDao
+import pl.valueadd.restcountries.persistence.dao.CountryRegionalBlocDao
+import pl.valueadd.restcountries.persistence.dao.CountryTimeZoneDao
 import pl.valueadd.restcountries.persistence.dao.CountryTopLevelDomainDao
 import pl.valueadd.restcountries.persistence.dao.CurrencyDao
 import pl.valueadd.restcountries.persistence.dao.LanguageDao
@@ -52,6 +55,9 @@ class PersistenceModule(context: Application) : Module() {
         bind(RegionalBlocDao::class.java).toInstance(database.regionalBlocDao())
         bind(TimeZoneDao::class.java).toInstance(database.timeZoneDao())
         bind(TopLevelDomainDao::class.java).toInstance(database.topLevelDomainDao())
+        bind(CountryAltSpellingDao::class.java).toInstance(database.countryAltSpellingDao())
+        bind(CountryRegionalBlocDao::class.java).toInstance(database.countryRegionalBlocDao())
+        bind(CountryTimeZoneDao::class.java).toInstance(database.countryTimeZoneDao())
     }
 
     private fun provideDatabase(context: Application): RestCountriesDatabase =

@@ -3,15 +3,21 @@ package pl.valueadd.restcountries.persistence.manager
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.annotations.SchedulerSupport
+import pl.valueadd.restcountries.persistence.dao.CountryAltSpellingDao
 import pl.valueadd.restcountries.persistence.dao.CountryCallingCodeDao
 import pl.valueadd.restcountries.persistence.dao.CountryCurrencyDao
 import pl.valueadd.restcountries.persistence.dao.CountryDao
 import pl.valueadd.restcountries.persistence.dao.CountryLanguageDao
+import pl.valueadd.restcountries.persistence.dao.CountryRegionalBlocDao
+import pl.valueadd.restcountries.persistence.dao.CountryTimeZoneDao
 import pl.valueadd.restcountries.persistence.dao.CountryTopLevelDomainDao
 import pl.valueadd.restcountries.persistence.entity.CountryEntity
+import pl.valueadd.restcountries.persistence.entity.join.CountryAltSpellingJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryCallingCodeJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryCurrencyJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryLanguageJoin
+import pl.valueadd.restcountries.persistence.entity.join.CountryRegionalBlocJoin
+import pl.valueadd.restcountries.persistence.entity.join.CountryTimeZoneJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryTopLevelDomainJoin
 import pl.valueadd.restcountries.utility.reactivex.subscribeOnIo
 import javax.inject.Inject
@@ -23,7 +29,10 @@ class CountryPersistenceManager @Inject constructor(private val dao: CountryDao,
                                                     private val callingCodeDao: CountryCallingCodeDao,
                                                     private val currencyDao: CountryCurrencyDao,
                                                     private val languageDao: CountryLanguageDao,
-                                                    private val topLevelDomainDao: CountryTopLevelDomainDao) {
+                                                    private val topLevelDomainDao: CountryTopLevelDomainDao,
+                                                    private val altSpellingDao: CountryAltSpellingDao,
+                                                    private val regionalBlocDao: CountryRegionalBlocDao,
+                                                    private val timeZoneDao: CountryTimeZoneDao) {
 
     fun observeAllCountries(): Flowable<List<CountryEntity>> =
         dao.observeAllCountries()
@@ -50,6 +59,18 @@ class CountryPersistenceManager @Inject constructor(private val dao: CountryDao,
         topLevelDomainDao.insert(list)
             .subscribeOnIo()
 
+    fun saveCountryAltSpellingJoins(list: List<CountryAltSpellingJoin>): Completable =
+        altSpellingDao.insert(list)
+            .subscribeOnIo()
+
+    fun saveCountryRegionalBlocJoins(list: List<CountryRegionalBlocJoin>): Completable =
+        regionalBlocDao.insert(list)
+            .subscribeOnIo()
+
+    fun saveCountryTimeZoneJoins(list: List<CountryTimeZoneJoin>): Completable =
+        timeZoneDao.insert(list)
+            .subscribeOnIo()
+
     fun saveCountryCallingCodeJoin(entity: CountryCallingCodeJoin): Completable =
         callingCodeDao.insert(entity)
             .subscribeOnIo()
@@ -67,6 +88,21 @@ class CountryPersistenceManager @Inject constructor(private val dao: CountryDao,
 
     fun saveCountryTopLevelDomainJoin(entity: CountryTopLevelDomainJoin): Completable =
         topLevelDomainDao.insert(entity)
+            .subscribeOnIo()
+            .ignoreElement()
+
+    fun saveCountryAltSpellingJoin(entity: CountryAltSpellingJoin): Completable =
+        altSpellingDao.insert(entity)
+            .subscribeOnIo()
+            .ignoreElement()
+
+    fun saveCountryRegionalBlocJoin(entity: CountryRegionalBlocJoin): Completable =
+        regionalBlocDao.insert(entity)
+            .subscribeOnIo()
+            .ignoreElement()
+
+    fun saveCountryTimeZoneJoin(entity: CountryTimeZoneJoin): Completable =
+        timeZoneDao.insert(entity)
             .subscribeOnIo()
             .ignoreElement()
 }
