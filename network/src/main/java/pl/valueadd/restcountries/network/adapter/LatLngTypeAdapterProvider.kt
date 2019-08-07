@@ -7,8 +7,8 @@ import javax.inject.Singleton
 
 @Singleton
 @ProvidesSingletonInScope
-class LatLngDeserializerProvider @Inject constructor() : Provider<LatLngDeserializer> {
+class LatLngTypeAdapterProvider @Inject constructor() : Provider<LatLngTypeAdapter> {
 
-    override fun get(): LatLngDeserializer =
-        LatLngDeserializer()
+    override fun get(): LatLngTypeAdapter =
+        LatLngTypeAdapter()
 }

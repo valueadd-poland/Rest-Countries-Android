@@ -1,4 +1,4 @@
-package pl.valueadd.restcountries.persistence.entity
+package pl.valueadd.restcountries.persistence.entity.join
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -6,8 +6,10 @@ import androidx.room.ForeignKey
 import androidx.room.ForeignKey.CASCADE
 import org.apache.commons.lang3.StringUtils.EMPTY
 import org.apache.commons.lang3.math.NumberUtils.LONG_ZERO
-import pl.valueadd.restcountries.persistence.entity.CountryCallingCodeJoin.Companion.COL_CALLING_CODE_ID
-import pl.valueadd.restcountries.persistence.entity.CountryCallingCodeJoin.Companion.COL_COUNTRY_ID
+import pl.valueadd.restcountries.persistence.entity.CallingCodeEntity
+import pl.valueadd.restcountries.persistence.entity.CountryEntity
+import pl.valueadd.restcountries.persistence.entity.join.CountryCallingCodeJoin.Companion.COL_CALLING_CODE_ID
+import pl.valueadd.restcountries.persistence.entity.join.CountryCallingCodeJoin.Companion.COL_COUNTRY_ID
 
 @Entity(
     tableName = "country_calling_code_join",
@@ -17,7 +19,7 @@ import pl.valueadd.restcountries.persistence.entity.CountryCallingCodeJoin.Compa
     ],
     foreignKeys = [
         ForeignKey(entity = CountryEntity::class,
-            parentColumns = arrayOf("numericCode"),
+            parentColumns = arrayOf("numeric_code"),
             childColumns = arrayOf(COL_COUNTRY_ID),
             onDelete = CASCADE),
         ForeignKey(entity = CallingCodeEntity::class,

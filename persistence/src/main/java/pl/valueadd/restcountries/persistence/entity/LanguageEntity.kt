@@ -18,7 +18,14 @@ data class LanguageEntity(
     @ColumnInfo(name = "name")
     var name: String = StringUtils.EMPTY,
 
-    @ColumnInfo(name = "nativeName")
+    @ColumnInfo(name = "native_name")
     var nativeName: String = StringUtils.EMPTY
 
-)
+) {
+
+    var id: String
+        get() = iso6392
+        set(value) {
+            iso6392 = value
+        }
+}

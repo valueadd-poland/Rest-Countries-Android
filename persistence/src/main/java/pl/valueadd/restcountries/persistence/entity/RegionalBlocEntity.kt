@@ -21,4 +21,11 @@ data class RegionalBlocEntity(
 //    @ColumnInfo(name = "otherNames")
 //    var otherNames: List<String> = emptyList()
 
-)
+) {
+
+    var id: String
+        get() = name
+        set(value) {
+            name = value
+        }
+}

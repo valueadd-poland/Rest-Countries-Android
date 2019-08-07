@@ -1,6 +1,8 @@
 package pl.valueadd.restcountries.network.dto.country
 
+import com.google.gson.annotations.JsonAdapter
 import com.google.gson.annotations.SerializedName
+import pl.valueadd.restcountries.network.adapter.LatLngTypeAdapter
 import pl.valueadd.restcountries.network.dto.base.BaseDto
 import pl.valueadd.restcountries.network.dto.currency.CurrencyDto
 import pl.valueadd.restcountries.network.dto.language.LanguageDto
@@ -40,7 +42,8 @@ data class CountryDto(
     var population: Long? = null,
 
     @SerializedName("latlng")
-    var latLng: List<Double>? = null,
+    @JsonAdapter(value = LatLngTypeAdapter::class, nullSafe = false)
+    var latLng: LatLngDto? = null,
 
     @SerializedName("demonym")
     var demonym: String? = null,

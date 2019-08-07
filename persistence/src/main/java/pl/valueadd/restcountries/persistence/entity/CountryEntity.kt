@@ -4,45 +4,47 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import org.apache.commons.lang3.StringUtils
+import org.apache.commons.lang3.StringUtils.EMPTY
 import org.apache.commons.lang3.math.NumberUtils
+import pl.valueadd.restcountries.persistence.model.LatLng
+import pl.valueadd.restcountries.persistence.model.Translations
 
 @Entity(tableName = "countries")
-data class CountryEntity (
+data class CountryEntity(
 
     @PrimaryKey
-    @ColumnInfo(name = "numericCode")
-    var numericCode: String = StringUtils.EMPTY,
+    @ColumnInfo(name = "numeric_code")
+    var numericCode: String = EMPTY,
 
     @ColumnInfo(name = "name")
-    var name: String = StringUtils.EMPTY,
+    var name: String = EMPTY,
 
-    @ColumnInfo(name = "alpha2Code")
-    var alpha2Code: String = StringUtils.EMPTY,
+    @ColumnInfo(name = "alpha2_code")
+    var alpha2Code: String = EMPTY,
 
-    @ColumnInfo(name = "alpha3Code")
-    var alpha3Code: String = StringUtils.EMPTY,
+    @ColumnInfo(name = "alpha3_code")
+    var alpha3Code: String = EMPTY,
 
     @ColumnInfo(name = "capital")
-    var capital: String = StringUtils.EMPTY,
+    var capital: String = EMPTY,
 
 //    @ColumnInfo(name = "altSpellings")
 //    var altSpellings: List<String> = emptyList(),
 
     @ColumnInfo(name = "region")
-    var region: String = StringUtils.EMPTY,
+    var region: String = EMPTY,
 
-    @ColumnInfo(name = "subRegion")
-    var subRegion: String = StringUtils.EMPTY,
+    @ColumnInfo(name = "sub_region")
+    var subRegion: String = EMPTY,
 
     @ColumnInfo(name = "population")
     var population: Long = NumberUtils.LONG_ZERO,
 
     @Embedded
-    var latLng: LatLngEntity = LatLngEntity(),
+    var latLng: LatLng = LatLng(),
 
     @ColumnInfo(name = "demonym")
-    var demonym: String = StringUtils.EMPTY,
+    var demonym: String = EMPTY,
 
     @ColumnInfo(name = "area")
     var area: Double = NumberUtils.DOUBLE_ZERO,
@@ -56,18 +58,25 @@ data class CountryEntity (
 //    @ColumnInfo(name = "borders")
 //    var borders: List<String> = emptyList(),
 
-    @ColumnInfo(name = "nativeName")
-    var nativeName: String = StringUtils.EMPTY,
+    @ColumnInfo(name = "native_name")
+    var nativeName: String = EMPTY,
 
-    @Embedded
-    var translations: TranslationsEntity = TranslationsEntity(),
+    @Embedded(prefix = "translation_")
+    var translations: Translations = Translations(),
 
     @ColumnInfo(name = "flag")
-    var flag: String = StringUtils.EMPTY,
+    var flag: String = EMPTY,
 
 //    @ColumnInfo(name = "regionalBlocs")
 //    var regionalBlocs: List<String> = emptyList(),
 
     @ColumnInfo(name = "cioc")
-    var cioc: String = StringUtils.EMPTY
-)
+    var cioc: String = EMPTY
+) {
+
+    var id: String
+        get() = numericCode
+        set(value) {
+            numericCode = value
+        }
+}

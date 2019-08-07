@@ -5,12 +5,14 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import pl.valueadd.restcountries.network.adapter.LatLngTypeAdapter
 import pl.valueadd.restcountries.network.definition.CallAdapterFactory
 import pl.valueadd.restcountries.network.definition.ConverterFactory
 import pl.valueadd.restcountries.network.definition.HttpLoggingLevel
 import pl.valueadd.restcountries.network.definition.OkHttpBuilder
 import pl.valueadd.restcountries.network.definition.RetrofitBuilder
 import pl.valueadd.restcountries.network.definition.ServerUrl
+import pl.valueadd.restcountries.network.dto.country.LatLngDto
 import pl.valueadd.restcountries.network.interceptor.HeaderAuthorizationInterceptor
 import pl.valueadd.restcountries.utility.BuildConfig
 import retrofit2.CallAdapter
@@ -54,13 +56,16 @@ class RetrofitBuilderProvider @Inject constructor(
 
 @Singleton
 @ProvidesSingletonInScope
-class GsonProvider @Inject constructor() : Provider<Gson> {
+class GsonProvider @Inject constructor(
+    private val latLngTypeAdapter: LatLngTypeAdapter
+) : Provider<Gson> {
 
     override fun get(): Gson =
         GsonBuilder()
             .setLenient()
             .setDateFormat(BuildConfig.SERVER_TIME_FORMAT)
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .registerTypeAdapter(LatLngDto::class.java, latLngTypeAdapter)
             .create()
 }
 

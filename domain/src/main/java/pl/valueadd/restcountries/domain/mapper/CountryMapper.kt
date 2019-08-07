@@ -22,7 +22,7 @@ import pl.valueadd.restcountries.persistence.entity.LanguageEntity
 import pl.valueadd.restcountries.persistence.entity.RegionalBlocEntity
 import pl.valueadd.restcountries.persistence.entity.TimeZoneEntity
 import pl.valueadd.restcountries.persistence.entity.TopLevelDomainEntity
-import pl.valueadd.restcountries.persistence.entity.TranslationsEntity
+import pl.valueadd.restcountries.persistence.model.Translations
 
 @Mapper(
     nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT,
@@ -38,7 +38,7 @@ abstract class CountryMapper {
 
     abstract fun mapLanguageDtoToEntity(model: LanguageDto): LanguageEntity
 
-    abstract fun mapTranslationsDtoToEntity(model: TranslationsDto): TranslationsEntity
+    abstract fun mapTranslationsDtoToEntity(model: TranslationsDto): Translations
 
     abstract fun mapRegionalBlocDtoToEntity(model: RegionalBlocDto): RegionalBlocEntity
 
@@ -46,11 +46,11 @@ abstract class CountryMapper {
 
     abstract fun mapCountryDtosToEntities(list: List<CountryDto>): List<CountryEntity>
 
-    abstract fun mapCurrencyDtosToEntities(list: List<CurrencyDto>): List<CurrencyEntity>
+    abstract fun mapCurrencyDtosToEntities(list: List<CurrencyDto>?): List<CurrencyEntity>
 
-    abstract fun mapLanguageDtosToEntities(list: List<LanguageDto>): List<LanguageEntity>
+    abstract fun mapLanguageDtosToEntities(list: List<LanguageDto>?): List<LanguageEntity>
 
-    abstract fun mapRegionalBlocDtosToEntities(list: List<RegionalBlocEntity>): List<RegionalBlocEntity>
+    abstract fun mapRegionalBlocDtosToEntities(list: List<RegionalBlocDto>?): List<RegionalBlocEntity>
 
     /* Entity to Model */
 
@@ -60,7 +60,7 @@ abstract class CountryMapper {
 
     abstract fun mapLanguageEntityToModel(model: LanguageEntity): LanguageModel
 
-    abstract fun mapTranslationsEntityToModel(model: TranslationsEntity): TranslationsModel
+    abstract fun mapTranslationsEntityToModel(model: Translations): TranslationsModel
 
     abstract fun mapRegionalBlocEntityToModel(model: RegionalBlocEntity): RegionalBlocModel
 
@@ -79,31 +79,31 @@ abstract class CountryMapper {
     fun mapTopLevelDomainDtoToEntity(value: String): TopLevelDomainEntity =
         TopLevelDomainEntity(name = value)
 
-    fun mapTopLevelDomainDtosToEntities(values: List<String>): List<TopLevelDomainEntity> =
-        values.map(::mapTopLevelDomainDtoToEntity)
+    fun mapTopLevelDomainDtosToEntities(values: List<String>?): List<TopLevelDomainEntity> =
+        values?.map(::mapTopLevelDomainDtoToEntity) ?: emptyList()
 
     fun mapCallingCodeDtoToEntity(value: String): CallingCodeEntity =
         CallingCodeEntity(name = value)
 
-    fun mapCallingCodeDtosToEntities(values: List<String>): List<CallingCodeEntity> =
-        values.map(::mapCallingCodeDtoToEntity)
+    fun mapCallingCodeDtosToEntities(values: List<String>?): List<CallingCodeEntity> =
+        values?.map(::mapCallingCodeDtoToEntity) ?: emptyList()
 
     fun mapAltSpellingDtoToEntity(value: String): AltSpellingEntity =
         AltSpellingEntity(name = value)
 
-    fun mapAltSpellingDtosToEntities(values: List<String>): List<AltSpellingEntity> =
-        values.map(::mapAltSpellingDtoToEntity)
+    fun mapAltSpellingDtosToEntities(values: List<String>?): List<AltSpellingEntity> =
+        values?.map(::mapAltSpellingDtoToEntity) ?: emptyList()
 
     fun mapTimeZoneDtoToEntity(value: String): TimeZoneEntity =
         TimeZoneEntity(name = value)
 
-    fun mapTimeZoneDtosToEntities(values: List<String>): List<TimeZoneEntity> =
-        values.map(::mapTimeZoneDtoToEntity)
+    fun mapTimeZoneDtosToEntities(values: List<String>?): List<TimeZoneEntity> =
+        values?.map(::mapTimeZoneDtoToEntity) ?: emptyList()
 
     fun mapBorderDtoToEntity(value: String): BorderEntity =
         BorderEntity(name = value)
 
-    fun mapBorderDtosToEntities(values: List<String>): List<BorderEntity> =
-        values.map(::mapBorderDtoToEntity)
+    fun mapBorderDtosToEntities(values: List<String>?): List<BorderEntity> =
+        values?.map(::mapBorderDtoToEntity) ?: emptyList()
 
 }

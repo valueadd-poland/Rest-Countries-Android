@@ -31,7 +31,7 @@ data class CountryModel(
 
     var population: Long = LONG_ZERO,
 
-    var latLng: List<Double> = emptyList(),
+    var latLng: LatLngModel = LatLngModel(),
 
     var demonym: String = EMPTY,
 

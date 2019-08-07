@@ -14,11 +14,9 @@ import pl.valueadd.restcountries.persistence.dao.CountryLanguageDao
 import pl.valueadd.restcountries.persistence.dao.CountryTopLevelDomainDao
 import pl.valueadd.restcountries.persistence.dao.CurrencyDao
 import pl.valueadd.restcountries.persistence.dao.LanguageDao
-import pl.valueadd.restcountries.persistence.dao.LatLngDao
 import pl.valueadd.restcountries.persistence.dao.RegionalBlocDao
 import pl.valueadd.restcountries.persistence.dao.TimeZoneDao
 import pl.valueadd.restcountries.persistence.dao.TopLevelDomainDao
-import pl.valueadd.restcountries.persistence.dao.TranslationsDao
 import pl.valueadd.restcountries.persistence.database.RestCountriesDatabase
 import toothpick.config.Module
 
@@ -51,11 +49,9 @@ class PersistenceModule(context: Application) : Module() {
         bind(CountryTopLevelDomainDao::class.java).toInstance(database.countryTopLevelDomainDao())
         bind(CurrencyDao::class.java).toInstance(database.currencyDao())
         bind(LanguageDao::class.java).toInstance(database.languageDao())
-        bind(LatLngDao::class.java).toInstance(database.latLngDao())
         bind(RegionalBlocDao::class.java).toInstance(database.regionalBlocDao())
         bind(TimeZoneDao::class.java).toInstance(database.timeZoneDao())
         bind(TopLevelDomainDao::class.java).toInstance(database.topLevelDomainDao())
-        bind(TranslationsDao::class.java).toInstance(database.translationsDao())
     }
 
     private fun provideDatabase(context: Application): RestCountriesDatabase =

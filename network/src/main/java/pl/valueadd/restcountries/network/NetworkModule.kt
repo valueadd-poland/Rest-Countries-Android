@@ -4,8 +4,8 @@ import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level
-import pl.valueadd.restcountries.network.adapter.LatLngDeserializer
-import pl.valueadd.restcountries.network.adapter.LatLngDeserializerProvider
+import pl.valueadd.restcountries.network.adapter.LatLngTypeAdapter
+import pl.valueadd.restcountries.network.adapter.LatLngTypeAdapterProvider
 import pl.valueadd.restcountries.network.definition.CallAdapterFactory
 import pl.valueadd.restcountries.network.definition.ConverterFactory
 import pl.valueadd.restcountries.network.definition.GsonInstance
@@ -54,7 +54,7 @@ class NetworkModule : Module() {
 
         bind(Gson::class.java)
             .withName(GsonInstance::class.java)
-            .toProviderInstance(provideGsonProvider())
+            .toProvider(GsonProvider::class.java)
 
         bind(OkHttpClient.Builder::class.java)
             .withName(OkHttpBuilder::class.java)
@@ -77,7 +77,7 @@ class NetworkModule : Module() {
     }
 
     private fun bindAdapterProviders() {
-        bind(LatLngDeserializer::class.java).toProviderInstance(LatLngDeserializerProvider())
+        bind(LatLngTypeAdapter::class.java).toProviderInstance(LatLngTypeAdapterProvider())
     }
 
     internal fun provideConverterFactoryProvider(): ConverterFactoryProvider =
@@ -85,9 +85,6 @@ class NetworkModule : Module() {
 
     internal fun provideCallAdapterFactoryProvider(): CallAdapterFactoryProvider =
         CallAdapterFactoryProvider()
-
-    internal fun provideGsonProvider(): GsonProvider =
-        GsonProvider()
 
     internal fun provideServiceUrl(): String =
         BuildConfig.SERVER_URL

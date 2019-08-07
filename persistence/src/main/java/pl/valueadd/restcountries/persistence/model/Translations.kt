@@ -1,9 +1,9 @@
-package pl.valueadd.restcountries.persistence.entity
+package pl.valueadd.restcountries.persistence.model
 
 import androidx.room.ColumnInfo
 import org.apache.commons.lang3.StringUtils.EMPTY
 
-data class TranslationsEntity(
+data class Translations(
 
     @ColumnInfo(name = "de")
     var de: String = EMPTY,
