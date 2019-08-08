@@ -99,6 +99,7 @@ dependencies {
     
     // View
     implementation deps.view.material_progress_bar
+    implementation deps.view.circle_image_view
 
     // FastAdapter
     implementation deps.fast_adapter.core

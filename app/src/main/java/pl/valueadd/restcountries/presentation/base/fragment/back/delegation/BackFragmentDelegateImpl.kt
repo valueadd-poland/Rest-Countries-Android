@@ -48,7 +48,7 @@ class BackFragmentDelegateImpl(
         }
     }
 
-    override fun initializeToolbarMenu(toolbar: Toolbar): Unit = with(toolbar) {
+    override fun initializeToolbarMenu(toolbar: Toolbar): Unit = toolbar.run {
         inflateMenu(R.menu.main_menu)
         setOnMenuItemClickListener(fragment::onOptionsItemSelected)
     }

@@ -63,6 +63,7 @@ versions.fragmentation = "1.0.1"
 versions.material_progress_bar = "1.6.1"
 versions.fast_adapter = "4.0.1"
 versions.mosby = "3.1.1"
+versions.android_svg = "1.4"
 deps.versions = versions
 ext.versions = versions
 
@@ -212,6 +213,7 @@ utility.apache_lang = "org.apache.commons:commons-lang3:$versions.apache_lang"
 utility.convalida_ktx = "io.github.wellingtoncosta:convalida-ktx:$versions.convalida"
 utility.easy_validation = "com.wajahatkarim3.easyvalidation:easyvalidation-core$versions.easy_validation"
 utility.fragmentation = "me.yokeyword:fragmentationx:$versions.fragmentation"
+utility.android_svg = "com.caverock:androidsvg-aar:$versions.android_svg"
 deps.utility = utility
 
 /**

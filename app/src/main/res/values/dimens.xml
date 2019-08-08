@@ -33,6 +33,7 @@
 
     <!-- Defined sizes-->
     <dimen name="_1dp">1dp</dimen>
+    <dimen name="_48dp">48dp</dimen>
 
     <!-- Component sizes -->
     <dimen name="material_cell_height">52dp</dimen>
