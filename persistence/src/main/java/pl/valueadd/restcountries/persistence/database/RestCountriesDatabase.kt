@@ -6,6 +6,7 @@ import pl.valueadd.restcountries.persistence.dao.AltSpellingDao
 import pl.valueadd.restcountries.persistence.dao.BorderDao
 import pl.valueadd.restcountries.persistence.dao.CallingCodeDao
 import pl.valueadd.restcountries.persistence.dao.CountryAltSpellingDao
+import pl.valueadd.restcountries.persistence.dao.CountryBorderDao
 import pl.valueadd.restcountries.persistence.dao.CountryCallingCodeDao
 import pl.valueadd.restcountries.persistence.dao.CountryCurrencyDao
 import pl.valueadd.restcountries.persistence.dao.CountryDao
@@ -28,6 +29,7 @@ import pl.valueadd.restcountries.persistence.entity.RegionalBlocEntity
 import pl.valueadd.restcountries.persistence.entity.TimeZoneEntity
 import pl.valueadd.restcountries.persistence.entity.TopLevelDomainEntity
 import pl.valueadd.restcountries.persistence.entity.join.CountryAltSpellingJoin
+import pl.valueadd.restcountries.persistence.entity.join.CountryBorderJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryCallingCodeJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryCurrencyJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryLanguageJoin
@@ -54,7 +56,8 @@ import pl.valueadd.restcountries.persistence.entity.join.CountryTopLevelDomainJo
         TimeZoneEntity::class,
         CountryAltSpellingJoin::class,
         CountryRegionalBlocJoin::class,
-        CountryTimeZoneJoin::class
+        CountryTimeZoneJoin::class,
+        CountryBorderJoin::class
     ]
 )
 abstract class RestCountriesDatabase : RoomDatabase() {
@@ -90,5 +93,7 @@ abstract class RestCountriesDatabase : RoomDatabase() {
     abstract fun countryRegionalBlocDao(): CountryRegionalBlocDao
 
     abstract fun countryTimeZoneDao(): CountryTimeZoneDao
+
+    abstract fun countryBorderDao(): CountryBorderDao
 
 }

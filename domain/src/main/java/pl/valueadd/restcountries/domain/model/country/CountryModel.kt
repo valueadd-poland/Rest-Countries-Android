@@ -53,7 +53,7 @@ data class CountryModel(
 
     var translations: TranslationsModel = TranslationsModel(),
 
-    var flag: String = EMPTY,
+    var flagUrl: String = EMPTY,
 
     var regionalBlocs: List<RegionalBlocModel> = emptyList(),
 

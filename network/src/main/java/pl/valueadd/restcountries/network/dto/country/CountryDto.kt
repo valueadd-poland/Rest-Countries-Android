@@ -76,7 +76,7 @@ data class CountryDto(
     var translations: TranslationsDto? = null,
 
     @SerializedName("flag")
-    var flag: String? = null,
+    var flagUrl: String? = null,
 
     @SerializedName("regionalBlocs")
     var regionalBlocs: List<RegionalBlocDto>? = null,

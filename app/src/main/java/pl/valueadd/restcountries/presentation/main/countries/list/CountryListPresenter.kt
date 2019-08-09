@@ -56,6 +56,9 @@ class CountryListPresenter
     private fun observeAllCountries() {
         countryManager
             .observeAllCountries()
+            .map { list ->
+                list.sortedBy { it.name }
+            }
             .observeOnMain()
             .subscribe(
                 ::handleObserveAllExamplesSuccess,

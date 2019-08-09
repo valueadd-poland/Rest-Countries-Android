@@ -8,6 +8,7 @@ import pl.valueadd.restcountries.domain.model.country.CountryModel
 import pl.valueadd.restcountries.network.dto.country.CountryDto
 import pl.valueadd.restcountries.network.manager.CountryNetworkManager
 import pl.valueadd.restcountries.persistence.entity.AltSpellingEntity
+import pl.valueadd.restcountries.persistence.entity.BorderEntity
 import pl.valueadd.restcountries.persistence.entity.CallingCodeEntity
 import pl.valueadd.restcountries.persistence.entity.CountryEntity
 import pl.valueadd.restcountries.persistence.entity.CurrencyEntity
@@ -16,6 +17,7 @@ import pl.valueadd.restcountries.persistence.entity.RegionalBlocEntity
 import pl.valueadd.restcountries.persistence.entity.TimeZoneEntity
 import pl.valueadd.restcountries.persistence.entity.TopLevelDomainEntity
 import pl.valueadd.restcountries.persistence.entity.join.CountryAltSpellingJoin
+import pl.valueadd.restcountries.persistence.entity.join.CountryBorderJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryCallingCodeJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryCurrencyJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryLanguageJoin
@@ -23,6 +25,7 @@ import pl.valueadd.restcountries.persistence.entity.join.CountryRegionalBlocJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryTimeZoneJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryTopLevelDomainJoin
 import pl.valueadd.restcountries.persistence.manager.AltSpellingPersistenceManager
+import pl.valueadd.restcountries.persistence.manager.BorderPersistenceManager
 import pl.valueadd.restcountries.persistence.manager.CallingCodePersistenceManager
 import pl.valueadd.restcountries.persistence.manager.CountryPersistenceManager
 import pl.valueadd.restcountries.persistence.manager.CurrencyPersistenceManager
@@ -45,6 +48,7 @@ class CountryDomainManager @Inject constructor(
     private val languagePersistence: LanguagePersistenceManager,
     private val regionalBlocPersistence: RegionalBlocPersistenceManager,
     private val timeZonePersistence: TimeZonePersistenceManager,
+    private val borderPersistence: BorderPersistenceManager,
     private val mapper: CountryMapper
 ) {
 
@@ -74,6 +78,7 @@ class CountryDomainManager @Inject constructor(
                     saveTasks.add(saveCurrenciesFor(entity.id, mapper.mapCurrencyDtosToEntities(dto.currencies)))
                     saveTasks.add(saveLanguagesFor(entity.id, mapper.mapLanguageDtosToEntities(dto.languages)))
                     saveTasks.add(saveRegionalBlocsFor(entity.id, mapper.mapRegionalBlocDtosToEntities(dto.regionalBlocs)))
+                    saveTasks.add(saveBordersFor(entity.id, mapper.mapBorderDtosToEntities(dto.borders)))
 
                     entities.add(entity)
                 }
@@ -135,4 +140,10 @@ class CountryDomainManager @Inject constructor(
             .andThen(map)
             .flatMapCompletable(persistence::saveCountryRegionalBlocJoins)
     }
+
+    private fun saveBordersFor(countryId: String, entities: List<BorderEntity>): Completable =
+        borderPersistence.saveBordersIds(entities)
+            .map { list ->
+                list.map { CountryBorderJoin(countryId, it) }
+            }.flatMapCompletable(persistence::saveCountryBorderJoins)
 }

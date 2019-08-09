@@ -8,6 +8,7 @@ import pl.valueadd.restcountries.persistence.dao.AltSpellingDao
 import pl.valueadd.restcountries.persistence.dao.BorderDao
 import pl.valueadd.restcountries.persistence.dao.CallingCodeDao
 import pl.valueadd.restcountries.persistence.dao.CountryAltSpellingDao
+import pl.valueadd.restcountries.persistence.dao.CountryBorderDao
 import pl.valueadd.restcountries.persistence.dao.CountryCallingCodeDao
 import pl.valueadd.restcountries.persistence.dao.CountryCurrencyDao
 import pl.valueadd.restcountries.persistence.dao.CountryDao
@@ -58,6 +59,7 @@ class PersistenceModule(context: Application) : Module() {
         bind(CountryAltSpellingDao::class.java).toInstance(database.countryAltSpellingDao())
         bind(CountryRegionalBlocDao::class.java).toInstance(database.countryRegionalBlocDao())
         bind(CountryTimeZoneDao::class.java).toInstance(database.countryTimeZoneDao())
+        bind(CountryBorderDao::class.java).toInstance(database.countryBorderDao())
     }
 
     private fun provideDatabase(context: Application): RestCountriesDatabase =

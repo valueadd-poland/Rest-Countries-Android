@@ -9,7 +9,7 @@ import com.mikepenz.fastadapter.listeners.ClickEventHook
 class ClickCountryItemEventHook(private val listener: Listener) : ClickEventHook<IItem<*>>() {
 
     override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
-        return if (viewHolder is CountryItem.CountryViewHolder) {
+        return if (viewHolder is CountryItem.ViewHolder) {
             viewHolder.itemView
         } else super.onBind(viewHolder)
     }

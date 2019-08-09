@@ -4,6 +4,7 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.annotations.SchedulerSupport
 import pl.valueadd.restcountries.persistence.dao.CountryAltSpellingDao
+import pl.valueadd.restcountries.persistence.dao.CountryBorderDao
 import pl.valueadd.restcountries.persistence.dao.CountryCallingCodeDao
 import pl.valueadd.restcountries.persistence.dao.CountryCurrencyDao
 import pl.valueadd.restcountries.persistence.dao.CountryDao
@@ -13,6 +14,7 @@ import pl.valueadd.restcountries.persistence.dao.CountryTimeZoneDao
 import pl.valueadd.restcountries.persistence.dao.CountryTopLevelDomainDao
 import pl.valueadd.restcountries.persistence.entity.CountryEntity
 import pl.valueadd.restcountries.persistence.entity.join.CountryAltSpellingJoin
+import pl.valueadd.restcountries.persistence.entity.join.CountryBorderJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryCallingCodeJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryCurrencyJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryLanguageJoin
@@ -32,7 +34,8 @@ class CountryPersistenceManager @Inject constructor(private val dao: CountryDao,
                                                     private val topLevelDomainDao: CountryTopLevelDomainDao,
                                                     private val altSpellingDao: CountryAltSpellingDao,
                                                     private val regionalBlocDao: CountryRegionalBlocDao,
-                                                    private val timeZoneDao: CountryTimeZoneDao) {
+                                                    private val timeZoneDao: CountryTimeZoneDao,
+                                                    private val borderDao: CountryBorderDao) {
 
     fun observeAllCountries(): Flowable<List<CountryEntity>> =
         dao.observeAllCountries()
@@ -71,6 +74,10 @@ class CountryPersistenceManager @Inject constructor(private val dao: CountryDao,
         timeZoneDao.insert(list)
             .subscribeOnIo()
 
+    fun saveCountryBorderJoins(list: List<CountryBorderJoin>): Completable =
+        borderDao.insert(list)
+            .subscribeOnIo()
+
     fun saveCountryCallingCodeJoin(entity: CountryCallingCodeJoin): Completable =
         callingCodeDao.insert(entity)
             .subscribeOnIo()
@@ -103,6 +110,11 @@ class CountryPersistenceManager @Inject constructor(private val dao: CountryDao,
 
     fun saveCountryTimeZoneJoin(entity: CountryTimeZoneJoin): Completable =
         timeZoneDao.insert(entity)
+            .subscribeOnIo()
+            .ignoreElement()
+
+    fun saveCountryBorderJoin(entity: CountryBorderJoin): Completable =
+        borderDao.insert(entity)
             .subscribeOnIo()
             .ignoreElement()
 }

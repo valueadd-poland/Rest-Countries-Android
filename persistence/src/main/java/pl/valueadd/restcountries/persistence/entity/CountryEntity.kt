@@ -28,9 +28,6 @@ data class CountryEntity(
     @ColumnInfo(name = "capital")
     var capital: String = EMPTY,
 
-//    @ColumnInfo(name = "altSpellings")
-//    var altSpellings: List<String> = emptyList(),
-
     @ColumnInfo(name = "region")
     var region: String = EMPTY,
 
@@ -52,23 +49,14 @@ data class CountryEntity(
     @ColumnInfo(name = "gini")
     var gini: Double = NumberUtils.DOUBLE_ZERO,
 
-//    @ColumnInfo(name = "timezones")
-//    var timezones: List<String> = emptyList(),
-//
-//    @ColumnInfo(name = "borders")
-//    var borders: List<String> = emptyList(),
-
     @ColumnInfo(name = "native_name")
     var nativeName: String = EMPTY,
 
     @Embedded(prefix = "translation_")
     var translations: Translations = Translations(),
 
-    @ColumnInfo(name = "flag")
-    var flag: String = EMPTY,
-
-//    @ColumnInfo(name = "regionalBlocs")
-//    var regionalBlocs: List<String> = emptyList(),
+    @ColumnInfo(name = "flag_url")
+    var flagUrl: String = EMPTY,
 
     @ColumnInfo(name = "cioc")
     var cioc: String = EMPTY

@@ -10,3 +10,9 @@ fun CharSequence.boldText(): CharSequence {
         setSpan(StyleSpan(Typeface.BOLD), 0, this.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
     }
 }
+
+fun StringBuilder.appendComma() {
+    if (this.isNotBlank()) {
+        this.append(", ")
+    }
+}

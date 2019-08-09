@@ -100,12 +100,14 @@ dependencies {
     // View
     implementation deps.view.material_progress_bar
     implementation deps.view.circle_image_view
+    implementation deps.view.sticky_headers
 
     // FastAdapter
     implementation deps.fast_adapter.core
     implementation deps.fast_adapter.scroll
     implementation deps.fast_adapter.utils
     implementation deps.fast_adapter.diff
+    implementation deps.fast_adapter.sticky_headers
 
     // AndroidX
     implementation deps.androidx.appcompat
