@@ -70,11 +70,11 @@ abstract class CountryMapper {
 
     abstract fun mapCurrencyEntitiesToModels(list: List<CurrencyEntity>): List<CurrencyModel>
 
-    abstract fun mapLanguageEntitiesToModels(list: List<CurrencyEntity>): List<CurrencyModel>
+    abstract fun mapLanguageEntitiesToModels(list: List<LanguageEntity>): List<LanguageModel>
 
     abstract fun mapRegionalBlocEntitiesToModels(list: List<RegionalBlocEntity>): List<RegionalBlocModel>
 
-    /* Custom */
+    /* Custom from Dto to Entity */
 
     fun mapTopLevelDomainDtoToEntity(value: String): TopLevelDomainEntity =
         TopLevelDomainEntity(name = value)
@@ -106,4 +106,35 @@ abstract class CountryMapper {
     fun mapBorderDtosToEntities(values: List<String>?): List<BorderEntity> =
         values?.map(::mapBorderDtoToEntity) ?: emptyList()
 
+    /* Custom from Entity to Model */
+
+    fun mapTopLevelDomainEntityToModel(entity: TopLevelDomainEntity): String =
+        entity.name
+
+    fun mapTopLevelDomainEntitiesToModels(entities: List<TopLevelDomainEntity>): List<String> =
+        entities.map(::mapTopLevelDomainEntityToModel)
+
+    fun mapCallingCodeEntityToModel(entity: CallingCodeEntity): String =
+        entity.name
+
+    fun mapCallingCodeEntitiesToModels(entities: List<CallingCodeEntity>): List<String> =
+        entities.map(::mapCallingCodeEntityToModel)
+
+    fun mapAltSpellingEntityToModel(entity: AltSpellingEntity): String =
+        entity.name
+
+    fun mapAltSpellingEntitiesToModels(entities: List<AltSpellingEntity>): List<String> =
+        entities.map(::mapAltSpellingEntityToModel)
+
+    fun mapTimeZoneEntityToModel(entity: TimeZoneEntity): String =
+        entity.name
+
+    fun mapTimeZoneEntitiesToModels(entities: List<TimeZoneEntity>): List<String> =
+        entities.map(::mapTimeZoneEntityToModel)
+
+    fun mapBorderEntityToModel(entity: BorderEntity): String =
+        entity.name
+
+    fun mapBorderEntitiesToModels(entities: List<BorderEntity>): List<String> =
+        entities.map(::mapBorderEntityToModel)
 }

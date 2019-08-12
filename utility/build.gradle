@@ -100,6 +100,7 @@ dependencies {
     api deps.utility.apache_lang
     implementation deps.utility.glide
     implementation deps.utility.android_svg
+    api deps.utility.timber
 
     //Reactivex
     implementation deps.rx.binding

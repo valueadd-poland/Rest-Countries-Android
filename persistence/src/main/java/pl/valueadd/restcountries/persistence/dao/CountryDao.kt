@@ -13,4 +13,12 @@ abstract class CountryDao : BaseDao<CountryEntity>() {
         FROM countries
     """)
     abstract fun observeAllCountries(): Flowable<List<CountryEntity>>
+
+    @Query(value = """
+        SELECT *
+        FROM countries
+        WHERE countries.numeric_code = :countryId
+        LIMIT 1
+    """)
+    abstract fun observeCountry(countryId: String): Flowable<CountryEntity>
 }

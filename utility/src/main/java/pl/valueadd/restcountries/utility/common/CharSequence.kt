@@ -16,3 +16,16 @@ fun StringBuilder.appendComma() {
         this.append(", ")
     }
 }
+
+fun List<String>.merge(separator: Char = ','): String {
+    return StringBuilder().apply {
+        for (str in this@merge) {
+            if (!str.isBlank()) {
+                if (this.isNotBlank()) {
+                    this.append("$separator ")
+                }
+                append(str)
+            }
+        }
+    }.toString()
+}

@@ -13,7 +13,7 @@ data class CountryModel(
 
     var name: String = EMPTY,
 
-    var topLevelDomain: List<String> = emptyList(),
+    var topLevelDomains: List<String> = emptyList(),
 
     var alpha2Code: String = EMPTY,
 
@@ -59,4 +59,8 @@ data class CountryModel(
 
     var cioc: String = EMPTY
 
-) : BaseModel()
+) : BaseModel() {
+
+    val id: String
+        get() = numericCode
+}

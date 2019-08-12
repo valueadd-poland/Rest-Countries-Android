@@ -15,7 +15,7 @@ data class CountryDto(
     var name: String? = null,
 
     @SerializedName("topLevelDomain")
-    var topLevelDomain: List<String>? = null,
+    var topLevelDomains: List<String>? = null,
 
     @SerializedName("alpha2Code")
     var alpha2Code: String? = null,

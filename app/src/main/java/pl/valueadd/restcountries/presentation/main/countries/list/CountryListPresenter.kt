@@ -1,6 +1,5 @@
 package pl.valueadd.restcountries.presentation.main.countries.list
 
-import android.util.Log
 import io.reactivex.rxkotlin.addTo
 import pl.valueadd.restcountries.domain.manager.CountryDomainManager
 import pl.valueadd.restcountries.domain.manager.ExceptionDomainManager
@@ -9,6 +8,7 @@ import pl.valueadd.restcountries.presentation.base.BasePresenter
 import pl.valueadd.restcountries.presentation.main.countries.list.item.ClickCountryItemEventHook
 import pl.valueadd.restcountries.presentation.main.countries.list.item.CountryItem
 import pl.valueadd.restcountries.utility.reactivex.observeOnMain
+import timber.log.Timber
 import javax.inject.Inject
 
 class CountryListPresenter
@@ -26,8 +26,8 @@ class CountryListPresenter
         observeAllCountries()
     }
 
-    override fun onCountryItemClick() = onceViewAttached {
-        it.navigateToCountryDetailsView()
+    override fun onCountryItemClick(model: CountryModel) = onceViewAttached {
+        it.navigateToCountryDetailsView(model.id)
     }
 
     private fun downloadAllCountries() {
@@ -43,7 +43,7 @@ class CountryListPresenter
 
     private fun handleDownloadAllExamplesSuccess() {
 
-        Log.d(this::class.java.simpleName, "Countries has been downloaded successfully.")
+        Timber.d("Countries has been downloaded successfully.")
     }
 
     private fun handleDownloadAllExamplesFailed(throwable: Throwable) = onceViewAttached {

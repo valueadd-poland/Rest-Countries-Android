@@ -1,6 +1,7 @@
 package pl.valueadd.restcountries.persistence.manager
 
 import io.reactivex.Completable
+import io.reactivex.Flowable
 import io.reactivex.annotations.SchedulerSupport
 import pl.valueadd.restcountries.persistence.dao.RegionalBlocDao
 import pl.valueadd.restcountries.persistence.entity.RegionalBlocEntity
@@ -14,5 +15,10 @@ class RegionalBlocPersistenceManager @Inject constructor(private val dao: Region
 
     fun saveRegionalBlocs(list: List<RegionalBlocEntity>): Completable =
         dao.insert(list)
+            .subscribeOnIo()
+
+    fun observeRegionalBlocs(countryId: String): Flowable<List<RegionalBlocEntity>> =
+        dao.observeRegionalBlocs(countryId)
+            .distinctUntilChanged()
             .subscribeOnIo()
 }

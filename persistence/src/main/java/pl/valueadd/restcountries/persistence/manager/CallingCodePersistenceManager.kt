@@ -1,6 +1,7 @@
 package pl.valueadd.restcountries.persistence.manager
 
 import io.reactivex.Completable
+import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.annotations.SchedulerSupport
 import pl.valueadd.restcountries.persistence.dao.CallingCodeDao
@@ -21,4 +22,8 @@ class CallingCodePersistenceManager @Inject constructor(private val dao: Calling
         dao.insert(list)
             .subscribeOnIo()
 
+    fun observeCallingCodes(countryId: String): Flowable<List<CallingCodeEntity>> =
+        dao.observeCallingCodes(countryId)
+            .distinctUntilChanged()
+            .subscribeOnIo()
 }

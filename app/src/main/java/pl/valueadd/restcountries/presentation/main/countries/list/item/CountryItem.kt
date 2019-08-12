@@ -2,12 +2,12 @@ package pl.valueadd.restcountries.presentation.main.countries.list.item
 
 import android.view.View
 import androidx.core.content.ContextCompat
-import pl.valueadd.restcountries.R
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.ModelAbstractItem
 import kotlinx.android.synthetic.main.country_item.view.flagImageView
 import kotlinx.android.synthetic.main.country_item.view.subTitleTextView
 import kotlinx.android.synthetic.main.country_item.view.titleTextView
+import pl.valueadd.restcountries.R
 import pl.valueadd.restcountries.domain.model.country.CountryModel
 import pl.valueadd.restcountries.utility.image.clearImage
 import pl.valueadd.restcountries.utility.image.loadSVGImage

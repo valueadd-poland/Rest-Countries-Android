@@ -40,13 +40,13 @@ fun <T : ImageView> T.loadImage(url: String, placeholder: Drawable? = null, @Col
         .into(this)
 }
 
-fun <T : ImageView> T.loadSVGImage(url: String, @DrawableRes placeholder: Int = View.NO_ID, @ColorInt colorInt: Int = Color.WHITE) {
+fun <T : ImageView> T.loadSVGImage(url: String, @DrawableRes placeholder: Int = View.NO_ID, @ColorInt placeholderColorInt: Int = Color.WHITE) {
     val drawable: Drawable? = ContextCompat.getDrawable(context, placeholder)
-    loadSVGImage(url, drawable, colorInt)
+    loadSVGImage(url, drawable, placeholderColorInt)
 }
 
-fun <T : ImageView> T.loadSVGImage(url: String, placeholder: Drawable? = null, @ColorInt colorInt: Int = Color.WHITE) {
-    placeholder?.setTint(colorInt)
+fun <T : ImageView> T.loadSVGImage(url: String, placeholder: Drawable? = null, @ColorInt placeholderColorInt: Int = Color.WHITE) {
+    placeholder?.setTint(placeholderColorInt)
 
     val uri = Uri.parse(url)
 

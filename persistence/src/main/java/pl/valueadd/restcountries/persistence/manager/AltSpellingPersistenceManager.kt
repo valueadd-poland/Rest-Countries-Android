@@ -1,6 +1,7 @@
 package pl.valueadd.restcountries.persistence.manager
 
 import io.reactivex.Completable
+import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.annotations.SchedulerSupport
 import pl.valueadd.restcountries.persistence.dao.AltSpellingDao
@@ -19,5 +20,10 @@ class AltSpellingPersistenceManager @Inject constructor(private val dao: AltSpel
 
     fun saveAltSpellingsIds(list: List<AltSpellingEntity>): Single<List<Long>> =
         dao.insertEntities(list)
+            .subscribeOnIo()
+
+    fun observeAltSpellings(countryId: String): Flowable<List<AltSpellingEntity>> =
+        dao.observeAltSpellings(countryId)
+            .distinctUntilChanged()
             .subscribeOnIo()
 }

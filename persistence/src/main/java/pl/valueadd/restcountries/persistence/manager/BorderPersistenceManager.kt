@@ -1,6 +1,7 @@
 package pl.valueadd.restcountries.persistence.manager
 
 import io.reactivex.Completable
+import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.annotations.SchedulerSupport
 import pl.valueadd.restcountries.persistence.dao.BorderDao
@@ -19,5 +20,10 @@ class BorderPersistenceManager @Inject constructor(private val dao: BorderDao) {
 
     fun saveBorders(list: List<BorderEntity>): Completable =
         dao.insert(list)
+            .subscribeOnIo()
+
+    fun observeBorders(countryId: String): Flowable<List<BorderEntity>> =
+        dao.observeBorders(countryId)
+            .distinctUntilChanged()
             .subscribeOnIo()
 }

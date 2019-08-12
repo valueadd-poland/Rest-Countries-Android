@@ -42,9 +42,19 @@ class CountryPersistenceManager @Inject constructor(private val dao: CountryDao,
             .distinctUntilChanged()
             .subscribeOnIo()
 
+    fun observeCountry(countryId: String): Flowable<CountryEntity> =
+        dao.observeCountry(countryId)
+            .distinctUntilChanged()
+            .subscribeOnIo()
+
     fun saveCountries(list: List<CountryEntity>): Completable =
         dao.insert(list)
             .subscribeOnIo()
+
+    fun saveCountry(entity: CountryEntity): Completable =
+        dao.insert(entity)
+            .subscribeOnIo()
+            .ignoreElement()
 
     fun saveCountryCallingCodeJoins(list: List<CountryCallingCodeJoin>): Completable =
         callingCodeDao.insert(list)

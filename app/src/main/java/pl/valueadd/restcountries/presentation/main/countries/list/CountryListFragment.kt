@@ -3,9 +3,7 @@ package pl.valueadd.restcountries.presentation.main.countries.list
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.brandongogetap.stickyheaders.StickyLayoutManager
 import com.mikepenz.fastadapter.IItem
-import com.mikepenz.fastadapter.adapters.FastItemAdapter
 import com.mikepenz.fastadapter.adapters.GenericFastItemAdapter
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration
 import kotlinx.android.synthetic.main.country_fragment_list.recyclerView
@@ -43,8 +41,8 @@ class CountryListFragment : BaseMVPFragment<CountryListView, CountryListPresente
         listAdapter.setNewList(list)
     }
 
-    override fun navigateToCountryDetailsView() {
-        val fragment = CountryDetailsFragment.createInstance()
+    override fun navigateToCountryDetailsView(countryId: String) {
+        val fragment = CountryDetailsFragment.createInstance(countryId)
 
         getParentFragment(RootFragment::class.java)
             .start(fragment)

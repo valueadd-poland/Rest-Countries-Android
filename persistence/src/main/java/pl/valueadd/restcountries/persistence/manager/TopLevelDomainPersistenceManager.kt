@@ -1,6 +1,7 @@
 package pl.valueadd.restcountries.persistence.manager
 
 import io.reactivex.Completable
+import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.annotations.SchedulerSupport
 import pl.valueadd.restcountries.persistence.dao.TopLevelDomainDao
@@ -19,5 +20,10 @@ class TopLevelDomainPersistenceManager @Inject constructor(private val dao: TopL
 
     fun saveTopLevelDomainsIds(list: List<TopLevelDomainEntity>): Single<List<Long>> =
         dao.insertEntities(list)
+            .subscribeOnIo()
+
+    fun observeTopLevelDomains(countryId: String): Flowable<List<TopLevelDomainEntity>> =
+        dao.observeTopLevelDomains(countryId)
+            .distinctUntilChanged()
             .subscribeOnIo()
 }

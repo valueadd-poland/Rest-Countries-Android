@@ -7,5 +7,5 @@ interface CountryListView : BaseView {
 
     fun bindDataToList(list: List<IItem<*>>)
 
-    fun navigateToCountryDetailsView()
+    fun navigateToCountryDetailsView(countryId: String)
 }

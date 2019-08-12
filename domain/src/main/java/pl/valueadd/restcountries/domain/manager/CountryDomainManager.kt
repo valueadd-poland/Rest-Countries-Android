@@ -3,8 +3,12 @@ package pl.valueadd.restcountries.domain.manager
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
+import io.reactivex.functions.Function9
 import pl.valueadd.restcountries.domain.mapper.CountryMapper
 import pl.valueadd.restcountries.domain.model.country.CountryModel
+import pl.valueadd.restcountries.domain.model.currency.CurrencyModel
+import pl.valueadd.restcountries.domain.model.language.LanguageModel
+import pl.valueadd.restcountries.domain.model.region.RegionalBlocModel
 import pl.valueadd.restcountries.network.dto.country.CountryDto
 import pl.valueadd.restcountries.network.manager.CountryNetworkManager
 import pl.valueadd.restcountries.persistence.entity.AltSpellingEntity
@@ -52,6 +56,40 @@ class CountryDomainManager @Inject constructor(
     private val mapper: CountryMapper
 ) {
 
+    fun observeCountry(countryId: String): Flowable<CountryModel> =
+        Flowable.combineLatest(
+            observeCountryById(countryId),
+            observeAltSpellings(countryId),
+            observeBorders(countryId),
+            observeCallingCodes(countryId),
+            observeCurrencies(countryId),
+            observeLanguages(countryId),
+            observeRegionalBlocs(countryId),
+            observeTimeZones(countryId),
+            observeTopLevelDomains(countryId),
+            Function9 { country,
+                        altSpellings,
+                        borders,
+                        callingCodes,
+                        currencies,
+                        languages,
+                        regionalBlocs,
+                        timezones,
+                        topLevelDomains ->
+
+                country.also {
+                    it.altSpellings = altSpellings
+                    it.borders = borders
+                    it.callingCodes = callingCodes
+                    it.currencies = currencies
+                    it.languages = languages
+                    it.regionalBlocs = regionalBlocs
+                    it.timezones = timezones
+                    it.topLevelDomains = topLevelDomains
+                }
+            }
+        )
+
     fun observeAllCountries(): Flowable<List<CountryModel>> =
         persistence
             .observeAllCountries()
@@ -62,6 +100,8 @@ class CountryDomainManager @Inject constructor(
             .getAllCountries()
             .flatMapCompletable(::saveAllCountries)
 
+    /* Save all Countries */
+
     private fun saveAllCountries(list: List<CountryDto>): Completable {
         val saveTasks: MutableList<Completable> = mutableListOf()
 
@@ -69,22 +109,26 @@ class CountryDomainManager @Inject constructor(
             mutableListOf<CountryEntity>().also { entities ->
                 for (dto in list) {
 
-                    val entity: CountryEntity = mapper.mapCountryDtoToEntity(dto)
-
-                    saveTasks.add(saveCallingCodesFor(entity.id, mapper.mapCallingCodeDtosToEntities(dto.callingCodes)))
-                    saveTasks.add(saveTopLevelDomainsFor(entity.id, mapper.mapTopLevelDomainDtosToEntities(dto.topLevelDomain)))
-                    saveTasks.add(saveAltSpellingsFor(entity.id, mapper.mapAltSpellingDtosToEntities(dto.altSpellings)))
-                    saveTasks.add(saveTimeZonesFor(entity.id, mapper.mapTimeZoneDtosToEntities(dto.timezones)))
-                    saveTasks.add(saveCurrenciesFor(entity.id, mapper.mapCurrencyDtosToEntities(dto.currencies)))
-                    saveTasks.add(saveLanguagesFor(entity.id, mapper.mapLanguageDtosToEntities(dto.languages)))
-                    saveTasks.add(saveRegionalBlocsFor(entity.id, mapper.mapRegionalBlocDtosToEntities(dto.regionalBlocs)))
-                    saveTasks.add(saveBordersFor(entity.id, mapper.mapBorderDtosToEntities(dto.borders)))
-
-                    entities.add(entity)
+                    entities.add(applySaveTasksAndMapToEntity(dto, saveTasks))
                 }
             }
         }.flatMapCompletable(persistence::saveCountries)
             .andThen(Completable.merge(saveTasks))
+    }
+
+    private fun applySaveTasksAndMapToEntity(dto: CountryDto, saveTasks: MutableList<Completable>): CountryEntity {
+        val entity: CountryEntity = mapper.mapCountryDtoToEntity(dto)
+
+        saveTasks.add(saveCallingCodesFor(entity.id, mapper.mapCallingCodeDtosToEntities(dto.callingCodes)))
+        saveTasks.add(saveTopLevelDomainsFor(entity.id, mapper.mapTopLevelDomainDtosToEntities(dto.topLevelDomains)))
+        saveTasks.add(saveAltSpellingsFor(entity.id, mapper.mapAltSpellingDtosToEntities(dto.altSpellings)))
+        saveTasks.add(saveTimeZonesFor(entity.id, mapper.mapTimeZoneDtosToEntities(dto.timezones)))
+        saveTasks.add(saveCurrenciesFor(entity.id, mapper.mapCurrencyDtosToEntities(dto.currencies)))
+        saveTasks.add(saveLanguagesFor(entity.id, mapper.mapLanguageDtosToEntities(dto.languages)))
+        saveTasks.add(saveRegionalBlocsFor(entity.id, mapper.mapRegionalBlocDtosToEntities(dto.regionalBlocs)))
+        saveTasks.add(saveBordersFor(entity.id, mapper.mapBorderDtosToEntities(dto.borders)))
+
+        return entity
     }
 
     private fun saveCallingCodesFor(countryId: String, entities: List<CallingCodeEntity>): Completable =
@@ -146,4 +190,51 @@ class CountryDomainManager @Inject constructor(
             .map { list ->
                 list.map { CountryBorderJoin(countryId, it) }
             }.flatMapCompletable(persistence::saveCountryBorderJoins)
+
+    /* Fetch Country */
+
+    private fun observeCountryById(countryId: String): Flowable<CountryModel> =
+        persistence
+            .observeCountry(countryId)
+            .map(mapper::mapCountryEntityToModel)
+
+    private fun observeAltSpellings(countryId: String): Flowable<List<String>> =
+        altSpellingPersistence
+            .observeAltSpellings(countryId)
+            .map(mapper::mapAltSpellingEntitiesToModels)
+
+    private fun observeBorders(countryId: String): Flowable<List<String>> =
+        borderPersistence
+            .observeBorders(countryId)
+            .map(mapper::mapBorderEntitiesToModels)
+
+    private fun observeCallingCodes(countryId: String): Flowable<List<String>> =
+        callingCodePersistence
+            .observeCallingCodes(countryId)
+            .map(mapper::mapCallingCodeEntitiesToModels)
+
+    private fun observeCurrencies(countryId: String): Flowable<List<CurrencyModel>> =
+        currencyPersistence
+            .observeCurriencies(countryId)
+            .map(mapper::mapCurrencyEntitiesToModels)
+
+    private fun observeLanguages(countryId: String): Flowable<List<LanguageModel>> =
+        languagePersistence
+            .observeLanguages(countryId)
+            .map(mapper::mapLanguageEntitiesToModels)
+
+    private fun observeRegionalBlocs(countryId: String): Flowable<List<RegionalBlocModel>> =
+        regionalBlocPersistence
+            .observeRegionalBlocs(countryId)
+            .map(mapper::mapRegionalBlocEntitiesToModels)
+
+    private fun observeTimeZones(countryId: String): Flowable<List<String>> =
+        timeZonePersistence
+            .observeTimeZones(countryId)
+            .map(mapper::mapTimeZoneEntitiesToModels)
+
+    private fun observeTopLevelDomains(countryId: String): Flowable<List<String>> =
+        topLevelDomainPersistence
+            .observeTopLevelDomains(countryId)
+            .map(mapper::mapTopLevelDomainEntitiesToModels)
 }

@@ -66,6 +66,7 @@ versions.mosby = "3.1.1"
 versions.android_svg = "1.4"
 versions.fast_adapter_sticky_headers = "0.5.1-SNAPSHOT"
 versions.sticky_headers = "0.5.1"
+versions.timber = "4.7.1"
 deps.versions = versions
 ext.versions = versions
 
@@ -218,6 +219,7 @@ utility.convalida_ktx = "io.github.wellingtoncosta:convalida-ktx:$versions.conva
 utility.easy_validation = "com.wajahatkarim3.easyvalidation:easyvalidation-core$versions.easy_validation"
 utility.fragmentation = "me.yokeyword:fragmentationx:$versions.fragmentation"
 utility.android_svg = "com.caverock:androidsvg-aar:$versions.android_svg"
+utility.timber = "com.jakewharton.timber:timber:$versions.timber"
 deps.utility = utility
 
 /**
