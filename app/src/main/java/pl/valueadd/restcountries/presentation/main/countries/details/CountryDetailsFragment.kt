@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.chip.Chip
+import kotlinx.android.synthetic.main.country_fragment_details.bordersCardView
 import kotlinx.android.synthetic.main.country_fragment_details.bordersChipGroup
 import kotlinx.android.synthetic.main.country_fragment_details.callingCodesPropertyView
 import kotlinx.android.synthetic.main.country_fragment_details.domainsPropertyView
@@ -21,6 +22,7 @@ import pl.valueadd.restcountries.utility.image.Options
 import pl.valueadd.restcountries.utility.image.listener.SvgSoftwareLayerSetter
 import pl.valueadd.restcountries.utility.image.loadSVGImage
 import pl.valueadd.restcountries.utility.image.target.ChipTarget
+import pl.valueadd.restcountries.utility.view.setVisible
 import javax.inject.Inject
 
 class CountryDetailsFragment : BaseMVPFragment<CountryDetailsView, CountryDetailsPresenter>(R.layout.country_fragment_details),
@@ -61,6 +63,9 @@ class CountryDetailsFragment : BaseMVPFragment<CountryDetailsView, CountryDetail
             bordersChipGroup.addView(chip)
         }
     }
+
+    override fun setBordersCardVisibility(isVisible: Boolean) =
+        bordersCardView.setVisible(isVisible)
 
     private fun prepareBorderChip(model: CountryModel): Chip =
         Chip(requireContext()).apply {

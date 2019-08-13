@@ -3,7 +3,6 @@ package pl.valueadd.restcountries.domain.manager
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
-import io.reactivex.functions.Function
 import io.reactivex.functions.Function9
 import pl.valueadd.restcountries.domain.mapper.CountryMapper
 import pl.valueadd.restcountries.domain.model.country.CountryModel
@@ -39,7 +38,6 @@ import pl.valueadd.restcountries.persistence.manager.RegionalBlocPersistenceMana
 import pl.valueadd.restcountries.persistence.manager.TimeZonePersistenceManager
 import pl.valueadd.restcountries.persistence.manager.TopLevelDomainPersistenceManager
 import pl.valueadd.restcountries.utility.reactivex.immediateSingle
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -110,27 +108,79 @@ class CountryDomainManager @Inject constructor(
     /* Save all Countries */
 
     private fun saveAllCountries(list: List<CountryDto>): Completable {
-        val saveTasks: MutableList<Completable> = mutableListOf()
+        val saveEntities: MutableList<Completable> = mutableListOf()
+        val saveRelations: MutableList<Completable> = mutableListOf()
 
         return immediateSingle {
             mutableListOf<CountryEntity>().also { entities ->
                 for (dto in list) {
+
                     val entity: CountryEntity = mapper.mapCountryDtoToEntity(dto)
 
-                    saveTasks.add(saveCallingCodesFor(entity.id, mapper.mapCallingCodeDtosToEntities(dto.callingCodes)))
-                    saveTasks.add(saveTopLevelDomainsFor(entity.id, mapper.mapTopLevelDomainDtosToEntities(dto.topLevelDomains)))
-                    saveTasks.add(saveAltSpellingsFor(entity.id, mapper.mapAltSpellingDtosToEntities(dto.altSpellings)))
-                    saveTasks.add(saveTimeZonesFor(entity.id, mapper.mapTimeZoneDtosToEntities(dto.timezones)))
-                    saveTasks.add(saveCurrenciesFor(entity.id, mapper.mapCurrencyDtosToEntities(dto.currencies)))
-                    saveTasks.add(saveLanguagesFor(entity.id, mapper.mapLanguageDtosToEntities(dto.languages)))
-                    saveTasks.add(saveRegionalBlocsFor(entity.id, mapper.mapRegionalBlocDtosToEntities(dto.regionalBlocs)))
-                    saveTasks.add(saveBordersFor(entity.id, mapper.mapBorderDtosToEntities(dto.borders)))
+                    saveEntities.add(saveCallingCodesFor(entity.id, mapper.mapCallingCodeDtosToEntities(dto.callingCodes)))
+                    saveEntities.add(saveTopLevelDomainsFor(entity.id, mapper.mapTopLevelDomainDtosToEntities(dto.topLevelDomains)))
+                    saveEntities.add(saveAltSpellingsFor(entity.id, mapper.mapAltSpellingDtosToEntities(dto.altSpellings)))
+                    saveEntities.add(saveTimeZonesFor(entity.id, mapper.mapTimeZoneDtosToEntities(dto.timezones)))
+
+                    mapper.mapRegionalBlocDtosToEntities(dto.regionalBlocs).let {
+                        saveEntities.add(regionalBlocPersistence.saveRegionalBlocs(it))
+                        saveRelations.add(saveRegionalBlocsFor(entity.id, it))
+                    }
+
+                    mapper.mapLanguageDtosToEntities(dto.languages).let {
+                        saveEntities.add(languagePersistence.saveLanguages(it))
+                        saveRelations.add(saveLanguageJoinsFor(entity.id, it))
+                    }
+
+                    mapper.mapCurrencyDtosToEntities(dto.currencies).let {
+                        saveEntities.add(currencyPersistence.saveCurrencies(it))
+                        saveRelations.add(saveCurrencyJoinsFor(entity.id, it))
+
+                    }
+
+                    mapper.mapBorderDtosToEntities(dto.borders).let {
+                        saveEntities.add(borderPersistence.saveBorders(it))
+                        saveRelations.add(saveBorderJoinsFor(entity.id, it))
+                    }
 
                     entities.add(entity)
                 }
             }
         }.flatMapCompletable(persistence::saveCountries)
-            .andThen(Completable.merge(saveTasks))
+            .andThen(Completable.merge(saveEntities))
+            .andThen(Completable.merge(saveRelations))
+    }
+
+    private fun saveCurrencyJoinsFor(countryId: String, entities: List<CurrencyEntity>): Completable {
+        val map: Single<List<CountryCurrencyJoin>> = immediateSingle {
+            entities.map { CountryCurrencyJoin(countryId, it.id) }
+        }
+
+        return map.flatMapCompletable(persistence::saveCountryCurrencyJoins)
+    }
+
+    private fun saveLanguageJoinsFor(countryId: String, entities: List<LanguageEntity>): Completable {
+        val map: Single<List<CountryLanguageJoin>> = immediateSingle {
+            entities.map { CountryLanguageJoin(countryId, it.id) }
+        }
+
+        return map.flatMapCompletable(persistence::saveCountryLanguageJoins)
+    }
+
+    private fun saveBorderJoinsFor(countryId: String, entities: List<BorderEntity>): Completable {
+        val map: Single<List<CountryBorderJoin>> = immediateSingle {
+            entities.map { CountryBorderJoin(countryId, it.id) }
+        }
+
+        return map.flatMapCompletable(persistence::saveCountryBorderJoins)
+    }
+
+    private fun saveRegionalBlocsFor(countryId: String, entities: List<RegionalBlocEntity>): Completable {
+        val map: Single<List<CountryRegionalBlocJoin>> = immediateSingle {
+            entities.map { CountryRegionalBlocJoin(countryId, it.id) }
+        }
+
+        return map.flatMapCompletable(persistence::saveCountryRegionalBlocJoins)
     }
 
     private fun saveCallingCodesFor(countryId: String, entities: List<CallingCodeEntity>): Completable =
@@ -138,26 +188,6 @@ class CountryDomainManager @Inject constructor(
             .map { list ->
                 list.map { CountryCallingCodeJoin(countryId, it) }
             }.flatMapCompletable(persistence::saveCountryCallingCodeJoins)
-
-    private fun saveCurrenciesFor(countryId: String, entities: List<CurrencyEntity>): Completable {
-        val map: Single<List<CountryCurrencyJoin>> = immediateSingle {
-            entities.map { CountryCurrencyJoin(countryId, it.id) }
-        }
-
-        return currencyPersistence.saveCurrencies(entities)
-            .andThen(map)
-            .flatMapCompletable(persistence::saveCountryCurrencyJoins)
-    }
-
-    private fun saveLanguagesFor(countryId: String, entities: List<LanguageEntity>): Completable {
-        val map: Single<List<CountryLanguageJoin>> = immediateSingle {
-            entities.map { CountryLanguageJoin(countryId, it.id) }
-        }
-
-        return languagePersistence.saveLanguages(entities)
-            .andThen(map)
-            .flatMapCompletable(persistence::saveCountryLanguageJoins)
-    }
 
     private fun saveTopLevelDomainsFor(countryId: String, entities: List<TopLevelDomainEntity>): Completable =
         topLevelDomainPersistence.saveTopLevelDomainsIds(entities)
@@ -176,26 +206,6 @@ class CountryDomainManager @Inject constructor(
             .map { list ->
                 list.map { CountryTimeZoneJoin(countryId, it) }
             }.flatMapCompletable(persistence::saveCountryTimeZoneJoins)
-
-    private fun saveRegionalBlocsFor(countryId: String, entities: List<RegionalBlocEntity>): Completable {
-        val map: Single<List<CountryRegionalBlocJoin>> = immediateSingle {
-            entities.map { CountryRegionalBlocJoin(countryId, it.id) }
-        }
-
-        return regionalBlocPersistence.saveRegionalBlocs(entities)
-            .andThen(map)
-            .flatMapCompletable(persistence::saveCountryRegionalBlocJoins)
-    }
-
-    private fun saveBordersFor(countryId: String, entities: List<BorderEntity>): Completable {
-        val map: Single<List<CountryBorderJoin>> = immediateSingle {
-            entities.map { CountryBorderJoin(countryId, it.id) }
-        }
-
-        return borderPersistence.saveBorders(entities)
-            .andThen(map)
-            .flatMapCompletable(persistence::saveCountryBorderJoins)
-    }
 
     /* Fetch Country */
 

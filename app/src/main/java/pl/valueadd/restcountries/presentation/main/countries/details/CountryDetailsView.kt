@@ -11,4 +11,6 @@ interface CountryDetailsView : BaseView {
 
     fun bindBordersToView(models: List<CountryModel>)
 
+    fun setBordersCardVisibility(isVisible: Boolean)
+
 }

@@ -51,6 +51,8 @@ class CountryDetailsPresenter @Inject constructor(
 
         view.bindModelToView(model)
 
+        view.setBordersCardVisibility(model.borders.isNotEmpty())
+
         bordersDisposable?.let {
             disposables.remove(it)
         }
