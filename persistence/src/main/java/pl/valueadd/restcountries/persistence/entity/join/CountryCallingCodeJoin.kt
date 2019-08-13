@@ -19,7 +19,7 @@ import pl.valueadd.restcountries.persistence.entity.join.CountryCallingCodeJoin.
     ],
     foreignKeys = [
         ForeignKey(entity = CountryEntity::class,
-            parentColumns = arrayOf("numeric_code"),
+            parentColumns = arrayOf("alpha3_code"),
             childColumns = arrayOf(COL_COUNTRY_ID),
             onDelete = CASCADE),
         ForeignKey(entity = CallingCodeEntity::class,

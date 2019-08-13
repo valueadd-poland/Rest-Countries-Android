@@ -42,6 +42,11 @@ class CountryPersistenceManager @Inject constructor(private val dao: CountryDao,
             .distinctUntilChanged()
             .subscribeOnIo()
 
+    fun observeCountries(countryIds: List<String>): Flowable<List<CountryEntity>> =
+        dao.observeCountries(countryIds)
+            .distinctUntilChanged()
+            .subscribeOnIo()
+
     fun observeCountry(countryId: String): Flowable<CountryEntity> =
         dao.observeCountry(countryId)
             .distinctUntilChanged()

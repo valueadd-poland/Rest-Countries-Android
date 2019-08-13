@@ -1,7 +1,12 @@
 package pl.valueadd.restcountries.presentation.main.countries.details
 
+import android.graphics.drawable.PictureDrawable
 import android.os.Bundle
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.chip.Chip
+import kotlinx.android.synthetic.main.country_fragment_details.bordersChipGroup
 import kotlinx.android.synthetic.main.country_fragment_details.callingCodesPropertyView
 import kotlinx.android.synthetic.main.country_fragment_details.domainsPropertyView
 import kotlinx.android.synthetic.main.country_fragment_details.flagImageView
@@ -12,7 +17,10 @@ import pl.valueadd.restcountries.R
 import pl.valueadd.restcountries.domain.model.country.CountryModel
 import pl.valueadd.restcountries.presentation.base.fragment.base.BaseMVPFragment
 import pl.valueadd.restcountries.utility.common.merge
+import pl.valueadd.restcountries.utility.image.Options
+import pl.valueadd.restcountries.utility.image.listener.SvgSoftwareLayerSetter
 import pl.valueadd.restcountries.utility.image.loadSVGImage
+import pl.valueadd.restcountries.utility.image.target.ChipTarget
 import javax.inject.Inject
 
 class CountryDetailsFragment : BaseMVPFragment<CountryDetailsView, CountryDetailsPresenter>(R.layout.country_fragment_details),
@@ -45,4 +53,25 @@ class CountryDetailsFragment : BaseMVPFragment<CountryDetailsView, CountryDetail
             timeZonesPropertyView.subtitle = timezones.merge()
         }
     }
+
+    override fun bindBordersToView(models: List<CountryModel>) {
+        for (model in models) {
+            val chip = prepareBorderChip(model)
+
+            bordersChipGroup.addView(chip)
+        }
+    }
+
+    private fun prepareBorderChip(model: CountryModel): Chip =
+        Chip(requireContext()).apply {
+            text = model.name
+            Glide.with(this)
+                .`as`(PictureDrawable::class.java)
+                .apply(Options.svgRequest.apply {
+                    circleCrop().autoClone()
+                })
+                .listener(SvgSoftwareLayerSetter())
+                .load(model.flagUrl)
+                .into(ChipTarget(this))
+        }
 }

@@ -1,5 +1,6 @@
 package pl.valueadd.restcountries.presentation.main.countries.details
 
+import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import pl.valueadd.restcountries.domain.manager.CountryDomainManager
 import pl.valueadd.restcountries.domain.manager.ExceptionDomainManager
@@ -15,24 +16,13 @@ class CountryDetailsPresenter @Inject constructor(
     private val exceptionManager: ExceptionDomainManager
 ) : BasePresenter<CountryDetailsView>() {
 
+    private var bordersDisposable: Disposable? = null
+
     override fun attachView(view: CountryDetailsView) {
         super.attachView(view)
 
-//        downloadCountry(view.countryId)
-
         observeCountry(view.countryId)
     }
-
-//    fun downloadCountry(countryId: String) {
-//        countryManager
-//            .downloadCountry(countryId)
-//            .subscribeOnIo()
-//            .subscribe(
-//                ::handleDownloadCountrySuccess,
-//                ::handleDownloadCountryFailed
-//            )
-//            .addTo(disposables)
-//    }
 
     fun observeCountry(countryId: String) {
         countryManager
@@ -45,11 +35,26 @@ class CountryDetailsPresenter @Inject constructor(
             .addTo(disposables)
     }
 
-    private fun handleObserveCountrySuccess(model: CountryModel) = onceViewAttached {
+    fun observeBorders(borderIds: List<String>): Disposable =
+        countryManager
+            .observeCountries(borderIds)
+            .observeOnMain()
+            .subscribe(
+                ::handleObserveBordersSuccess,
+                ::handleObserveBordersFailed
+            )
+            .addTo(disposables)
+
+    private fun handleObserveCountrySuccess(model: CountryModel) = onceViewAttached { view->
 
         Timber.i("Country has been fetched successfully.")
 
-        it.bindModelToView(model)
+        view.bindModelToView(model)
+
+        bordersDisposable?.let {
+            disposables.remove(it)
+        }
+        bordersDisposable = observeBorders(model.borders)
     }
 
     private fun handleObserveCountryFailed(throwable: Throwable) = onceViewAttached {
@@ -61,15 +66,16 @@ class CountryDetailsPresenter @Inject constructor(
         it.showError(message)
     }
 
-    private fun handleDownloadCountrySuccess() {
+    private fun handleObserveBordersSuccess(models: List<CountryModel>) = onceViewAttached {
 
-        Timber.i("Country has been downloaded successfully.")
+        Timber.i("Borders has been fetched successfully.")
 
+        it.bindBordersToView(models)
     }
 
-    private fun handleDownloadCountryFailed(throwable: Throwable) = onceViewAttached {
+    private fun handleObserveBordersFailed(throwable: Throwable) = onceViewAttached {
 
-        Timber.w(throwable, "Country download failed.")
+        Timber.w(throwable, "Borders fetch failed.")
 
         val message = exceptionManager.mapToMessage(throwable)
 

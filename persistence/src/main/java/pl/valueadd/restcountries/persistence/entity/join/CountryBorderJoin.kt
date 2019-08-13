@@ -5,7 +5,6 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.CASCADE
 import org.apache.commons.lang3.StringUtils.EMPTY
-import org.apache.commons.lang3.math.NumberUtils.LONG_ZERO
 import pl.valueadd.restcountries.persistence.entity.BorderEntity
 import pl.valueadd.restcountries.persistence.entity.CountryEntity
 import pl.valueadd.restcountries.persistence.entity.join.CountryBorderJoin.Companion.COL_BORDER_ID
@@ -19,11 +18,11 @@ import pl.valueadd.restcountries.persistence.entity.join.CountryBorderJoin.Compa
     ],
     foreignKeys = [
         ForeignKey(entity = CountryEntity::class,
-            parentColumns = arrayOf("numeric_code"),
+            parentColumns = arrayOf("alpha3_code"),
             childColumns = arrayOf(COL_COUNTRY_ID),
             onDelete = CASCADE),
         ForeignKey(entity = BorderEntity::class,
-            parentColumns = arrayOf("id"),
+            parentColumns = arrayOf("name"),
             childColumns = arrayOf(COL_BORDER_ID),
             onDelete = CASCADE)
     ]
@@ -34,9 +33,10 @@ data class CountryBorderJoin(
     var countryId: String = EMPTY,
 
     @ColumnInfo(name = COL_BORDER_ID)
-    var borderId: Long = LONG_ZERO
+    var borderId: String = EMPTY
 
 ) {
+
     companion object {
         internal const val COL_COUNTRY_ID = "country_id"
         internal const val COL_BORDER_ID = "border_id"

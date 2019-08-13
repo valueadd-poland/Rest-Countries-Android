@@ -62,5 +62,5 @@ data class CountryModel(
 ) : BaseModel() {
 
     val id: String
-        get() = numericCode
+        get() = alpha3Code
 }

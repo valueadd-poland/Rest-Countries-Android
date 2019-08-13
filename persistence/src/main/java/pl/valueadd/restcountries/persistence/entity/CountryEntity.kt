@@ -13,17 +13,17 @@ import pl.valueadd.restcountries.persistence.model.Translations
 data class CountryEntity(
 
     @PrimaryKey
+    @ColumnInfo(name = "alpha3_code")
+    var alpha3Code: String = EMPTY,
+
+    @ColumnInfo(name = "alpha2_code")
+    var alpha2Code: String = EMPTY,
+
     @ColumnInfo(name = "numeric_code")
     var numericCode: String = EMPTY,
 
     @ColumnInfo(name = "name")
     var name: String = EMPTY,
-
-    @ColumnInfo(name = "alpha2_code")
-    var alpha2Code: String = EMPTY,
-
-    @ColumnInfo(name = "alpha3_code")
-    var alpha3Code: String = EMPTY,
 
     @ColumnInfo(name = "capital")
     var capital: String = EMPTY,
@@ -63,8 +63,8 @@ data class CountryEntity(
 ) {
 
     var id: String
-        get() = numericCode
+        get() = alpha3Code
         set(value) {
-            numericCode = value
+            alpha3Code = value
         }
 }

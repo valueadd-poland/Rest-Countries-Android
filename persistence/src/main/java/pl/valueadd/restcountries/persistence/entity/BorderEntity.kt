@@ -9,11 +9,16 @@ import org.apache.commons.lang3.math.NumberUtils.LONG_ZERO
 @Entity(tableName = "borders")
 data class BorderEntity(
 
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    var id: Long = LONG_ZERO,
-
+    @PrimaryKey
     @ColumnInfo(name = "name")
     var name: String = EMPTY
 
-)
+) {
+
+    var id: String
+        get() = name
+        set(value) {
+            name = value
+        }
+
+}

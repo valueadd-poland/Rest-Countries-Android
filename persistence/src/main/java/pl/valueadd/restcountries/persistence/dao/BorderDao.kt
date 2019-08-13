@@ -13,7 +13,7 @@ abstract class BorderDao : BaseDao<BorderEntity>() {
         SELECT *
         FROM borders
         INNER JOIN country_border_join
-        ON borders.id = country_border_join.border_id
+        ON borders.name = country_border_join.border_id
         WHERE country_border_join.country_id = :countryId
     """)
     abstract fun observeBorders(countryId: String): Flowable<List<BorderEntity>>

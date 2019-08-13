@@ -17,8 +17,17 @@ abstract class CountryDao : BaseDao<CountryEntity>() {
     @Query(value = """
         SELECT *
         FROM countries
-        WHERE countries.numeric_code = :countryId
+        WHERE countries.alpha3_code = :countryId
+        COLLATE NOCASE
         LIMIT 1
     """)
     abstract fun observeCountry(countryId: String): Flowable<CountryEntity>
+
+    @Query(value = """
+        SELECT *
+        FROM countries
+        WHERE countries.alpha3_code IN (:countryIds)
+        ORDER BY name COLLATE NOCASE ASC
+    """)
+    abstract fun observeCountries(countryIds: List<String>): Flowable<List<CountryEntity>>
 }

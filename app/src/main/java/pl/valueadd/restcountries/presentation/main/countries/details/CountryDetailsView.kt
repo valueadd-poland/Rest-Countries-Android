@@ -9,4 +9,6 @@ interface CountryDetailsView : BaseView {
 
     fun bindModelToView(model: CountryModel)
 
+    fun bindBordersToView(models: List<CountryModel>)
+
 }

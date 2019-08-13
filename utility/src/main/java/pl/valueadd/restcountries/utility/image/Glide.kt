@@ -3,7 +3,6 @@ package pl.valueadd.restcountries.utility.image
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.PictureDrawable
-import android.net.Uri
 import android.view.View
 import android.widget.ImageView
 import androidx.annotation.ColorInt
@@ -16,12 +15,14 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import pl.valueadd.restcountries.utility.image.listener.SvgSoftwareLayerSetter
 
-private val svgRequestOptions: RequestOptions by lazy {
-    RequestOptions().apply {
-        diskCacheStrategy(DiskCacheStrategy.NONE)
-            .skipMemoryCache(true)
-            .dontTransform()
-            .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+object Options {
+    val svgRequest: RequestOptions by lazy {
+        RequestOptions().apply {
+            diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .dontTransform()
+                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+        }
     }
 }
 
@@ -48,14 +49,12 @@ fun <T : ImageView> T.loadSVGImage(url: String, @DrawableRes placeholder: Int = 
 fun <T : ImageView> T.loadSVGImage(url: String, placeholder: Drawable? = null, @ColorInt placeholderColorInt: Int = Color.WHITE) {
     placeholder?.setTint(placeholderColorInt)
 
-    val uri = Uri.parse(url)
-
     Glide.with(this)
         .`as`(PictureDrawable::class.java)
         .placeholder(placeholder)
-        .apply(svgRequestOptions)
+        .apply(Options.svgRequest)
         .listener(SvgSoftwareLayerSetter())
-        .load(uri)
+        .load(url)
         .into(this)
 }
 
