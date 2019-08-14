@@ -21,9 +21,9 @@ class ChipTarget(view: Chip) : CustomViewTarget<Chip, PictureDrawable>(view) {
 
     override fun onResourceReady(resource: PictureDrawable, transition: Transition<in PictureDrawable>?) {
 
-        val rawBitmap: Bitmap = Bitmap.createBitmap(resource.intrinsicWidth, resource.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        val resourceBitmap: Bitmap = Bitmap.createBitmap(resource.intrinsicWidth, resource.intrinsicHeight, Bitmap.Config.ARGB_8888)
 
-        Canvas(rawBitmap).apply {
+        Canvas(resourceBitmap).apply {
             drawPicture(resource.picture)
         }
 
@@ -36,23 +36,21 @@ class ChipTarget(view: Chip) : CustomViewTarget<Chip, PictureDrawable>(view) {
             centerSide = resource.intrinsicHeight
             centerX = resource.intrinsicWidth / 2 - resource.intrinsicHeight / 2
             centerY = 0
-            Bitmap.createBitmap(rawBitmap, centerX, centerY, centerSide, centerSide)
         } else {
             centerSide = resource.intrinsicWidth
             centerX = 0
             centerY = resource.intrinsicHeight / 2 - resource.intrinsicWidth / 2
-
         }
 
-        val centeredBitmap: Bitmap = Bitmap.createBitmap(rawBitmap, centerX, centerY, centerSide, centerSide)
+        val centeredBitmap: Bitmap = Bitmap.createBitmap(resourceBitmap, centerX, centerY, centerSide, centerSide)
 
-        rawBitmap.recycle()
+        resourceBitmap.recycle()
 
-        val desiredBitmap: Bitmap = Bitmap.createScaledBitmap(centeredBitmap, chipIconSize, chipIconSize, true)
+        val scaledBitmap: Bitmap = Bitmap.createScaledBitmap(centeredBitmap, chipIconSize, chipIconSize, true)
 
         centeredBitmap.recycle()
 
-        val desiredDrawable: Drawable? = RoundedBitmapDrawableFactory.create(view.resources, desiredBitmap).apply {
+        val desiredDrawable: Drawable = RoundedBitmapDrawableFactory.create(view.resources, scaledBitmap).apply {
             isCircular = true
         }
 

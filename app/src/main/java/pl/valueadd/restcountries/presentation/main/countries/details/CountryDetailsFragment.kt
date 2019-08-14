@@ -3,12 +3,8 @@ package pl.valueadd.restcountries.presentation.main.countries.details
 import android.graphics.drawable.PictureDrawable
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.Target
 import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.country_fragment_details.bordersCardView
 import kotlinx.android.synthetic.main.country_fragment_details.bordersChipGroup

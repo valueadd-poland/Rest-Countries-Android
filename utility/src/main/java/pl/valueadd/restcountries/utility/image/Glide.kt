@@ -18,7 +18,7 @@ import pl.valueadd.restcountries.utility.image.listener.SvgSoftwareLayerSetter
 object Options {
     val svgRequest: RequestOptions by lazy {
         RequestOptions().apply {
-            diskCacheStrategy(DiskCacheStrategy.NONE)
+            diskCacheStrategy(DiskCacheStrategy.DATA)
                 .skipMemoryCache(true)
                 .dontTransform()
                 .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
