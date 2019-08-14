@@ -22,6 +22,8 @@ import pl.valueadd.restcountries.utility.image.Options
 import pl.valueadd.restcountries.utility.image.listener.SvgSoftwareLayerSetter
 import pl.valueadd.restcountries.utility.image.loadSVGImage
 import pl.valueadd.restcountries.utility.image.target.ChipTarget
+import pl.valueadd.restcountries.utility.reactivex.onSuccess
+import pl.valueadd.restcountries.utility.reactivex.throttleClicks
 import pl.valueadd.restcountries.utility.view.setVisible
 import javax.inject.Inject
 
@@ -58,7 +60,10 @@ class CountryDetailsFragment : BaseMVPFragment<CountryDetailsView, CountryDetail
 
     override fun bindBordersToView(models: List<CountryModel>) {
         for (model in models) {
-            val chip = prepareBorderChip(model)
+            val chip = createBorderChip(model)
+
+            chip.throttleClicks()
+                .onSuccess(disposables, { presenter.onBorderItemClick(model.id) })
 
             bordersChipGroup.addView(chip)
         }
@@ -67,8 +72,16 @@ class CountryDetailsFragment : BaseMVPFragment<CountryDetailsView, CountryDetail
     override fun setBordersCardVisibility(isVisible: Boolean) =
         bordersCardView.setVisible(isVisible)
 
-    private fun prepareBorderChip(model: CountryModel): View =
+    override fun navigateToCountry(countryId: String) {
+
+        val fragment = createInstance(countryId)
+
+        startWithPop(fragment)
+    }
+
+    private fun createBorderChip(model: CountryModel): View =
         Chip(requireContext()).apply {
+            isClickable = true
             text = model.name
             Glide.with(this)
                 .`as`(PictureDrawable::class.java)

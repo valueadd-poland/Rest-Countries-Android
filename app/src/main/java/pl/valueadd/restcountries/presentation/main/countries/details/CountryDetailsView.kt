@@ -13,4 +13,6 @@ interface CountryDetailsView : BaseView {
 
     fun setBordersCardVisibility(isVisible: Boolean)
 
+    fun navigateToCountry(countryId: String)
+
 }

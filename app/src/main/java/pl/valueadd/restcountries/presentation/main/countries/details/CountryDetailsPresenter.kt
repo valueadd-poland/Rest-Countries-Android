@@ -24,6 +24,10 @@ class CountryDetailsPresenter @Inject constructor(
         observeCountry(view.countryId)
     }
 
+    fun onBorderItemClick(countryId: String) = onceViewAttached {
+        it.navigateToCountry(countryId)
+    }
+
     fun observeCountry(countryId: String) {
         countryManager
             .observeCountry(countryId)
