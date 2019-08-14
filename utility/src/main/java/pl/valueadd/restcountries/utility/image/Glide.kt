@@ -42,16 +42,16 @@ fun <T : ImageView> T.loadImage(url: String, placeholder: Drawable? = null, @Col
 }
 
 fun <T : ImageView> T.loadSVGImage(url: String, @DrawableRes placeholder: Int = View.NO_ID, @ColorInt placeholderColorInt: Int = Color.WHITE) {
-    val drawable: Drawable? = ContextCompat.getDrawable(context, placeholder)
-    loadSVGImage(url, drawable, placeholderColorInt)
-}
-
-fun <T : ImageView> T.loadSVGImage(url: String, placeholder: Drawable? = null, @ColorInt placeholderColorInt: Int = Color.WHITE) {
-    placeholder?.setTint(placeholderColorInt)
+    val drawable: Drawable? =
+        if (placeholder != View.NO_ID) {
+            ContextCompat.getDrawable(context, placeholder)?.apply {
+                setTint(placeholderColorInt)
+            }
+        } else null
 
     Glide.with(this)
         .`as`(PictureDrawable::class.java)
-        .placeholder(placeholder)
+        .placeholder(drawable)
         .apply(Options.svgRequest)
         .listener(SvgSoftwareLayerSetter())
         .load(url)
