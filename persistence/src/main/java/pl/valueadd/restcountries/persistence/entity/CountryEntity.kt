@@ -13,7 +13,7 @@ import pl.valueadd.restcountries.persistence.model.Translations
 data class CountryEntity(
 
     @PrimaryKey
-    @ColumnInfo(name = "alpha3_code")
+    @ColumnInfo(name = COL_ALPHA_3_CODE)
     var alpha3Code: String = EMPTY,
 
     @ColumnInfo(name = "alpha2_code")
@@ -61,6 +61,10 @@ data class CountryEntity(
     @ColumnInfo(name = "cioc")
     var cioc: String = EMPTY
 ) {
+
+    companion object {
+        const val COL_ALPHA_3_CODE = "alpha3_code"
+    }
 
     var id: String
         get() = alpha3Code

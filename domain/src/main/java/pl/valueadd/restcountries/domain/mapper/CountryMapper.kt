@@ -3,6 +3,7 @@ package pl.valueadd.restcountries.domain.mapper
 import org.mapstruct.Mapper
 import org.mapstruct.NullValueCheckStrategy
 import org.mapstruct.NullValueMappingStrategy
+import pl.valueadd.restcountries.domain.model.country.CountryFlatModel
 import pl.valueadd.restcountries.domain.model.country.CountryModel
 import pl.valueadd.restcountries.domain.model.currency.CurrencyModel
 import pl.valueadd.restcountries.domain.model.language.LanguageModel
@@ -14,7 +15,7 @@ import pl.valueadd.restcountries.network.dto.language.LanguageDto
 import pl.valueadd.restcountries.network.dto.language.TranslationsDto
 import pl.valueadd.restcountries.network.dto.region.RegionalBlocDto
 import pl.valueadd.restcountries.persistence.entity.AltSpellingEntity
-import pl.valueadd.restcountries.persistence.entity.BorderEntity
+import pl.valueadd.restcountries.persistence.model.Border
 import pl.valueadd.restcountries.persistence.entity.CallingCodeEntity
 import pl.valueadd.restcountries.persistence.entity.CountryEntity
 import pl.valueadd.restcountries.persistence.entity.CurrencyEntity
@@ -22,6 +23,7 @@ import pl.valueadd.restcountries.persistence.entity.LanguageEntity
 import pl.valueadd.restcountries.persistence.entity.RegionalBlocEntity
 import pl.valueadd.restcountries.persistence.entity.TimeZoneEntity
 import pl.valueadd.restcountries.persistence.entity.TopLevelDomainEntity
+import pl.valueadd.restcountries.persistence.model.CountryFlat
 import pl.valueadd.restcountries.persistence.model.Translations
 
 @Mapper(
@@ -64,6 +66,8 @@ abstract class CountryMapper {
 
     abstract fun mapRegionalBlocEntityToModel(model: RegionalBlocEntity): RegionalBlocModel
 
+    abstract fun mapCountryFlatToModel(entity: CountryFlat): CountryFlatModel
+
     /* Entity List to Model List */
 
     abstract fun mapCountryEntitiesToModels(list: List<CountryEntity>): List<CountryModel>
@@ -74,25 +78,27 @@ abstract class CountryMapper {
 
     abstract fun mapRegionalBlocEntitiesToModels(list: List<RegionalBlocEntity>): List<RegionalBlocModel>
 
+    abstract fun mapCountriesFlatToModels(entities: List<CountryFlat>): List<CountryFlatModel>
+
     /* Custom from Dto to Entity */
 
-    fun mapTopLevelDomainDtoToEntity(value: String): TopLevelDomainEntity =
-        TopLevelDomainEntity(name = value)
+    fun mapTopLevelDomainDtoToEntity(value: String, countryId: String): TopLevelDomainEntity =
+        TopLevelDomainEntity(name = value, countryId = countryId)
 
-    fun mapTopLevelDomainDtosToEntities(values: List<String>?): List<TopLevelDomainEntity> =
-        values?.map(::mapTopLevelDomainDtoToEntity) ?: emptyList()
+    fun mapTopLevelDomainDtosToEntities(values: List<String>?, countryId: String): List<TopLevelDomainEntity> =
+        values?.map { mapTopLevelDomainDtoToEntity(it, countryId) } ?: emptyList()
 
-    fun mapCallingCodeDtoToEntity(value: String): CallingCodeEntity =
-        CallingCodeEntity(name = value)
+    fun mapCallingCodeDtoToEntity(value: String, countryId: String): CallingCodeEntity =
+        CallingCodeEntity(name = value, countryId = countryId)
 
-    fun mapCallingCodeDtosToEntities(values: List<String>?): List<CallingCodeEntity> =
-        values?.map(::mapCallingCodeDtoToEntity) ?: emptyList()
+    fun mapCallingCodeDtosToEntities(values: List<String>?, countryId: String): List<CallingCodeEntity> =
+        values?.map { mapCallingCodeDtoToEntity(it, countryId) } ?: emptyList()
 
-    fun mapAltSpellingDtoToEntity(value: String): AltSpellingEntity =
-        AltSpellingEntity(name = value)
+    fun mapAltSpellingDtoToEntity(value: String, countryId: String): AltSpellingEntity =
+        AltSpellingEntity(name = value, countryId = countryId)
 
-    fun mapAltSpellingDtosToEntities(values: List<String>?): List<AltSpellingEntity> =
-        values?.map(::mapAltSpellingDtoToEntity) ?: emptyList()
+    fun mapAltSpellingDtosToEntities(values: List<String>?, countryId: String): List<AltSpellingEntity> =
+        values?.map { mapAltSpellingDtoToEntity(it, countryId) } ?: emptyList()
 
     fun mapTimeZoneDtoToEntity(value: String): TimeZoneEntity =
         TimeZoneEntity(name = value)
@@ -100,10 +106,10 @@ abstract class CountryMapper {
     fun mapTimeZoneDtosToEntities(values: List<String>?): List<TimeZoneEntity> =
         values?.map(::mapTimeZoneDtoToEntity) ?: emptyList()
 
-    fun mapBorderDtoToEntity(value: String): BorderEntity =
-        BorderEntity(name = value)
+    fun mapBorderDtoToEntity(value: String): Border =
+        Border(name = value)
 
-    fun mapBorderDtosToEntities(values: List<String>?): List<BorderEntity> =
+    fun mapBorderDtosToEntities(values: List<String>?): List<Border> =
         values?.map(::mapBorderDtoToEntity) ?: emptyList()
 
     /* Custom from Entity to Model */
@@ -132,9 +138,6 @@ abstract class CountryMapper {
     fun mapTimeZoneEntitiesToModels(entities: List<TimeZoneEntity>): List<String> =
         entities.map(::mapTimeZoneEntityToModel)
 
-    fun mapBorderEntityToModel(entity: BorderEntity): String =
+    fun mapBorderEntityToModel(entity: Border): String =
         entity.name
-
-    fun mapBorderEntitiesToModels(entities: List<BorderEntity>): List<String> =
-        entities.map(::mapBorderEntityToModel)
 }

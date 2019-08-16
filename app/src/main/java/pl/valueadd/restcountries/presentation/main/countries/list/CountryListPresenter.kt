@@ -18,12 +18,12 @@ class CountryListPresenter
 ) : BasePresenter<CountryListView>(),
     ClickCountryItemEventHook.Listener {
 
-    override fun attachView(view: CountryListView) {
-        super.attachView(view)
+    init {
+        onceViewAttached {
+            downloadAllCountries()
 
-        downloadAllCountries()
-
-        observeAllCountries()
+            observeAllCountries()
+        }
     }
 
     override fun onCountryItemClick(model: CountryModel) = onceViewAttached {
@@ -48,6 +48,8 @@ class CountryListPresenter
 
     private fun handleDownloadAllExamplesFailed(throwable: Throwable) = onceViewAttached {
 
+        Timber.e(throwable, "Download all countries failed.")
+
         val message = exceptionManager.mapToMessage(throwable)
 
         it.showError(message)
@@ -61,20 +63,22 @@ class CountryListPresenter
             }
             .observeOnMain()
             .subscribe(
-                ::handleObserveAllExamplesSuccess,
-                ::handleObserveAllExamplesFailed
+                ::handleObserveAllCountriesSuccess,
+                ::handleObserveAllCountriesFailed
             )
             .addTo(disposables)
     }
 
-    private fun handleObserveAllExamplesSuccess(list: List<CountryModel>) = onceViewAttached { view ->
+    private fun handleObserveAllCountriesSuccess(list: List<CountryModel>) = onceViewAttached { view ->
 
         val items = list.map { CountryItem(it) }
 
         view.bindDataToList(items)
     }
 
-    private fun handleObserveAllExamplesFailed(throwable: Throwable) = onceViewAttached {
+    private fun handleObserveAllCountriesFailed(throwable: Throwable) = onceViewAttached {
+
+        Timber.e(throwable, "Observe all countries failed.")
 
         val message = exceptionManager.mapToMessage(throwable)
 

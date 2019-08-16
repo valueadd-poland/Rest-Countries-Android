@@ -106,6 +106,7 @@ abstract class BaseMVPFragment<V : BaseView, P : BasePresenter<V>>(@LayoutRes la
     }
 
     override fun onDetach() {
+        presenter.clearDisposables()
         clearDisposables()
 
         super.onDetach()

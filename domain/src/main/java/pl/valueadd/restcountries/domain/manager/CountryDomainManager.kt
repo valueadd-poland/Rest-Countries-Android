@@ -5,31 +5,25 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.functions.Function9
 import pl.valueadd.restcountries.domain.mapper.CountryMapper
+import pl.valueadd.restcountries.domain.model.country.CountryFlatModel
 import pl.valueadd.restcountries.domain.model.country.CountryModel
 import pl.valueadd.restcountries.domain.model.currency.CurrencyModel
 import pl.valueadd.restcountries.domain.model.language.LanguageModel
 import pl.valueadd.restcountries.domain.model.region.RegionalBlocModel
 import pl.valueadd.restcountries.network.dto.country.CountryDto
 import pl.valueadd.restcountries.network.manager.CountryNetworkManager
-import pl.valueadd.restcountries.persistence.entity.AltSpellingEntity
-import pl.valueadd.restcountries.persistence.entity.BorderEntity
-import pl.valueadd.restcountries.persistence.entity.CallingCodeEntity
+import pl.valueadd.restcountries.persistence.model.Border
 import pl.valueadd.restcountries.persistence.entity.CountryEntity
 import pl.valueadd.restcountries.persistence.entity.CurrencyEntity
 import pl.valueadd.restcountries.persistence.entity.LanguageEntity
 import pl.valueadd.restcountries.persistence.entity.RegionalBlocEntity
 import pl.valueadd.restcountries.persistence.entity.TimeZoneEntity
-import pl.valueadd.restcountries.persistence.entity.TopLevelDomainEntity
-import pl.valueadd.restcountries.persistence.entity.join.CountryAltSpellingJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryBorderJoin
-import pl.valueadd.restcountries.persistence.entity.join.CountryCallingCodeJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryCurrencyJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryLanguageJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryRegionalBlocJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryTimeZoneJoin
-import pl.valueadd.restcountries.persistence.entity.join.CountryTopLevelDomainJoin
 import pl.valueadd.restcountries.persistence.manager.AltSpellingPersistenceManager
-import pl.valueadd.restcountries.persistence.manager.BorderPersistenceManager
 import pl.valueadd.restcountries.persistence.manager.CallingCodePersistenceManager
 import pl.valueadd.restcountries.persistence.manager.CountryPersistenceManager
 import pl.valueadd.restcountries.persistence.manager.CurrencyPersistenceManager
@@ -38,6 +32,7 @@ import pl.valueadd.restcountries.persistence.manager.RegionalBlocPersistenceMana
 import pl.valueadd.restcountries.persistence.manager.TimeZonePersistenceManager
 import pl.valueadd.restcountries.persistence.manager.TopLevelDomainPersistenceManager
 import pl.valueadd.restcountries.utility.reactivex.immediateSingle
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -52,7 +47,6 @@ class CountryDomainManager @Inject constructor(
     private val languagePersistence: LanguagePersistenceManager,
     private val regionalBlocPersistence: RegionalBlocPersistenceManager,
     private val timeZonePersistence: TimeZonePersistenceManager,
-    private val borderPersistence: BorderPersistenceManager,
     private val mapper: CountryMapper
 ) {
 
@@ -90,11 +84,6 @@ class CountryDomainManager @Inject constructor(
             }
         )
 
-    fun observeCountries(countyIds: List<String>): Flowable<List<CountryModel>> {
-        return persistence.observeCountries(countyIds)
-            .map(mapper::mapCountryEntitiesToModels)
-    }
-
     fun observeAllCountries(): Flowable<List<CountryModel>> =
         persistence
             .observeAllCountries()
@@ -117,10 +106,19 @@ class CountryDomainManager @Inject constructor(
 
                     val entity: CountryEntity = mapper.mapCountryDtoToEntity(dto)
 
-                    saveEntities.add(saveCallingCodesFor(entity.id, mapper.mapCallingCodeDtosToEntities(dto.callingCodes)))
-                    saveEntities.add(saveTopLevelDomainsFor(entity.id, mapper.mapTopLevelDomainDtosToEntities(dto.topLevelDomains)))
-                    saveEntities.add(saveAltSpellingsFor(entity.id, mapper.mapAltSpellingDtosToEntities(dto.altSpellings)))
                     saveEntities.add(saveTimeZonesFor(entity.id, mapper.mapTimeZoneDtosToEntities(dto.timezones)))
+
+                    mapper.mapCallingCodeDtosToEntities(dto.callingCodes, entity.id).let {
+                        saveEntities.add(callingCodePersistence.saveCallingCodes(it))
+                    }
+
+                    mapper.mapAltSpellingDtosToEntities(dto.altSpellings, entity.id).let {
+                        saveEntities.add(altSpellingPersistence.saveAltSpellings(it))
+                    }
+
+                    mapper.mapTopLevelDomainDtosToEntities(dto.topLevelDomains, entity.id).let {
+                        saveEntities.add(topLevelDomainPersistence.saveTopLevelDomains(it))
+                    }
 
                     mapper.mapRegionalBlocDtosToEntities(dto.regionalBlocs).let {
                         saveEntities.add(regionalBlocPersistence.saveRegionalBlocs(it))
@@ -139,7 +137,6 @@ class CountryDomainManager @Inject constructor(
                     }
 
                     mapper.mapBorderDtosToEntities(dto.borders).let {
-                        saveEntities.add(borderPersistence.saveBorders(it))
                         saveRelations.add(saveBorderJoinsFor(entity.id, it))
                     }
 
@@ -167,11 +164,11 @@ class CountryDomainManager @Inject constructor(
         return map.flatMapCompletable(persistence::saveCountryLanguageJoins)
     }
 
-    private fun saveBorderJoinsFor(countryId: String, entities: List<BorderEntity>): Completable {
+    private fun saveBorderJoinsFor(countryId: String, entities: List<Border>): Completable {
         val map: Single<List<CountryBorderJoin>> = immediateSingle {
             entities.map { CountryBorderJoin(countryId, it.id) }
         }
-
+        Timber.d("Count of borders to save: ${entities.size} for countryId = $countryId")
         return map.flatMapCompletable(persistence::saveCountryBorderJoins)
     }
 
@@ -182,24 +179,6 @@ class CountryDomainManager @Inject constructor(
 
         return map.flatMapCompletable(persistence::saveCountryRegionalBlocJoins)
     }
-
-    private fun saveCallingCodesFor(countryId: String, entities: List<CallingCodeEntity>): Completable =
-        callingCodePersistence.saveCallingCodesIds(entities)
-            .map { list ->
-                list.map { CountryCallingCodeJoin(countryId, it) }
-            }.flatMapCompletable(persistence::saveCountryCallingCodeJoins)
-
-    private fun saveTopLevelDomainsFor(countryId: String, entities: List<TopLevelDomainEntity>): Completable =
-        topLevelDomainPersistence.saveTopLevelDomainsIds(entities)
-            .map { list ->
-                list.map { CountryTopLevelDomainJoin(countryId, it) }
-            }.flatMapCompletable(persistence::saveCountryTopLevelDomainJoins)
-
-    private fun saveAltSpellingsFor(countryId: String, entities: List<AltSpellingEntity>): Completable =
-        altSpellingPersistence.saveAltSpellingsIds(entities)
-            .map { list ->
-                list.map { CountryAltSpellingJoin(countryId, it) }
-            }.flatMapCompletable(persistence::saveCountryAltSpellingJoins)
 
     private fun saveTimeZonesFor(countryId: String, entities: List<TimeZoneEntity>): Completable =
         timeZonePersistence.saveTimezonesIds(entities)
@@ -219,10 +198,10 @@ class CountryDomainManager @Inject constructor(
             .observeAltSpellings(countryId)
             .map(mapper::mapAltSpellingEntitiesToModels)
 
-    private fun observeBorders(countryId: String): Flowable<List<String>> =
-        borderPersistence
+    private fun observeBorders(countryId: String): Flowable<List<CountryFlatModel>> =
+        persistence
             .observeBorders(countryId)
-            .map(mapper::mapBorderEntitiesToModels)
+            .map(mapper::mapCountriesFlatToModels)
 
     private fun observeCallingCodes(countryId: String): Flowable<List<String>> =
         callingCodePersistence

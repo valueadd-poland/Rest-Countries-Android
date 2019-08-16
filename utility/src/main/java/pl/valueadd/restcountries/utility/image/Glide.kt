@@ -59,6 +59,6 @@ fun <T : ImageView> T.loadSVGImage(url: String, @DrawableRes placeholder: Int = 
 }
 
 fun <T : ImageView> T.clearImage() {
-    GlideApp.with(this).clear(this)
+    GlideApp.with(context.applicationContext).clear(this)
     this.setImageDrawable(null)
 }

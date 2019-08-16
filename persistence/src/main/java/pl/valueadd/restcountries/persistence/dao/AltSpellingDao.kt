@@ -12,9 +12,8 @@ abstract class AltSpellingDao : BaseDao<AltSpellingEntity>() {
     @Query(value = """
         SELECT *
         FROM alt_spellings
-        INNER JOIN country_alt_spelling_join
-        ON alt_spellings.id = country_alt_spelling_join.alt_spelling_id
-        WHERE country_alt_spelling_join.country_id = :countryId
+        WHERE alt_spellings.country_id = :countryId
+        COLLATE NOCASE
     """)
     abstract fun observeAltSpellings(countryId: String): Flowable<List<AltSpellingEntity>>
 }

@@ -12,9 +12,8 @@ abstract class CallingCodeDao : BaseDao<CallingCodeEntity>() {
     @Query(value = """
         SELECT *
         FROM calling_codes
-        INNER JOIN country_calling_code_join
-        ON calling_codes.id = country_calling_code_join.calling_code_id
-        WHERE country_calling_code_join.country_id = :countryId
+        WHERE calling_codes.country_id = :countryId
+        COLLATE NOCASE
     """)
     abstract fun observeCallingCodes(countryId: String): Flowable<List<CallingCodeEntity>>
 }

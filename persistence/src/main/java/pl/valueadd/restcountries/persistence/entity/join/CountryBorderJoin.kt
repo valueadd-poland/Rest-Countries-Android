@@ -5,8 +5,8 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.CASCADE
 import org.apache.commons.lang3.StringUtils.EMPTY
-import pl.valueadd.restcountries.persistence.entity.BorderEntity
 import pl.valueadd.restcountries.persistence.entity.CountryEntity
+import pl.valueadd.restcountries.persistence.entity.CountryEntity.Companion.COL_ALPHA_3_CODE
 import pl.valueadd.restcountries.persistence.entity.join.CountryBorderJoin.Companion.COL_BORDER_ID
 import pl.valueadd.restcountries.persistence.entity.join.CountryBorderJoin.Companion.COL_COUNTRY_ID
 
@@ -18,11 +18,11 @@ import pl.valueadd.restcountries.persistence.entity.join.CountryBorderJoin.Compa
     ],
     foreignKeys = [
         ForeignKey(entity = CountryEntity::class,
-            parentColumns = arrayOf("alpha3_code"),
+            parentColumns = arrayOf(COL_ALPHA_3_CODE),
             childColumns = arrayOf(COL_COUNTRY_ID),
             onDelete = CASCADE),
-        ForeignKey(entity = BorderEntity::class,
-            parentColumns = arrayOf("name"),
+        ForeignKey(entity = CountryEntity::class,
+            parentColumns = arrayOf(COL_ALPHA_3_CODE),
             childColumns = arrayOf(COL_BORDER_ID),
             onDelete = CASCADE)
     ]
