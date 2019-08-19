@@ -1,12 +1,14 @@
 package pl.valueadd.restcountries.application
 
 import androidx.multidex.MultiDexApplication
+import me.yokeyword.fragmentation.Fragmentation
 import pl.valueadd.restcountries.domain.DomainModule
 import pl.valueadd.restcountries.utility.BuildConfig
 import pl.valueadd.restcountries.utility.UtilityModule
 import pl.valueadd.restcountries.utility.dependencyinjection.DependencyUtil
 import pl.valueadd.restcountries.utility.image.GlideApp
-import me.yokeyword.fragmentation.Fragmentation
+import timber.log.Timber
+import timber.log.Timber.DebugTree
 import toothpick.config.Module
 
 class RestCountriesApplication : MultiDexApplication() {
@@ -24,6 +26,10 @@ class RestCountriesApplication : MultiDexApplication() {
                     // TODO Crashlytics log exception...
                 }
                 .install()
+        }
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(DebugTree())
         }
     }
 

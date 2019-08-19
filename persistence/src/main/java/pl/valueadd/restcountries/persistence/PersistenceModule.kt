@@ -4,7 +4,19 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
-import pl.valueadd.restcountries.persistence.dao.ExampleDao
+import pl.valueadd.restcountries.persistence.dao.AltSpellingDao
+import pl.valueadd.restcountries.persistence.dao.CallingCodeDao
+import pl.valueadd.restcountries.persistence.dao.CountryBorderDao
+import pl.valueadd.restcountries.persistence.dao.CountryCurrencyDao
+import pl.valueadd.restcountries.persistence.dao.CountryDao
+import pl.valueadd.restcountries.persistence.dao.CountryLanguageDao
+import pl.valueadd.restcountries.persistence.dao.CountryRegionalBlocDao
+import pl.valueadd.restcountries.persistence.dao.CountryTimeZoneDao
+import pl.valueadd.restcountries.persistence.dao.CurrencyDao
+import pl.valueadd.restcountries.persistence.dao.LanguageDao
+import pl.valueadd.restcountries.persistence.dao.RegionalBlocDao
+import pl.valueadd.restcountries.persistence.dao.TimeZoneDao
+import pl.valueadd.restcountries.persistence.dao.TopLevelDomainDao
 import pl.valueadd.restcountries.persistence.database.RestCountriesDatabase
 import toothpick.config.Module
 
@@ -12,7 +24,7 @@ class PersistenceModule(context: Application) : Module() {
 
     companion object Configuration {
         internal const val DATABASE_NAME = "restcountries.db"
-        internal const val CACHE_NAME = "com.valueadd.restcountries.DEVICE_PREFERENCES"
+        internal const val CACHE_NAME = "pl.valueadd.restcountries.DEVICE_PREFERENCES"
     }
 
     init {
@@ -27,7 +39,19 @@ class PersistenceModule(context: Application) : Module() {
     }
 
     private fun bindDao(database: RestCountriesDatabase) {
-        bind(ExampleDao::class.java).toInstance(database.exampleDao())
+        bind(CountryDao::class.java).toInstance(database.countryDao())
+        bind(AltSpellingDao::class.java).toInstance(database.altSpellingDao())
+        bind(CallingCodeDao::class.java).toInstance(database.callingCodeDao())
+        bind(CountryCurrencyDao::class.java).toInstance(database.countryCurrencyDao())
+        bind(CountryLanguageDao::class.java).toInstance(database.countryLanguageDao())
+        bind(CurrencyDao::class.java).toInstance(database.currencyDao())
+        bind(LanguageDao::class.java).toInstance(database.languageDao())
+        bind(RegionalBlocDao::class.java).toInstance(database.regionalBlocDao())
+        bind(TimeZoneDao::class.java).toInstance(database.timeZoneDao())
+        bind(TopLevelDomainDao::class.java).toInstance(database.topLevelDomainDao())
+        bind(CountryRegionalBlocDao::class.java).toInstance(database.countryRegionalBlocDao())
+        bind(CountryTimeZoneDao::class.java).toInstance(database.countryTimeZoneDao())
+        bind(CountryBorderDao::class.java).toInstance(database.countryBorderDao())
     }
 
     private fun provideDatabase(context: Application): RestCountriesDatabase =

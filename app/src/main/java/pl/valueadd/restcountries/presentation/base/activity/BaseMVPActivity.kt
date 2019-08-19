@@ -25,7 +25,6 @@ import pl.valueadd.restcountries.utility.dependencyinjection.DependencyUtil
 import pl.valueadd.restcountries.utility.view.snackbar.SnackbarUtil
 import javax.inject.Inject
 
-@Suppress("TooManyFunctions")
 abstract class BaseMVPActivity<V : BaseView, P : BasePresenter<V>>(
     @LayoutRes protected val layoutResourceId: Int = R.layout.activity_base_layout
 ) :

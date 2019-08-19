@@ -63,6 +63,10 @@ versions.fragmentation = "1.0.1"
 versions.material_progress_bar = "1.6.1"
 versions.fast_adapter = "4.0.1"
 versions.mosby = "3.1.1"
+versions.android_svg = "1.4"
+versions.fast_adapter_sticky_headers = "0.5.1-SNAPSHOT"
+versions.sticky_headers = "0.5.1"
+versions.timber = "4.7.1"
 deps.versions = versions
 ext.versions = versions
 
@@ -134,6 +138,7 @@ view.circle_image_view = "de.hdodenhof:circleimageview:$versions.circle_image_vi
 view.material_progress_bar = "me.zhanghai.android.materialprogressbar:library:$versions.material_progress_bar"
 view.material_dialogs = "com.afollestad.material-dialogs:core:$versions.material_dialogs"
 view.material_dialogs_date = "com.afollestad.material-dialogs:datetime:$versions.material_dialogs"
+view.sticky_headers = "com.brandongogetap:stickyheaders:$versions.sticky_headers"
 deps.view = view
 
 /**
@@ -144,6 +149,7 @@ fast_adapter.core = "com.mikepenz:fastadapter:$versions.fast_adapter"
 fast_adapter.diff = "com.mikepenz:fastadapter-extensions-diff:$versions.fast_adapter"
 fast_adapter.scroll = "com.mikepenz:fastadapter-extensions-scroll:$versions.fast_adapter"
 fast_adapter.utils = "com.mikepenz:fastadapter-extensions-utils:$versions.fast_adapter"
+fast_adapter.sticky_headers = "com.mikepenz.thirdparty:stickyheadersrecyclerview:${versions.fast_adapter_sticky_headers}@aar"
 deps.fast_adapter = fast_adapter
 
 /**
@@ -212,6 +218,8 @@ utility.apache_lang = "org.apache.commons:commons-lang3:$versions.apache_lang"
 utility.convalida_ktx = "io.github.wellingtoncosta:convalida-ktx:$versions.convalida"
 utility.easy_validation = "com.wajahatkarim3.easyvalidation:easyvalidation-core$versions.easy_validation"
 utility.fragmentation = "me.yokeyword:fragmentationx:$versions.fragmentation"
+utility.android_svg = "com.caverock:androidsvg-aar:$versions.android_svg"
+utility.timber = "com.jakewharton.timber:timber:$versions.timber"
 deps.utility = utility
 
 /**
@@ -246,6 +254,7 @@ static def applyRepositories(RepositoryHandler handler) {
     handler.mavenCentral()
     handler.maven { url "https://maven.fabric.io/public" }
     handler.maven { url "https://jitpack.io" }
+    handler.maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
 // Export applyRepositories method.

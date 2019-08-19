@@ -1,78 +1,84 @@
 package pl.valueadd.restcountries.presentation.main.countries.list
 
-import android.util.Log
 import io.reactivex.rxkotlin.addTo
-import pl.valueadd.restcountries.domain.manager.ExampleDomainManager
+import pl.valueadd.restcountries.domain.manager.CountryDomainManager
 import pl.valueadd.restcountries.domain.manager.ExceptionDomainManager
-import pl.valueadd.restcountries.domain.model.ExampleModel
+import pl.valueadd.restcountries.domain.model.country.CountryModel
 import pl.valueadd.restcountries.presentation.base.BasePresenter
 import pl.valueadd.restcountries.presentation.main.countries.list.item.ClickCountryItemEventHook
 import pl.valueadd.restcountries.presentation.main.countries.list.item.CountryItem
 import pl.valueadd.restcountries.utility.reactivex.observeOnMain
+import timber.log.Timber
 import javax.inject.Inject
 
 class CountryListPresenter
 @Inject constructor(
-    private val exampleManager: ExampleDomainManager,
+    private val countryManager: CountryDomainManager,
     private val exceptionManager: ExceptionDomainManager
 ) : BasePresenter<CountryListView>(),
     ClickCountryItemEventHook.Listener {
 
-    override fun attachView(view: CountryListView) {
-        super.attachView(view)
+    init {
+        onceViewAttached {
+            downloadAllCountries()
 
-        downloadAllExamples()
-
-        observeAllExamples()
+            observeAllCountries()
+        }
     }
 
-    override fun onCountryItemClick() = onceViewAttached {
-        it.navigateToCountryDetailsView()
+    override fun onCountryItemClick(model: CountryModel) = onceViewAttached {
+        it.navigateToCountryDetailsView(model.id)
     }
 
-    private fun downloadAllExamples() {
-
-        exampleManager
-            .downloadMockedExamples()
+    private fun downloadAllCountries() {
+        countryManager
+            .downloadAllCountries()
             .observeOnMain()
             .subscribe(
-                ::handleDownloadAllExamplesSuccess,
-                ::handleDownloadAllExamplesFailed
+                ::onDownloadAllExamplesSuccess,
+                ::onDownloadAllExamplesFailed
             )
             .addTo(disposables)
     }
 
-    private fun handleDownloadAllExamplesSuccess() {
+    private fun onDownloadAllExamplesSuccess() {
 
-        Log.d(this::class.java.simpleName, "Examples has been downloaded successfully.")
+        Timber.d("Countries has been downloaded successfully.")
     }
 
-    private fun handleDownloadAllExamplesFailed(throwable: Throwable) = onceViewAttached {
+    private fun onDownloadAllExamplesFailed(throwable: Throwable) = onceViewAttached {
+
+        Timber.e(throwable, "Download all countries failed.")
 
         val message = exceptionManager.mapToMessage(throwable)
 
         it.showError(message)
     }
 
-    private fun observeAllExamples() {
-        exampleManager
-            .observeAllExamples()
+    private fun observeAllCountries() {
+        countryManager
+            .observeAllCountries()
+            .map { list ->
+                list.sortedBy { it.name }
+            }
             .observeOnMain()
             .subscribe(
-                ::handleObserveAllExamplesSuccess,
-                ::handleObserveAllExamplesFailed
+                ::onObserveAllCountriesSuccess,
+                ::onObserveAllCountriesFailed
             )
             .addTo(disposables)
     }
 
-    private fun handleObserveAllExamplesSuccess(list: List<ExampleModel>) = onceViewAttached { view ->
+    private fun onObserveAllCountriesSuccess(list: List<CountryModel>) = onceViewAttached { view ->
 
         val items = list.map { CountryItem(it) }
 
         view.bindDataToList(items)
     }
 
-    private fun handleObserveAllExamplesFailed(throwable: Throwable) = onceViewAttached {
+    private fun onObserveAllCountriesFailed(throwable: Throwable) = onceViewAttached {
+
+        Timber.e(throwable, "Observe all countries failed.")
 
         val message = exceptionManager.mapToMessage(throwable)
 

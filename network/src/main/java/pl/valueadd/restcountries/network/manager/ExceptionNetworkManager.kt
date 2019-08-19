@@ -34,7 +34,6 @@ class ExceptionNetworkManager @Inject constructor(
         }
     }
 
-    @Suppress("MagicNumber")
     fun mapToMessage(error: HttpCallException): String {
         return when (error.statusCode) {
             BAD_REQUEST -> context.getString(R.string.exception_400)

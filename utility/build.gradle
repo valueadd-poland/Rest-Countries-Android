@@ -57,7 +57,7 @@ android {
     buildTypes.each {
         setBuildProperty(it, "DEBUG_BACKSTACK", false)
 
-        setBuildProperty(it, "SERVER_URL", "http://localhost:8080")
+        setBuildProperty(it, "SERVER_URL", "https://restcountries.eu/rest/v2/")
         setBuildProperty(it, "SERVER_CONNECTION_TIMEOUT", 15L)
         setBuildProperty(it, "SERVER_READ_TIMEOUT", 20L)
         setBuildProperty(it, "SERVER_WRITE_TIMEOUT", 20L)
@@ -99,6 +99,8 @@ dependencies {
     // Utility
     api deps.utility.apache_lang
     implementation deps.utility.glide
+    implementation deps.utility.android_svg
+    api deps.utility.timber
 
     //Reactivex
     implementation deps.rx.binding

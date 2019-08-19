@@ -14,7 +14,6 @@ import pl.valueadd.restcountries.presentation.base.BasePresenter
 import pl.valueadd.restcountries.presentation.base.BaseView
 import javax.inject.Inject
 
-@Suppress("TooManyFunctions")
 abstract class BaseMVPFragment<V : BaseView, P : BasePresenter<V>>(@LayoutRes layoutId: Int) :
     BaseFragment(layoutId),
     MvpDelegateCallback<V, P>,
@@ -106,6 +105,7 @@ abstract class BaseMVPFragment<V : BaseView, P : BasePresenter<V>>(@LayoutRes la
     }
 
     override fun onDetach() {
+        presenter.clearDisposables()
         clearDisposables()
 
         super.onDetach()

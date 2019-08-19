@@ -21,7 +21,7 @@ abstract class BasePresenter<V : BaseView> : MvpQueuingBasePresenter<V>() {
     /**
      * Clear all subscriptions.
      */
-    protected fun clearDisposables() {
+    fun clearDisposables() {
         disposables.clear()
     }
 }

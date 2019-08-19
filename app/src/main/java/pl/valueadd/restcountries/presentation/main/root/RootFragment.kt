@@ -80,7 +80,7 @@ class RootFragment : BaseMVPFragment<RootView, RootPresenter>(R.layout.root_frag
         currentRootNavigation = type
     }
 
-    private fun initializeToolbar() = with(toolbar) {
+    private fun initializeToolbar() = toolbar.run {
 
         inflateMenu(R.menu.main_menu)
 

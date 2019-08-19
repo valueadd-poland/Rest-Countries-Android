@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Base -->
-    <color name="primaryColor">#3959c7</color>
-    <color name="primaryLightColor">#7385fb</color>
-    <color name="primaryDarkColor">#003195</color>
-    <color name="secondaryColor">#f3591f</color>
-    <color name="secondaryLightColor">#ff8b4e</color>
-    <color name="secondaryDarkColor">#b92300</color>
-    <color name="primaryTextColor">#ffffff</color>
-    <color name="secondaryTextColor">#000000</color>
+    <color name="primaryColor">@color/indigo</color>
+    <color name="primaryLightColor">@color/cornflowerBlue</color>
+    <color name="primaryDarkColor">@color/smalt</color>
+    <color name="secondaryColor">@color/flamingo</color>
+    <color name="secondaryLightColor">@color/coral</color>
+    <color name="secondaryDarkColor">@color/milanoRed</color>
+    <color name="primaryTextColor">@color/white</color>
+    <color name="secondaryTextColor">@color/black</color>
+
+    <!-- Brand -->
+    <color name="concrete">#f2f2f2</color>
+    <color name="indigo">#3959c7</color>
+    <color name="cornflowerBlue">#7385fb</color>
+    <color name="smalt">#003195</color>
+    <color name="flamingo">#f3591f</color>
+    <color name="coral">#ff8b4e</color>
+    <color name="milanoRed">#b92300</color>
 
     <!-- Components -->
     <color name="red">#B00020</color>
+    <color name="propertyDivider">@color/concrete</color>
 
     <!-- White Alpha -->
     <color name="white">#FFFFFF</color>
