@@ -44,5 +44,4 @@ class LanguageModel(
             return arrayOfNulls(size)
         }
     }
-
 }

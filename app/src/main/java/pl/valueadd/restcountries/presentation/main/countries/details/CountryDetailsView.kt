@@ -24,5 +24,4 @@ interface CountryDetailsView : BaseView {
     fun setInformationCardVisibility(isVisible: Boolean)
 
     fun navigateToCountry(countryId: String)
-
 }

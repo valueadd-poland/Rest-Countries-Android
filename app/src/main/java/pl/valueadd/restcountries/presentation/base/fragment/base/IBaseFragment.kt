@@ -4,7 +4,6 @@ import android.view.View
 import pl.valueadd.restcountries.presentation.base.activity.IBaseActivity
 import me.yokeyword.fragmentation.ISupportFragment
 
-@Suppress("TooManyFunctions")
 interface IBaseFragment : ISupportFragment {
 
     val isBackStackAtRoot: Boolean

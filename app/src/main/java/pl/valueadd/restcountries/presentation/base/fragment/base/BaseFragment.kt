@@ -18,7 +18,6 @@ import me.yokeyword.fragmentation.SupportFragmentDelegate
 import me.yokeyword.fragmentation.SupportHelper
 import me.yokeyword.fragmentation.anim.FragmentAnimator
 
-@Suppress("TooManyFunctions")
 abstract class BaseFragment(@LayoutRes protected val layoutId: Int) : Fragment(), IBaseFragment {
 
     private val fragmentDelegate: SupportFragmentDelegate

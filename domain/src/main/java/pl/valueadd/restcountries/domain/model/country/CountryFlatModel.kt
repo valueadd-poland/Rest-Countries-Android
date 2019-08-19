@@ -50,5 +50,4 @@ data class CountryFlatModel(
             return arrayOfNulls(size)
         }
     }
-
 }

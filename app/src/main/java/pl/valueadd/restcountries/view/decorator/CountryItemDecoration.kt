@@ -38,14 +38,15 @@ class CountryItemDecoration(context: Context) : RecyclerView.ItemDecoration() {
 
                 if (viewType == R.id.item_country) {
 
-                    parent.getChildViewHolder(view).itemView.apply {
-                        marginStart = titleTextView.left
-                    }
+                    marginStart = parent
+                        .getChildViewHolder(view)
+                        .itemView
+                        .titleTextView
+                        .left
 
                     c.drawRect(view.left.toFloat() + marginStart, view.bottom.toFloat(), view.right.toFloat(), view.bottom + heightDp.toFloat(), paint)
                 }
             }
-
         }
     }
 }

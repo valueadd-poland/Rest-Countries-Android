@@ -16,7 +16,6 @@ import pl.valueadd.restcountries.persistence.dao.RegionalBlocDao
 import pl.valueadd.restcountries.persistence.dao.TimeZoneDao
 import pl.valueadd.restcountries.persistence.dao.TopLevelDomainDao
 import pl.valueadd.restcountries.persistence.entity.AltSpellingEntity
-import pl.valueadd.restcountries.persistence.model.Border
 import pl.valueadd.restcountries.persistence.entity.CallingCodeEntity
 import pl.valueadd.restcountries.persistence.entity.CountryEntity
 import pl.valueadd.restcountries.persistence.entity.CurrencyEntity
@@ -76,5 +75,4 @@ abstract class RestCountriesDatabase : RoomDatabase() {
     abstract fun countryTimeZoneDao(): CountryTimeZoneDao
 
     abstract fun countryBorderDao(): CountryBorderDao
-
 }

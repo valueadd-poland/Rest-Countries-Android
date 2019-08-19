@@ -42,5 +42,4 @@ data class TopLevelDomainEntity(
         const val COL_COUNTRY_ID = "country_id"
         const val COL_NAME = "name"
     }
-
 }

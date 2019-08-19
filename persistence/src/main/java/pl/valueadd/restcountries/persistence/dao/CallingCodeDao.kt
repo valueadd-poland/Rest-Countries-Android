@@ -1,6 +1,5 @@
 package pl.valueadd.restcountries.persistence.dao
 
-
 import androidx.room.Dao
 import androidx.room.Query
 import io.reactivex.Flowable

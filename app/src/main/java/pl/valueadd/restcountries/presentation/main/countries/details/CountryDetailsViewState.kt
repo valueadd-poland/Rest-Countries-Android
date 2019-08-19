@@ -5,7 +5,6 @@ import com.hannesdorfmann.mosby3.mvp.viewstate.RestorableViewState
 import pl.valueadd.restcountries.domain.model.country.CountryFlatModel
 import pl.valueadd.restcountries.domain.model.country.CountryModel
 import pl.valueadd.restcountries.presentation.base.fragment.viewstate.BaseViewState
-import timber.log.Timber
 
 class CountryDetailsViewState : BaseViewState<CountryDetailsView>() {
 
@@ -50,5 +49,4 @@ class CountryDetailsViewState : BaseViewState<CountryDetailsView>() {
             setInformationCardVisibility(isInformationCardVisible)
         }
     }
-
 }

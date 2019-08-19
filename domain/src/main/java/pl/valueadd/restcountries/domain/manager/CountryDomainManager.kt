@@ -133,7 +133,6 @@ class CountryDomainManager @Inject constructor(
                     mapper.mapCurrencyDtosToEntities(dto.currencies).let {
                         saveEntities.add(currencyPersistence.saveCurrencies(it))
                         saveRelations.add(saveCurrencyJoinsFor(entity.id, it))
-
                     }
 
                     mapper.mapBorderDtosToEntities(dto.borders).let {

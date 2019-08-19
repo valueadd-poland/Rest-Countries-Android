@@ -22,12 +22,14 @@ import javax.inject.Singleton
 
 @Singleton
 @SchedulerSupport(value = SchedulerSupport.IO)
-class CountryPersistenceManager @Inject constructor(private val dao: CountryDao,
-                                                    private val currencyDao: CountryCurrencyDao,
-                                                    private val languageDao: CountryLanguageDao,
-                                                    private val regionalBlocDao: CountryRegionalBlocDao,
-                                                    private val timeZoneDao: CountryTimeZoneDao,
-                                                    private val borderDao: CountryBorderDao) {
+class CountryPersistenceManager @Inject constructor(
+    private val dao: CountryDao,
+    private val currencyDao: CountryCurrencyDao,
+    private val languageDao: CountryLanguageDao,
+    private val regionalBlocDao: CountryRegionalBlocDao,
+    private val timeZoneDao: CountryTimeZoneDao,
+    private val borderDao: CountryBorderDao
+) {
 
     fun observeAllCountries(): Flowable<List<CountryEntity>> =
         dao.observeAllCountries()

@@ -2,14 +2,12 @@ package pl.valueadd.restcountries.utility.image.listener
 
 import android.graphics.drawable.PictureDrawable
 import android.view.View
-import android.widget.ImageView
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.CustomViewTarget
 import com.bumptech.glide.request.target.ImageViewTarget
 import com.bumptech.glide.request.target.Target
-import pl.valueadd.restcountries.utility.image.target.ChipTarget
 
 class SvgSoftwareLayerSetter : RequestListener<PictureDrawable> {
 

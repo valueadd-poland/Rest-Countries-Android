@@ -11,19 +11,23 @@ fun CharSequence.boldText(): CharSequence {
     }
 }
 
-fun StringBuilder.appendComma() {
+/**
+ * Appends [separator] only when is needed ([StringBuilder] is not blank)
+ */
+fun StringBuilder.appendComma(separator: Char = ',') {
     if (this.isNotBlank()) {
-        this.append(", ")
+        this.append("$separator ")
     }
 }
 
+/**
+ * Concat the [String]s through [separator] and empty space.
+ */
 fun List<String>.merge(separator: Char = ','): String {
     return StringBuilder().apply {
         for (str in this@merge) {
             if (!str.isBlank()) {
-                if (this.isNotBlank()) {
-                    this.append("$separator ")
-                }
+                appendComma(separator)
                 append(str)
             }
         }

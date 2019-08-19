@@ -15,5 +15,4 @@ data class Border(
         set(value) {
             name = value
         }
-
 }

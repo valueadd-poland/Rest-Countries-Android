@@ -41,5 +41,4 @@ data class CallingCodeEntity(
         const val COL_NAME = "name"
         const val COL_COUNTRY_ID = "country_id"
     }
-
 }

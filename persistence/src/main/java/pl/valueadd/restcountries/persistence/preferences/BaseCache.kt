@@ -7,7 +7,6 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import javax.inject.Inject
 
-@Suppress("TooManyFunctions")
 class BaseCache @Inject constructor(private val sharedPreferences: SharedPreferences) {
 
     companion object {

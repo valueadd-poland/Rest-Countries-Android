@@ -7,5 +7,5 @@ import retrofit2.http.GET
 interface CountryApi {
 
     @GET("all")
-    fun getAllCountries() : Single<List<CountryDto>>
+    fun getAllCountries(): Single<List<CountryDto>>
 }

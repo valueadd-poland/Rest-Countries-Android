@@ -12,11 +12,11 @@ import com.google.android.material.chip.Chip
 class ChipTarget(view: Chip) : CustomViewTarget<Chip, PictureDrawable>(view) {
 
     override fun onLoadFailed(errorDrawable: Drawable?) {
-        //no-op
+        // no-op
     }
 
     override fun onResourceCleared(placeholder: Drawable?) {
-        //no-op
+        // no-op
     }
 
     override fun onResourceReady(resource: PictureDrawable, transition: Transition<in PictureDrawable>?) {

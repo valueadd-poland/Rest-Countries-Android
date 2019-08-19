@@ -10,8 +10,8 @@ import com.mikepenz.fastadapter.adapters.FastItemAdapter
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter
 import org.apache.commons.lang3.math.NumberUtils.LONG_ZERO
 
-abstract class StickyHeaderAdapter<Item : GenericItem>(
-    @LayoutRes private val layoutRes: Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder> {
+abstract class StickyHeaderAdapter<Item : GenericItem>
+(@LayoutRes private val layoutRes: Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder> {
 
     lateinit var fastAdapter: FastItemAdapter<Item>
         private set
@@ -26,7 +26,7 @@ abstract class StickyHeaderAdapter<Item : GenericItem>(
     override fun onCreateHeaderViewHolder(parent: ViewGroup?): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent?.context).inflate(layoutRes, parent, false)
         return object : RecyclerView.ViewHolder(view) {
-            //no-op
+            // no-op
         }
     }
 

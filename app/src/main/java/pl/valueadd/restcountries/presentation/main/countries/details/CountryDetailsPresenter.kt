@@ -71,5 +71,4 @@ class CountryDetailsPresenter @Inject constructor(
 
         it.showError(message)
     }
-
 }
