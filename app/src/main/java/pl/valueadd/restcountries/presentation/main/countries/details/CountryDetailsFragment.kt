@@ -1,12 +1,9 @@
 package pl.valueadd.restcountries.presentation.main.countries.details
 
-import android.graphics.drawable.PictureDrawable
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.transition.Fade
-import com.bumptech.glide.Glide
-import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.country_fragment_details.bordersCardView
 import kotlinx.android.synthetic.main.country_fragment_details.bordersChipGroup
 import kotlinx.android.synthetic.main.country_fragment_details.callingCodesPropertyView
@@ -21,13 +18,11 @@ import pl.valueadd.restcountries.domain.model.country.CountryFlatModel
 import pl.valueadd.restcountries.domain.model.country.CountryModel
 import pl.valueadd.restcountries.presentation.base.fragment.viewstate.base.BaseMVPViewStateFragment
 import pl.valueadd.restcountries.utility.common.merge
-import pl.valueadd.restcountries.utility.image.Options
-import pl.valueadd.restcountries.utility.image.listener.SvgSoftwareLayerSetter
 import pl.valueadd.restcountries.utility.image.loadSVGImage
-import pl.valueadd.restcountries.utility.image.target.ChipTarget
 import pl.valueadd.restcountries.utility.reactivex.onSuccess
 import pl.valueadd.restcountries.utility.reactivex.throttleClicks
 import pl.valueadd.restcountries.utility.view.setVisible
+import pl.valueadd.restcountries.view.chip.BorderChip
 import javax.inject.Inject
 
 class CountryDetailsFragment : BaseMVPViewStateFragment<CountryDetailsView, CountryDetailsPresenter, CountryDetailsViewState>(R.layout.country_fragment_details),
@@ -65,13 +60,12 @@ class CountryDetailsFragment : BaseMVPViewStateFragment<CountryDetailsView, Coun
         }
     }
 
-    override fun bindModelToView(model: CountryModel) {
-        model.apply {
-            titleTextView.text = name
-            callingCodesPropertyView.subtitle = callingCodes.merge()
-            domainsPropertyView.subtitle = topLevelDomains.merge()
-            timeZonesPropertyView.subtitle = timezones.merge()
-        }
+    override fun bindModelToView(model: CountryModel) = model.run {
+        flagImageView.loadSVGImage(flagUrl)
+        titleTextView.text = name
+        callingCodesPropertyView.subtitle = callingCodes.merge()
+        domainsPropertyView.subtitle = topLevelDomains.merge()
+        timeZonesPropertyView.subtitle = timezones.merge()
     }
 
     override fun bindBordersToView(models: List<CountryFlatModel>) {
@@ -87,9 +81,6 @@ class CountryDetailsFragment : BaseMVPViewStateFragment<CountryDetailsView, Coun
         }
     }
 
-    override fun bindFlagToView(flagUrl: String) =
-        flagImageView.loadSVGImage(flagUrl)
-
     override fun setBordersCardVisibility(isVisible: Boolean) =
         bordersCardView.setVisible(isVisible)
 
@@ -104,14 +95,5 @@ class CountryDetailsFragment : BaseMVPViewStateFragment<CountryDetailsView, Coun
     }
 
     private fun createBorderChip(model: CountryFlatModel): View =
-        Chip(requireContext()).apply {
-            isClickable = true
-            text = model.name
-            Glide.with(this)
-                .`as`(PictureDrawable::class.java)
-                .apply(Options.svgRequest)
-                .listener(SvgSoftwareLayerSetter())
-                .load(model.flagUrl)
-                .into(ChipTarget(this))
-        }
+        BorderChip(requireContext()).bindModel(model)
 }

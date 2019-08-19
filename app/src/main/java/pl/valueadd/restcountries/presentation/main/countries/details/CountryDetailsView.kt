@@ -12,13 +12,6 @@ interface CountryDetailsView : BaseView {
 
     fun bindBordersToView(models: List<CountryFlatModel>)
 
-    /**
-     * Binds image to the view.
-     *
-     * Should be called separately to prevent reload effect on image view.
-     */
-    fun bindFlagToView(flagUrl: String)
-
     fun setBordersCardVisibility(isVisible: Boolean)
 
     fun setInformationCardVisibility(isVisible: Boolean)

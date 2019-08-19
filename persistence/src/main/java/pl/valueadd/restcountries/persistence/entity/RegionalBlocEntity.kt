@@ -15,12 +15,6 @@ data class RegionalBlocEntity(
     @ColumnInfo(name = "acronym")
     var acronym: String = EMPTY
 
-//    @ColumnInfo(name = "otherAcronyms")
-//    var otherAcronyms: List<String> = emptyList(),
-//
-//    @ColumnInfo(name = "otherNames")
-//    var otherNames: List<String> = emptyList()
-
 ) {
 
     var id: String

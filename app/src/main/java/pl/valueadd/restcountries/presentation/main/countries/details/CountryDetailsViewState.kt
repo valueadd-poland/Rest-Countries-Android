@@ -15,7 +15,7 @@ class CountryDetailsViewState : BaseViewState<CountryDetailsView>() {
         private const val KEY_IS_INFORMATION_CARD_VISIBLE = "CountryDetailsViewState-isInformationCardVisible"
     }
 
-    var borders: List<CountryFlatModel> = mutableListOf()
+    var borders: List<CountryFlatModel> = emptyList()
     var model: CountryModel? = null
     var isBorderCardVisible: Boolean = false
     var isInformationCardVisible: Boolean = false
@@ -41,7 +41,6 @@ class CountryDetailsViewState : BaseViewState<CountryDetailsView>() {
     override fun apply(view: CountryDetailsView?, retained: Boolean) {
         view?.run {
             model?.let {
-                bindFlagToView(it.flagUrl)
                 bindModelToView(it)
             }
             bindBordersToView(borders)

@@ -1,6 +1,5 @@
 package pl.valueadd.restcountries.presentation.main.countries.details
 
-import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import pl.valueadd.restcountries.domain.manager.CountryDomainManager
 import pl.valueadd.restcountries.domain.manager.ExceptionDomainManager
@@ -18,6 +17,7 @@ class CountryDetailsPresenter @Inject constructor(
 
     var model: CountryModel? = null
         private set
+
     var borderModels: List<CountryFlatModel> = emptyList()
         private set
 
@@ -31,25 +31,20 @@ class CountryDetailsPresenter @Inject constructor(
         it.navigateToCountry(countryId)
     }
 
-    fun observeCountry(countryId: String): Disposable =
+    private fun observeCountry(countryId: String) {
         countryManager
             .observeCountry(countryId)
             .observeOnMain()
             .subscribe(
-                ::handleObserveCountrySuccess,
-                ::handleObserveCountryFailed
+                ::onObserveCountrySuccess,
+                ::onObserveCountryFailed
             )
             .addTo(disposables)
+    }
 
-    private fun handleObserveCountrySuccess(model: CountryModel) = onceViewAttached { view ->
+    private fun onObserveCountrySuccess(model: CountryModel) = onceViewAttached { view ->
 
         Timber.i("Country has been fetched successfully.")
-
-        // Load the image only when url has been changed to
-        // prevent unnecessary reload of the image.
-        if (model.flagUrl != this.model?.flagUrl) {
-            view.bindFlagToView(model.flagUrl)
-        }
 
         this.model = model
         this.borderModels = model.borders
@@ -63,7 +58,7 @@ class CountryDetailsPresenter @Inject constructor(
         view.bindBordersToView(model.borders)
     }
 
-    private fun handleObserveCountryFailed(throwable: Throwable) = onceViewAttached {
+    private fun onObserveCountryFailed(throwable: Throwable) = onceViewAttached {
 
         Timber.w(throwable, "Country fetch failed.")
 

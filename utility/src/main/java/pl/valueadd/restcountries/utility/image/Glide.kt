@@ -9,7 +9,6 @@ import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
@@ -18,8 +17,7 @@ import pl.valueadd.restcountries.utility.image.listener.SvgSoftwareLayerSetter
 object Options {
     val svgRequest: RequestOptions by lazy {
         RequestOptions().apply {
-            diskCacheStrategy(DiskCacheStrategy.DATA)
-                .skipMemoryCache(true)
+            skipMemoryCache(true)
                 .dontTransform()
                 .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
         }

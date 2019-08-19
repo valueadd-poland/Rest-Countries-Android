@@ -1,11 +1,11 @@
 package pl.valueadd.restcountries.domain.model.country
 
-import android.os.Parcel
 import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import org.apache.commons.lang3.StringUtils.EMPTY
 import pl.valueadd.restcountries.domain.model.base.BaseModel
-import pl.valueadd.restcountries.utility.parcel.loadString
 
+@Parcelize
 data class CountryFlatModel(
 
     var name: String = EMPTY,
@@ -23,31 +23,4 @@ data class CountryFlatModel(
         set(value) {
             alpha3Code = value
         }
-
-    constructor(parcel: Parcel) : this(
-        parcel.loadString(),
-        parcel.loadString(),
-        parcel.loadString(),
-        parcel.loadString())
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(name)
-        parcel.writeString(alpha3Code)
-        parcel.writeString(alpha2Code)
-        parcel.writeString(flagUrl)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<CountryFlatModel> {
-        override fun createFromParcel(parcel: Parcel): CountryFlatModel {
-            return CountryFlatModel(parcel)
-        }
-
-        override fun newArray(size: Int): Array<CountryFlatModel?> {
-            return arrayOfNulls(size)
-        }
-    }
 }

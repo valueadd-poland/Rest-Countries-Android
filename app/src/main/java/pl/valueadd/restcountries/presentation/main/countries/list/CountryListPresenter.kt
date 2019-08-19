@@ -35,18 +35,18 @@ class CountryListPresenter
             .downloadAllCountries()
             .observeOnMain()
             .subscribe(
-                ::handleDownloadAllExamplesSuccess,
-                ::handleDownloadAllExamplesFailed
+                ::onDownloadAllExamplesSuccess,
+                ::onDownloadAllExamplesFailed
             )
             .addTo(disposables)
     }
 
-    private fun handleDownloadAllExamplesSuccess() {
+    private fun onDownloadAllExamplesSuccess() {
 
         Timber.d("Countries has been downloaded successfully.")
     }
 
-    private fun handleDownloadAllExamplesFailed(throwable: Throwable) = onceViewAttached {
+    private fun onDownloadAllExamplesFailed(throwable: Throwable) = onceViewAttached {
 
         Timber.e(throwable, "Download all countries failed.")
 
@@ -63,20 +63,20 @@ class CountryListPresenter
             }
             .observeOnMain()
             .subscribe(
-                ::handleObserveAllCountriesSuccess,
-                ::handleObserveAllCountriesFailed
+                ::onObserveAllCountriesSuccess,
+                ::onObserveAllCountriesFailed
             )
             .addTo(disposables)
     }
 
-    private fun handleObserveAllCountriesSuccess(list: List<CountryModel>) = onceViewAttached { view ->
+    private fun onObserveAllCountriesSuccess(list: List<CountryModel>) = onceViewAttached { view ->
 
         val items = list.map { CountryItem(it) }
 
         view.bindDataToList(items)
     }
 
-    private fun handleObserveAllCountriesFailed(throwable: Throwable) = onceViewAttached {
+    private fun onObserveAllCountriesFailed(throwable: Throwable) = onceViewAttached {
 
         Timber.e(throwable, "Observe all countries failed.")
 

@@ -10,6 +10,13 @@ import com.mikepenz.fastadapter.adapters.FastItemAdapter
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter
 import org.apache.commons.lang3.math.NumberUtils.LONG_ZERO
 
+/**
+ * Created by mikepenz on 30.12.15.
+ * This is a FastAdapter adapter implementation for the awesome Sticky-Headers lib by timehop
+ * https://github.com/timehop/sticky-headers-recyclerview
+ *
+ * Modified for project usage.
+ */
 abstract class StickyHeaderAdapter<Item : GenericItem>
 (@LayoutRes private val layoutRes: Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder> {
 
