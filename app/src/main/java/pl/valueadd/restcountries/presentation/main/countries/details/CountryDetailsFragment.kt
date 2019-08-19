@@ -3,8 +3,8 @@ package pl.valueadd.restcountries.presentation.main.countries.details
 import android.graphics.drawable.PictureDrawable
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.transition.Fade
 import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.country_fragment_details.bordersCardView
@@ -28,7 +28,6 @@ import pl.valueadd.restcountries.utility.image.target.ChipTarget
 import pl.valueadd.restcountries.utility.reactivex.onSuccess
 import pl.valueadd.restcountries.utility.reactivex.throttleClicks
 import pl.valueadd.restcountries.utility.view.setVisible
-import timber.log.Timber
 import javax.inject.Inject
 
 class CountryDetailsFragment : BaseMVPViewStateFragment<CountryDetailsView, CountryDetailsPresenter, CountryDetailsViewState>(R.layout.country_fragment_details),
@@ -43,6 +42,8 @@ class CountryDetailsFragment : BaseMVPViewStateFragment<CountryDetailsView, Coun
                 it.arguments = Bundle().apply {
                     putString(ARG_COUNTRY_ID, countryId)
                 }
+                it.enterTransition = Fade()
+                it.exitTransition = Fade()
             }
     }
 
@@ -87,7 +88,7 @@ class CountryDetailsFragment : BaseMVPViewStateFragment<CountryDetailsView, Coun
     }
 
     override fun bindFlagToView(flagUrl: String) =
-        flagImageView.loadSVGImage(flagUrl, R.drawable.ic_language_white_24dp, ContextCompat.getColor(requireContext(), R.color.blackAlpha40))
+        flagImageView.loadSVGImage(flagUrl)
 
     override fun setBordersCardVisibility(isVisible: Boolean) =
         bordersCardView.setVisible(isVisible)
