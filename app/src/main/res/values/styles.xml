@@ -9,8 +9,12 @@
 
     <style name="AppTheme.ThemeOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="AppTheme.ThemeOverlay.ActionBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+    <style name="AppTheme.ThemeOverlay.ActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
         <item name="android:textColorPrimary">@color/white</item>
+    </style>
+
+    <style name="AppTheme.ThemeOverlay.ActionBar.Transparent">
+        <item name="colorPrimary">@color/whiteTransparent</item>
     </style>
 
     <style name="AppTheme.Font" parent="@android:style/TextAppearance" />

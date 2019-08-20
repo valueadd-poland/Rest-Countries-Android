@@ -1,193 +1,264 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <!-- AppBar -->
+
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clipToPadding="false">
+        android:theme="@style/AppTheme.ThemeOverlay.ActionBar.Transparent">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineStart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_begin="@dimen/size_giant"/>
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineEnd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_end="@dimen/size_giant"/>
-
-        <ImageView
-            android:id="@+id/flagImageView"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/size_auto"
-            android:scaleType="centerCrop"
-            app:layout_constraintDimensionRatio="h,16:9"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription"
-            tools:src="@tools:sample/backgrounds/scenic"/>
+            android:layout_height="match_parent"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleGravity="bottom|start"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
-        <TextView
-            android:id="@+id/titleTextView"
-            style="@style/AppTheme.TextAppearance.Outlined"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:textColor="@color/primaryTextColor"
-            android:textSize="@dimen/text_colossal_size"
-            app:layout_constraintBottom_toBottomOf="@+id/flagImageView"
-            app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
-            app:layout_constraintHorizontal_bias="0.00"
-            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.90"
-            tools:text="USA"/>
+            <!-- AppBar Content -->
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/informationCardView"
-            style="@style/Widget.MaterialComponents.CardView"
-            android:layout_width="@dimen/size_auto"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_giant"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/bordersCardView"
-            app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@+id/flagImageView"
-            app:layout_constraintVertical_bias="0.0"
-            app:layout_constraintVertical_chainStyle="packed"
-            app:layout_goneMarginBottom="@dimen/size_giant"
-            tools:visibility="visible">
-
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
-                <pl.valueadd.restcountries.view.PropertyView
-                    android:id="@+id/callingCodesPropertyView"
-                    android:layout_width="match_parent"
+                <!-- Helpers -->
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidelineStartTop"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/size_normal"
-                    android:paddingBottom="@dimen/size_normal"
-                    app:iconDrawable="@drawable/ic_phone_white_24dp"
-                    app:iconHighlightColor="@color/primaryColor"
-                    app:title="@string/country_details_calling_codes"/>
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="@dimen/size_giant"/>
 
-                <pl.valueadd.restcountries.view.PropertyView
-                    android:id="@+id/domainsPropertyView"
-                    android:layout_width="match_parent"
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidelineEndTop"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/size_normal"
-                    android:paddingBottom="@dimen/size_normal"
-                    app:iconDrawable="@drawable/ic_language_white_24dp"
-                    app:iconHighlightColor="@color/primaryColor"
-                    app:title="@string/country_details_top_level_domains"/>
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_end="@dimen/size_giant"/>
 
-                <pl.valueadd.restcountries.view.PropertyView
-                    android:id="@+id/timeZonesPropertyView"
+                <!-- Flag -->
+
+                <ImageView
+                    android:id="@+id/flagImageView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/size_normal"
-                    android:paddingBottom="@dimen/size_normal"
-                    app:iconDrawable="@drawable/ic_access_time_white_24dp"
-                    app:iconHighlightColor="@color/primaryColor"
-                    app:title="@string/country_details_timezones"/>
+                    android:layout_height="@dimen/size_auto"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintDimensionRatio="h,16:9"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription"
+                    tools:src="@tools:sample/backgrounds/scenic"/>
 
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/bordersCardView"
-            style="@style/Widget.MaterialComponents.CardView"
-            android:layout_width="@dimen/size_auto"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_giant"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/mapCardView"
-            app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@+id/informationCardView"
-            app:layout_goneMarginBottom="@dimen/size_giant"
-            tools:visibility="visible">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:paddingStart="@dimen/size_normal"
-                android:paddingTop="@dimen/size_normal"
-                android:paddingEnd="@dimen/size_normal"
-                android:paddingBottom="@dimen/size_giant">
+                <!-- Title -->
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:id="@+id/titleTextView"
+                    style="@style/AppTheme.TextAppearance.Outlined"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/size_normal"
-                    android:text="@string/country_details_borders"
-                    android:textColor="@color/secondaryTextColor"
-                    android:textSize="@dimen/text_normal_size"/>
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="@dimen/text_colossal_size"
+                    app:layout_constraintBottom_toBottomOf="@+id/flagImageView"
+                    app:layout_constraintEnd_toEndOf="@id/guidelineEndTop"
+                    app:layout_constraintHorizontal_bias="0.00"
+                    app:layout_constraintStart_toStartOf="@+id/guidelineStartTop"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.90"
+                    android:visibility="gone"
+                    tools:text="USA"/>
 
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/bordersChipGroup"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                </com.google.android.material.chip.ChipGroup>
-
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/mapCardView"
-            style="@style/Widget.MaterialComponents.CardView"
-            android:layout_width="@dimen/size_auto"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_giant"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@+id/bordersCardView"
-            tools:visibility="visible">
-
-            <LinearLayout
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"/>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Content -->
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!-- Helpers -->
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingStart="@dimen/size_normal"
-                android:paddingTop="@dimen/size_normal"
-                android:paddingEnd="@dimen/size_normal"
-                android:paddingBottom="@dimen/size_giant">
+                app:layout_constraintGuide_begin="@dimen/size_giant"/>
 
-                <TextView
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineEnd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="@dimen/size_giant"/>
+
+            <!-- Information Card -->
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/informationCardView"
+                style="@style/Widget.MaterialComponents.CardView"
+                android:layout_width="@dimen/size_auto"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_giant"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@id/bordersCardView"
+                app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+                app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:layout_goneMarginBottom="@dimen/size_giant"
+                tools:visibility="visible">
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/size_normal"
-                    android:text="@string/country_details_map"
-                    android:textColor="@color/secondaryTextColor"
-                    android:textSize="@dimen/text_normal_size"/>
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                <!-- TODO Google Map here... | View is hidden -->
+                    <pl.valueadd.restcountries.view.PropertyView
+                        android:id="@+id/callingCodesPropertyView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/size_normal"
+                        android:paddingBottom="@dimen/size_normal"
+                        app:iconDrawable="@drawable/ic_phone_white_24dp"
+                        app:iconHighlightColor="@color/primaryColor"
+                        app:title="@string/country_details_calling_codes"/>
 
-            </LinearLayout>
+                    <pl.valueadd.restcountries.view.PropertyView
+                        android:id="@+id/domainsPropertyView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/size_normal"
+                        android:paddingBottom="@dimen/size_normal"
+                        app:iconDrawable="@drawable/ic_language_white_24dp"
+                        app:iconHighlightColor="@color/primaryColor"
+                        app:title="@string/country_details_top_level_domains"/>
 
-        </com.google.android.material.card.MaterialCardView>
+                    <pl.valueadd.restcountries.view.PropertyView
+                        android:id="@+id/timeZonesPropertyView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/size_normal"
+                        android:paddingBottom="@dimen/size_normal"
+                        app:iconDrawable="@drawable/ic_access_time_white_24dp"
+                        app:iconHighlightColor="@color/primaryColor"
+                        app:title="@string/country_details_timezones"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
 
-</ScrollView>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Borders Card -->
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/bordersCardView"
+                style="@style/Widget.MaterialComponents.CardView"
+                android:layout_width="@dimen/size_auto"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_giant"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@id/mapCardView"
+                app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+                app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+                app:layout_constraintTop_toBottomOf="@+id/informationCardView"
+                app:layout_goneMarginBottom="@dimen/size_giant"
+                tools:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingStart="@dimen/size_normal"
+                    android:paddingTop="@dimen/size_normal"
+                    android:paddingEnd="@dimen/size_normal"
+                    android:paddingBottom="@dimen/size_giant">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/size_normal"
+                        android:text="@string/country_details_borders"
+                        android:textColor="@color/secondaryTextColor"
+                        android:textSize="@dimen/text_normal_size"/>
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/bordersChipGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Map Card -->
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/mapCardView"
+                style="@style/Widget.MaterialComponents.CardView"
+                android:layout_width="@dimen/size_auto"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_giant"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+                app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+                app:layout_constraintTop_toBottomOf="@+id/bordersCardView"
+                tools:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingStart="@dimen/size_normal"
+                    android:paddingTop="@dimen/size_normal"
+                    android:paddingEnd="@dimen/size_normal"
+                    android:paddingBottom="@dimen/size_giant">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/size_normal"
+                        android:text="@string/country_details_map"
+                        android:textColor="@color/secondaryTextColor"
+                        android:textSize="@dimen/text_normal_size"/>
+
+                    <!-- TODO Google Map here... | View is hidden -->
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
