@@ -3,6 +3,7 @@ package pl.valueadd.restcountries.persistence.manager
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.annotations.SchedulerSupport
+import org.apache.commons.lang3.StringUtils.stripAccents
 import pl.valueadd.restcountries.persistence.dao.CountryBorderDao
 import pl.valueadd.restcountries.persistence.dao.CountryCurrencyDao
 import pl.valueadd.restcountries.persistence.dao.CountryDao
@@ -38,6 +39,11 @@ class CountryPersistenceManager @Inject constructor(
 
     fun observeCountries(countryIds: List<String>): Flowable<List<CountryEntity>> =
         dao.observeCountries(countryIds)
+            .distinctUntilChanged()
+            .subscribeOnIo()
+
+    fun observeCountries(query: String): Flowable<List<CountryEntity>> =
+        dao.observeCountries(stripAccents(query))
             .distinctUntilChanged()
             .subscribeOnIo()
 

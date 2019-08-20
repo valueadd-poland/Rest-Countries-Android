@@ -31,7 +31,7 @@
             app:mpb_useIntrinsicPadding="false"
             tools:indeterminate="false"
             tools:progress="20"
-            tools:visibility="visible" />
+            tools:visibility="visible"/>
     </LinearLayout>
 
 </com.google.android.material.appbar.AppBarLayout>

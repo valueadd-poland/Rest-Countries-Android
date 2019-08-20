@@ -1,6 +1,9 @@
 package pl.valueadd.restcountries.presentation.main.countries.list
 
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
+import org.apache.commons.lang3.StringUtils.EMPTY
 import pl.valueadd.restcountries.domain.manager.CountryDomainManager
 import pl.valueadd.restcountries.domain.manager.ExceptionDomainManager
 import pl.valueadd.restcountries.domain.model.country.CountryModel
@@ -9,6 +12,7 @@ import pl.valueadd.restcountries.presentation.main.countries.list.item.ClickCoun
 import pl.valueadd.restcountries.presentation.main.countries.list.item.CountryItem
 import pl.valueadd.restcountries.utility.reactivex.observeOnMain
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class CountryListPresenter
@@ -18,16 +22,31 @@ class CountryListPresenter
 ) : BasePresenter<CountryListView>(),
     ClickCountryItemEventHook.Listener {
 
+    companion object {
+        private const val DELAY = 350L
+    }
+
+    private var countriesDisposable: Disposable? = null
+
     init {
         onceViewAttached {
             downloadAllCountries()
 
-            observeAllCountries()
+            observeCountries()
         }
     }
 
     override fun onCountryItemClick(model: CountryModel) = onceViewAttached {
         it.navigateToCountryDetailsView(model.id)
+    }
+
+    fun onSearchQueryChange(query: String) {
+
+        countriesDisposable?.let {
+            disposables.remove(it)
+        }
+
+        observeCountries(query, true)
     }
 
     private fun downloadAllCountries() {
@@ -55,9 +74,14 @@ class CountryListPresenter
         it.showError(message)
     }
 
-    private fun observeAllCountries() {
-        countryManager
-            .observeAllCountries()
+    private fun observeCountries(query: String = EMPTY, isDelayed: Boolean = false) {
+        countriesDisposable = countryManager
+            .observeCountries(query)
+            .apply {
+                if (isDelayed) {
+                    delay(DELAY, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                }
+            }
             .map { list ->
                 list.sortedBy { it.name }
             }

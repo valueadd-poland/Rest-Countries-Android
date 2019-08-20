@@ -22,7 +22,7 @@ class CurrencyPersistenceManager @Inject constructor(private val dao: CurrencyDa
         dao.insertEntities(list)
             .subscribeOnIo()
 
-    fun observeCurriencies(countryId: String): Flowable<List<CurrencyEntity>> =
+    fun observeCurrencies(countryId: String): Flowable<List<CurrencyEntity>> =
         dao.observeCurriences(countryId)
             .distinctUntilChanged()
             .subscribeOnIo()

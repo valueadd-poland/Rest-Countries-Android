@@ -5,6 +5,7 @@
     <string name="common_ok">OK</string>
     <string name="common_no">No</string>
     <string name="common_yes">Yes</string>
+    <string name="common_search">Search</string>
     <string name="common_empty"/>
 
     <!-- Countries screen -->

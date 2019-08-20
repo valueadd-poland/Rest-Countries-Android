@@ -1,9 +1,11 @@
 package pl.valueadd.restcountries.presentation.main.root
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
+import androidx.appcompat.widget.SearchView
 import kotlinx.android.synthetic.main.toolbar.toolbar
 import pl.valueadd.restcountries.R
 import pl.valueadd.restcountries.presentation.base.fragment.base.BaseMVPFragment
@@ -36,9 +38,9 @@ class RootFragment : BaseMVPFragment<RootView, RootPresenter>(R.layout.root_frag
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initializeToolbar()
-
         loadRootFragments()
+
+        initializeToolbar()
     }
 
     private fun loadRootFragments() {
@@ -87,5 +89,18 @@ class RootFragment : BaseMVPFragment<RootView, RootPresenter>(R.layout.root_frag
         setOnMenuItemClickListener(::onOptionsItemSelected)
 
         setToolbarTitle(R.string.country_list_title)
+
+        initializeSearchView(menu)
+    }
+
+    private fun initializeSearchView(menu: Menu) {
+        val countryListFragment = rootFragments[RootNavigation.COUNTRIES]
+
+        if (countryListFragment is SearchView.OnQueryTextListener) {
+            val item = menu.findItem(R.id.action_search)
+
+            (item.actionView as SearchView)
+                .setOnQueryTextListener(countryListFragment)
+        }
     }
 }

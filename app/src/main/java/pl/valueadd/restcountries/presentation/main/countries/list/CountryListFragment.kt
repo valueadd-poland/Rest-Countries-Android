@@ -1,12 +1,16 @@
 package pl.valueadd.restcountries.presentation.main.countries.list
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.RecyclerView
 import com.mikepenz.fastadapter.IItem
 import com.mikepenz.fastadapter.adapters.GenericFastItemAdapter
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration
 import kotlinx.android.synthetic.main.country_fragment_list.recyclerView
+import org.apache.commons.lang3.StringUtils.EMPTY
 import pl.valueadd.restcountries.R
 import pl.valueadd.restcountries.presentation.base.fragment.base.BaseMVPFragment
 import pl.valueadd.restcountries.presentation.main.countries.details.CountryDetailsFragment
@@ -17,7 +21,8 @@ import pl.valueadd.restcountries.view.decorator.CountryItemDecoration
 import javax.inject.Inject
 
 class CountryListFragment : BaseMVPFragment<CountryListView, CountryListPresenter>(R.layout.country_fragment_list),
-    CountryListView {
+    CountryListView,
+    SearchView.OnQueryTextListener {
 
     companion object {
         fun createInstance(): CountryListFragment =
@@ -34,7 +39,14 @@ class CountryListFragment : BaseMVPFragment<CountryListView, CountryListPresente
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupView()
+        initializeRecyclerView()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+
+        menu.findItem(R.id.action_search)
+            .expandActionView()
     }
 
     override fun bindDataToList(list: List<IItem<*>>) {
@@ -48,7 +60,16 @@ class CountryListFragment : BaseMVPFragment<CountryListView, CountryListPresente
             .start(fragment)
     }
 
-    private fun setupView() {
+    override fun onQueryTextSubmit(query: String?): Boolean =
+        onQueryTextChange(query)
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        presenter.onSearchQueryChange(newText ?: EMPTY)
+
+        return false
+    }
+
+    private fun initializeRecyclerView() {
 
         val headersDecoration = StickyRecyclerHeadersDecoration(stickyHeaderAdapter)
 
