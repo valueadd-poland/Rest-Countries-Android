@@ -53,10 +53,10 @@ class CountryListPresenter
     }
 
     fun onQueryChanged(query: String) {
-        val filter = when {
-            isAscending -> Filters.NAME_ASC
-            !isAscending -> Filters.NAME_DSC
-            else -> throw IllegalStateException("Cannot find the suitable filter.")
+        val filter = if (isAscending) {
+            Filters.NameAsc
+        } else {
+            Filters.NameDsc
         }
 
         countriesDisposable?.let {
@@ -95,7 +95,7 @@ class CountryListPresenter
         it.showError(message)
     }
 
-    private fun observeCountries(query: String = EMPTY, isDelayed: Boolean = false, filter: Filter<CountryModel> = Filters.NAME_ASC) {
+    private fun observeCountries(query: String = EMPTY, isDelayed: Boolean = false, filter: Filter<CountryModel> = Filters.NameAsc) {
         countriesDisposable = countryManager
             .observeCountries(query, filter)
             .apply {
@@ -129,8 +129,8 @@ class CountryListPresenter
 
     internal class Filters {
 
-        object NAME_ASC : Filter<CountryModel>(true)
+        object NameAsc : Filter<CountryModel>(true)
 
-        object NAME_DSC : Filter<CountryModel>(false)
+        object NameDsc : Filter<CountryModel>(false)
     }
 }

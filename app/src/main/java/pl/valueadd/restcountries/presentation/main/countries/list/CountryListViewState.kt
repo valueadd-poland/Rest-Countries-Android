@@ -2,7 +2,6 @@ package pl.valueadd.restcountries.presentation.main.countries.list
 
 import android.os.Bundle
 import com.hannesdorfmann.mosby3.mvp.viewstate.RestorableViewState
-import org.apache.commons.lang3.StringUtils.EMPTY
 import pl.valueadd.restcountries.presentation.base.fragment.viewstate.BaseViewState
 
 class CountryListViewState : BaseViewState<CountryListView>() {

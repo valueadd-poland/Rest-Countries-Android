@@ -2,7 +2,6 @@ package pl.valueadd.restcountries.presentation.main.root
 
 import android.os.Bundle
 import android.view.Gravity
-import android.view.Menu
 import android.view.View
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes

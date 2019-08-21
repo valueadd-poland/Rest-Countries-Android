@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mikepenz.fastadapter.IItem
 import com.mikepenz.fastadapter.adapters.GenericFastItemAdapter
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration
-import kotlinx.android.synthetic.main.country_dialog_sort_name.segmentedRadioGroup
+import kotlinx.android.synthetic.main.country_dialog_sort_name.view.segmentedRadioGroup
 import kotlinx.android.synthetic.main.country_fragment_details.bordersChipGroup
 import kotlinx.android.synthetic.main.country_fragment_list.recyclerView
 import kotlinx.android.synthetic.main.country_fragment_list.sortByNameChip
@@ -55,8 +55,8 @@ class CountryListFragment : BaseMVPViewStateFragment<CountryListView, CountryLis
         initializeChipGroup()
     }
 
-    override fun onSaveViewState() = viewState.let {
-        it.isSortByNameDialogDisplaying = isSortByNameDialogDisplaying
+    override fun onSaveViewState() {
+        viewState.isSortByNameDialogDisplaying = isSortByNameDialogDisplaying
     }
 
     override fun createViewState(): CountryListViewState =
@@ -82,29 +82,31 @@ class CountryListFragment : BaseMVPViewStateFragment<CountryListView, CountryLis
         return false
     }
 
-    override fun showSortByNameDialog() {
-        createBottomSheetDialog(R.layout.country_dialog_sort_name).apply {
-            val id: Int = if (presenter.isAscending) {
-                R.id.segmentedAscending
-            } else {
-                R.id.segmentedDescending
-            }
-
-            segmentedRadioGroup.check(id)
-
-            segmentedRadioGroup.setOnCheckedChangeListener { _, checkedId ->
-                this.dismiss()
-                presenter.onSortByNameChanged(R.id.segmentedAscending == checkedId)
-            }
-
-            setOnDismissListener {
+    override fun showSortByNameDialog() =
+        createBottomSheetDialog(R.layout.country_dialog_sort_name) { dialog, view ->
+            dialog.setOnDismissListener {
                 isSortByNameDialogDisplaying = false
             }
 
-        }.show()
+            dialog.setOnShowListener {
+                isSortByNameDialogDisplaying = true
 
-        isSortByNameDialogDisplaying = true
-    }
+                val id: Int = if (presenter.isAscending) {
+                    R.id.segmentedAscending
+                } else {
+                    R.id.segmentedDescending
+                }
+
+                view.run {
+                    segmentedRadioGroup.check(id)
+
+                    segmentedRadioGroup.setOnCheckedChangeListener { _, checkedId ->
+                        dialog.dismiss()
+                        presenter.onSortByNameChanged(R.id.segmentedAscending == checkedId)
+                    }
+                }
+            }
+        }.show()
 
     private fun initializeRecyclerView() {
 
