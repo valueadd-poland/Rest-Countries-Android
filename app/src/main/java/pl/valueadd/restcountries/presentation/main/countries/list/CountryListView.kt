@@ -8,4 +8,8 @@ interface CountryListView : BaseView {
     fun bindDataToList(list: List<IItem<*>>)
 
     fun navigateToCountryDetailsView(countryId: String)
+
+    fun showSortByNameDialog()
+
+    val searchQuery: String
 }

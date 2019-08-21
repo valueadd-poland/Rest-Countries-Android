@@ -56,7 +56,10 @@ abstract class CountryDao : BaseDao<CountryEntity>() {
         OR lower(alpha3_code) LIKE '%' || :query || '%'
         OR lower(alpha2_code) LIKE '%' || :query || '%'
         OR lower(numeric_code) LIKE '%' || :query || '%'
-        ORDER BY name COLLATE NOCASE ASC
+        COLLATE NOCASE
+        ORDER BY 
+            CASE WHEN :ascendingOrder = 1 THEN name END ASC,
+            CASE WHEN :ascendingOrder = 0 THEN name END DESC
     """)
-    abstract fun observeCountries(query: String): Flowable<List<CountryEntity>>
+    abstract fun observeCountries(query: String, ascendingOrder: Boolean): Flowable<List<CountryEntity>>
 }

@@ -6,6 +6,8 @@
     <string name="common_no">No</string>
     <string name="common_yes">Yes</string>
     <string name="common_search">Search</string>
+    <string name="common_ascending">Ascending</string>
+    <string name="common_descending">Descending</string>
     <string name="common_empty"/>
 
     <!-- Countries screen -->
@@ -19,5 +21,12 @@
     <string name="country_details_borders">Borders</string>
     <string name="country_details_map">Map</string>
     <string name="country_details_timezones">Timezones</string>
+
+    <!-- Country List screen -->
+
+    <string name="country_list_sort_by_name">Sort by name</string>
+
+    <!-- Dialog -->
+    <string name="dialog_sort_by_name">Sort by name</string>
 
 </resources>

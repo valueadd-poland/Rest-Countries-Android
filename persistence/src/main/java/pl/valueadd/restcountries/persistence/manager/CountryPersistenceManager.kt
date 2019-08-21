@@ -42,8 +42,8 @@ class CountryPersistenceManager @Inject constructor(
             .distinctUntilChanged()
             .subscribeOnIo()
 
-    fun observeCountries(query: String): Flowable<List<CountryEntity>> =
-        dao.observeCountries(stripAccents(query))
+    fun observeCountries(query: String, ascendingOrder: Boolean = true): Flowable<List<CountryEntity>> =
+        dao.observeCountries(stripAccents(query), ascendingOrder)
             .distinctUntilChanged()
             .subscribeOnIo()
 

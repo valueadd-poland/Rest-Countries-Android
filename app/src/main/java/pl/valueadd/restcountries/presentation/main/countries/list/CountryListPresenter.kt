@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils.EMPTY
 import pl.valueadd.restcountries.domain.manager.CountryDomainManager
 import pl.valueadd.restcountries.domain.manager.ExceptionDomainManager
 import pl.valueadd.restcountries.domain.model.country.CountryModel
+import pl.valueadd.restcountries.domain.model.helper.Filter
 import pl.valueadd.restcountries.presentation.base.BasePresenter
 import pl.valueadd.restcountries.presentation.main.countries.list.item.ClickCountryItemEventHook
 import pl.valueadd.restcountries.presentation.main.countries.list.item.CountryItem
@@ -26,8 +27,6 @@ class CountryListPresenter
         private const val DELAY = 350L
     }
 
-    private var countriesDisposable: Disposable? = null
-
     init {
         onceViewAttached {
             downloadAllCountries()
@@ -36,17 +35,39 @@ class CountryListPresenter
         }
     }
 
+    var isAscending: Boolean = true
+
+    private var countriesDisposable: Disposable? = null
+
     override fun onCountryItemClick(model: CountryModel) = onceViewAttached {
         it.navigateToCountryDetailsView(model.id)
     }
 
-    fun onSearchQueryChange(query: String) {
+    fun onSortByNameViewClick() = onceViewAttached {
+        it.showSortByNameDialog()
+    }
+
+    fun onSortByNameChanged(isAscending: Boolean) {
+        this.isAscending = isAscending
+        onQueryChanged()
+    }
+
+    fun onQueryChanged(query: String) {
+        val filter = when {
+            isAscending -> Filters.NAME_ASC
+            !isAscending -> Filters.NAME_DSC
+            else -> throw IllegalStateException("Cannot find the suitable filter.")
+        }
 
         countriesDisposable?.let {
             disposables.remove(it)
         }
 
-        observeCountries(query, true)
+        observeCountries(query, true, filter)
+    }
+
+    private fun onQueryChanged() = onceViewAttached {
+        onQueryChanged(it.searchQuery)
     }
 
     private fun downloadAllCountries() {
@@ -74,16 +95,13 @@ class CountryListPresenter
         it.showError(message)
     }
 
-    private fun observeCountries(query: String = EMPTY, isDelayed: Boolean = false) {
+    private fun observeCountries(query: String = EMPTY, isDelayed: Boolean = false, filter: Filter<CountryModel> = Filters.NAME_ASC) {
         countriesDisposable = countryManager
-            .observeCountries(query)
+            .observeCountries(query, filter)
             .apply {
                 if (isDelayed) {
-                    delay(DELAY, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                    debounce(DELAY, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 }
-            }
-            .map { list ->
-                list.sortedBy { it.name }
             }
             .observeOnMain()
             .subscribe(
@@ -107,5 +125,12 @@ class CountryListPresenter
         val message = exceptionManager.mapToMessage(throwable)
 
         it.showError(message)
+    }
+
+    internal class Filters {
+
+        object NAME_ASC : Filter<CountryModel>(true)
+
+        object NAME_DSC : Filter<CountryModel>(false)
     }
 }

@@ -8,6 +8,7 @@ import pl.valueadd.restcountries.domain.mapper.CountryMapper
 import pl.valueadd.restcountries.domain.model.country.CountryFlatModel
 import pl.valueadd.restcountries.domain.model.country.CountryModel
 import pl.valueadd.restcountries.domain.model.currency.CurrencyModel
+import pl.valueadd.restcountries.domain.model.helper.Filter
 import pl.valueadd.restcountries.domain.model.language.LanguageModel
 import pl.valueadd.restcountries.domain.model.region.RegionalBlocModel
 import pl.valueadd.restcountries.network.dto.country.CountryDto
@@ -89,10 +90,15 @@ class CountryDomainManager @Inject constructor(
             .observeAllCountries()
             .map(mapper::mapCountryEntitiesToModels)
 
-    fun observeCountries(query: String): Flowable<List<CountryModel>> =
+    fun observeCountries(query: String, filter: Filter<CountryModel>): Flowable<List<CountryModel>> =
         persistence
-            .observeCountries(query)
+            .observeCountries(query, filter.isAscending)
             .map(mapper::mapCountryEntitiesToModels)
+            .map { list ->
+                if (filter.hasComparator) {
+                    list.sortedWith(filter.comparator)
+                } else list
+            }
 
     fun downloadAllCountries(): Completable =
         network
