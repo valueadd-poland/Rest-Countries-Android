@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Checked -->
+
+    <item android:drawable="@drawable/segmented_button_selected" android:state_checked="true"/>
+
+    <!-- Normal -->
+
+    <item android:drawable="@drawable/segmented_button_normal"/>
+
+</selector>

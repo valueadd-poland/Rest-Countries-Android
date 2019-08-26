@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/size_giant"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/size_giant"
+        android:text="@string/dialog_sort_by_name"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
+
+    <RadioGroup
+        android:id="@+id/segmentedRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/segmented_background_group"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:padding="@dimen/_1dp">
+
+        <RadioButton
+            android:id="@+id/segmentedAscending"
+            android:layout_width="@dimen/size_auto"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/segmented_selector"
+            android:button="@color/whiteTransparent"
+            android:checked="true"
+            android:gravity="center"
+            android:text="@string/common_ascending"
+            android:textColor="@color/segmented_selector_text" />
+
+        <RadioButton
+            android:id="@+id/segmentedDescending"
+            android:layout_width="@dimen/size_auto"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/segmented_selector"
+            android:button="@color/whiteTransparent"
+            android:gravity="center"
+            android:text="@string/common_descending"
+            android:textColor="@color/segmented_selector_text" />
+
+    </RadioGroup>
+
+</LinearLayout>

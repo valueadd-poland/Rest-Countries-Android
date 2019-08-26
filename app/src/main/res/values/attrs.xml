@@ -4,15 +4,22 @@
 
     <eat-comment/>
 
-    <!-- region Icon Indicator -->
+    <!-- Shared -->
+    <attr name="iconDrawable" format="reference"/>
+
+    <!-- PropertyView -->
 
     <declare-styleable name="PropertyView">
         <attr name="iconHighlightColor" format="color|reference"/>
-        <attr name="iconDrawable" format="reference"/>
+        <attr name="iconDrawable"/>
         <attr name="title" format="string|reference"/>
         <attr name="subtitle" format="string|reference"/>
     </declare-styleable>
 
-    <!-- endregion -->
+    <!-- ChipIconRight -->
+
+    <declare-styleable name="ChipIconRight">
+        <attr name="iconDrawable"/>
+    </declare-styleable>
 
 </resources>

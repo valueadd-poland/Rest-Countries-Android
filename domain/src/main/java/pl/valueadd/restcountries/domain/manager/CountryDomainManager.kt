@@ -8,11 +8,11 @@ import pl.valueadd.restcountries.domain.mapper.CountryMapper
 import pl.valueadd.restcountries.domain.model.country.CountryFlatModel
 import pl.valueadd.restcountries.domain.model.country.CountryModel
 import pl.valueadd.restcountries.domain.model.currency.CurrencyModel
+import pl.valueadd.restcountries.domain.model.helper.Filter
 import pl.valueadd.restcountries.domain.model.language.LanguageModel
 import pl.valueadd.restcountries.domain.model.region.RegionalBlocModel
 import pl.valueadd.restcountries.network.dto.country.CountryDto
 import pl.valueadd.restcountries.network.manager.CountryNetworkManager
-import pl.valueadd.restcountries.persistence.model.Border
 import pl.valueadd.restcountries.persistence.entity.CountryEntity
 import pl.valueadd.restcountries.persistence.entity.CurrencyEntity
 import pl.valueadd.restcountries.persistence.entity.LanguageEntity
@@ -31,6 +31,7 @@ import pl.valueadd.restcountries.persistence.manager.LanguagePersistenceManager
 import pl.valueadd.restcountries.persistence.manager.RegionalBlocPersistenceManager
 import pl.valueadd.restcountries.persistence.manager.TimeZonePersistenceManager
 import pl.valueadd.restcountries.persistence.manager.TopLevelDomainPersistenceManager
+import pl.valueadd.restcountries.persistence.model.Border
 import pl.valueadd.restcountries.utility.reactivex.immediateSingle
 import timber.log.Timber
 import javax.inject.Inject
@@ -88,6 +89,16 @@ class CountryDomainManager @Inject constructor(
         persistence
             .observeAllCountries()
             .map(mapper::mapCountryEntitiesToModels)
+
+    fun observeCountries(query: String, filter: Filter<CountryModel>): Flowable<List<CountryModel>> =
+        persistence
+            .observeCountries(query, filter.isAscending)
+            .map(mapper::mapCountryEntitiesToModels)
+            .map { list ->
+                if (filter.hasComparator) {
+                    list.sortedWith(filter.comparator)
+                } else list
+            }
 
     fun downloadAllCountries(): Completable =
         network
@@ -209,7 +220,7 @@ class CountryDomainManager @Inject constructor(
 
     private fun observeCurrencies(countryId: String): Flowable<List<CurrencyModel>> =
         currencyPersistence
-            .observeCurriencies(countryId)
+            .observeCurrencies(countryId)
             .map(mapper::mapCurrencyEntitiesToModels)
 
     private fun observeLanguages(countryId: String): Flowable<List<LanguageModel>> =
