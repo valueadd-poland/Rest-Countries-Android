@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.transition.Fade
+import kotlinx.android.synthetic.main.country_fragment_details.appBarLayout
 import kotlinx.android.synthetic.main.country_fragment_details.bordersCardView
 import kotlinx.android.synthetic.main.country_fragment_details.bordersChipGroup
 import kotlinx.android.synthetic.main.country_fragment_details.callingCodesPropertyView
@@ -15,6 +16,7 @@ import kotlinx.android.synthetic.main.country_fragment_details.informationCardVi
 import kotlinx.android.synthetic.main.country_fragment_details.timeZonesPropertyView
 import kotlinx.android.synthetic.main.country_fragment_details.toolbar
 import org.apache.commons.lang3.StringUtils.EMPTY
+import org.apache.commons.lang3.math.NumberUtils.INTEGER_ZERO
 import pl.valueadd.restcountries.R
 import pl.valueadd.restcountries.domain.model.country.CountryFlatModel
 import pl.valueadd.restcountries.domain.model.country.CountryModel
@@ -25,6 +27,8 @@ import pl.valueadd.restcountries.utility.reactivex.onSuccess
 import pl.valueadd.restcountries.utility.reactivex.throttleClicks
 import pl.valueadd.restcountries.utility.view.getChildAtOrNull
 import pl.valueadd.restcountries.utility.view.setVisible
+import pl.valueadd.restcountries.utility.view.toolbar.CollapsingToolbarState
+import pl.valueadd.restcountries.utility.view.toolbar.onCollapsingToolbarStateChanged
 import pl.valueadd.restcountries.view.chip.BorderChip
 import javax.inject.Inject
 
@@ -118,8 +122,25 @@ class CountryDetailsFragment : BackMVPViewStateFragment<CountryDetailsView, Coun
         navigationIcon = ContextCompat.getDrawable(context, R.drawable.ic_arrow_back_white_24dp)
 
         // Sets navigation icon's background
-        getChildAtOrNull(0)?.let { navigationIconView ->
+        getChildAtOrNull(INTEGER_ZERO)?.let { navigationIconView ->
             navigationIconView.background = ContextCompat.getDrawable(requireContext(), R.drawable.country_background_navigation_icon)
+        }
+
+        appBarLayout.addOnOffsetChangedListener(onCollapsingToolbarStateChanged { _, state ->
+            setNavigationIconBackground(state)
+        })
+    }
+
+    private fun setNavigationIconBackground(@CollapsingToolbarState state: Int) {
+        toolbarNavigation.getChildAtOrNull(INTEGER_ZERO)?.let { navigationIconView ->
+            when (state) {
+                CollapsingToolbarState.COLLAPSED -> {
+                    navigationIconView.setBackgroundResource(R.color.whiteTransparent)
+                }
+                CollapsingToolbarState.EXPANDED -> {
+                    navigationIconView.background = ContextCompat.getDrawable(requireContext(), R.drawable.country_background_navigation_icon)
+                }
+            }
         }
     }
 }

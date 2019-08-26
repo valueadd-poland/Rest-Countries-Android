@@ -2,11 +2,14 @@ package pl.valueadd.restcountries.utility.view
 
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.view.Gravity
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 
 fun View.setVisible(isVisible: Boolean, falseRes: Int = View.GONE) {
 
@@ -31,4 +34,8 @@ fun Menu.setTextColor(@IdRes idRes: Int, @ColorInt color: Int) {
 
 fun Menu.show(@IdRes idRes: Int) {
     this.findItem(idRes)?.isVisible = true
+}
+
+fun SearchView.applyAligmentToTheRight() {
+    layoutParams = Toolbar.LayoutParams(Gravity.END)
 }

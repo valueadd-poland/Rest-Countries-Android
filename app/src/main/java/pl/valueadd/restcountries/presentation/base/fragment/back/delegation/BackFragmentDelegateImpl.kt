@@ -6,36 +6,36 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import pl.valueadd.restcountries.R
 import me.yokeyword.fragmentation.anim.DefaultVerticalAnimator
 import me.yokeyword.fragmentation.anim.FragmentAnimator
+import pl.valueadd.restcountries.R
 
 class BackFragmentDelegateImpl(
     private val fragment: Fragment,
     private val delegateCallback: BackFragmentDelegateCallback
 ) : BackFragmentDelegate {
 
-    private val toolbarNavigation: Toolbar
+    override val toolbarNavigation: Toolbar
         get() = delegateCallback.toolbarNavigation
 
     @get:StringRes
-    private val titleRes: Int
+    override val titleRes: Int
         get() = delegateCallback.titleRes
 
     @get:DrawableRes
-    private val navigationIcon: Int
+    override val navigationIcon: Int
         get() = delegateCallback.navigationIcon
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initializeToolbarNavigation(toolbarNavigation)
-        setTitle(titleRes)
+        delegateCallback.initializeToolbarNavigation(toolbarNavigation)
+        delegateCallback.setTitle(titleRes)
     }
 
     override fun setTitle(@StringRes resId: Int): Unit =
-        setTitle(getString(resId))
+        delegateCallback.setTitle(getString(resId))
 
     override fun setTitle(title: String) {
-        toolbarNavigation.title = title
+        delegateCallback.toolbarNavigation.title = title
     }
 
     override fun initializeToolbarNavigation(toolbar: Toolbar) {

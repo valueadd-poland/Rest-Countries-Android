@@ -3,6 +3,7 @@ package pl.valueadd.restcountries.presentation.main.countries.list
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
 import com.mikepenz.fastadapter.IItem
 import com.mikepenz.fastadapter.adapters.GenericFastItemAdapter
@@ -12,9 +13,10 @@ import kotlinx.android.synthetic.main.country_fragment_details.bordersChipGroup
 import kotlinx.android.synthetic.main.country_fragment_list.recyclerView
 import kotlinx.android.synthetic.main.country_fragment_list.sortByNameChip
 import kotlinx.android.synthetic.main.toolbar.searchView
+import kotlinx.android.synthetic.main.toolbar.toolbar
 import org.apache.commons.lang3.StringUtils.EMPTY
 import pl.valueadd.restcountries.R
-import pl.valueadd.restcountries.presentation.base.fragment.viewstate.base.BaseMVPViewStateFragment
+import pl.valueadd.restcountries.presentation.base.fragment.viewstate.back.BackMVPViewStateFragment
 import pl.valueadd.restcountries.presentation.main.countries.details.CountryDetailsFragment
 import pl.valueadd.restcountries.presentation.main.countries.list.item.ClickCountryItemEventHook
 import pl.valueadd.restcountries.presentation.main.countries.list.item.CountryHeaderAdapter
@@ -22,10 +24,11 @@ import pl.valueadd.restcountries.presentation.main.root.RootFragment
 import pl.valueadd.restcountries.utility.context.createBottomSheetDialog
 import pl.valueadd.restcountries.utility.reactivex.onSuccess
 import pl.valueadd.restcountries.utility.reactivex.throttleClicks
+import pl.valueadd.restcountries.utility.view.applyAligmentToTheRight
 import pl.valueadd.restcountries.view.decorator.CountryItemDecoration
 import javax.inject.Inject
 
-class CountryListFragment : BaseMVPViewStateFragment<CountryListView, CountryListPresenter, CountryListViewState>(R.layout.country_fragment_list),
+class CountryListFragment : BackMVPViewStateFragment<CountryListView, CountryListPresenter, CountryListViewState>(R.layout.country_fragment_list),
     CountryListView,
     SearchView.OnQueryTextListener {
 
@@ -39,6 +42,9 @@ class CountryListFragment : BaseMVPViewStateFragment<CountryListView, CountryLis
 
     override val searchQuery: String
         get() = searchView?.query?.toString() ?: EMPTY
+
+    override val titleRes: Int
+        get() = R.string.country_list_title
 
     private val stickyHeaderAdapter = CountryHeaderAdapter()
 
@@ -136,5 +142,14 @@ class CountryListFragment : BaseMVPViewStateFragment<CountryListView, CountryLis
             .onSuccess(disposables, {
                 presenter.onSortByNameViewClick()
             })
+    }
+
+    override fun initializeToolbarNavigation(toolbar: Toolbar) {
+        initializeToolbar()
+    }
+
+    private fun initializeToolbar() = toolbar.run {
+        searchView.applyAligmentToTheRight()
+        searchView.setOnQueryTextListener(this@CountryListFragment)
     }
 }

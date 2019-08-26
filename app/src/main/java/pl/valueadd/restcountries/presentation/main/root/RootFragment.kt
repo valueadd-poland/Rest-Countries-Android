@@ -1,18 +1,21 @@
 package pl.valueadd.restcountries.presentation.main.root
 
 import android.os.Bundle
-import android.view.Gravity
 import android.view.View
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.AppBarLayout
+import kotlinx.android.synthetic.main.app_bar.appBarLayout
 import kotlinx.android.synthetic.main.toolbar.searchView
 import kotlinx.android.synthetic.main.toolbar.toolbar
+import kotlinx.android.synthetic.main.toolbar.view.searchView
 import pl.valueadd.restcountries.R
+import pl.valueadd.restcountries.presentation.base.fragment.back.IBackFragment
 import pl.valueadd.restcountries.presentation.base.fragment.base.BaseMVPFragment
 import pl.valueadd.restcountries.presentation.base.fragment.base.IBaseFragment
 import pl.valueadd.restcountries.presentation.main.countries.list.CountryListFragment
+import pl.valueadd.restcountries.utility.view.applyAligmentToTheRight
 import pl.valueadd.restcountries.utility.view.setVisible
 import javax.inject.Inject
 
@@ -29,6 +32,9 @@ class RootFragment : BaseMVPFragment<RootView, RootPresenter>(R.layout.root_frag
 
     @Inject
     override lateinit var mPresenter: RootPresenter
+
+    private val appBar: AppBarLayout
+        get() = appBarLayout
 
     @IdRes
     private val childFragmentContainer: Int = R.id.fragmentContainer
@@ -64,14 +70,20 @@ class RootFragment : BaseMVPFragment<RootView, RootPresenter>(R.layout.root_frag
 
     private fun setSearchViewFor(@RootNavigation type: Int) {
         val fragment = rootFragments[type]
+        val isBackFragment = fragment is IBackFragment
+
+        appBar.setVisible(!isBackFragment)
+
+        if (isBackFragment) return
 
         val isSearchable = fragment is SearchView.OnQueryTextListener
 
-        if (isSearchable) {
-            searchView.setOnQueryTextListener(fragment as SearchView.OnQueryTextListener)
+        toolbar.searchView.run {
+            if (isSearchable) {
+                setOnQueryTextListener(fragment as SearchView.OnQueryTextListener)
+            }
+            setVisible(isSearchable)
         }
-
-        searchView.setVisible(isSearchable)
     }
 
     private fun getRootFragmentClass(@RootNavigation type: Int): Class<out IBaseFragment> =
@@ -86,7 +98,6 @@ class RootFragment : BaseMVPFragment<RootView, RootPresenter>(R.layout.root_frag
     private fun navigateToView(@RootNavigation type: Int) {
 
         val currentFragment: IBaseFragment = requireNotNull(rootFragments[currentRootNavigation])
-
         val selectedFragment: IBaseFragment = requireNotNull(rootFragments[type])
 
         showHideFragment(
@@ -105,14 +116,11 @@ class RootFragment : BaseMVPFragment<RootView, RootPresenter>(R.layout.root_frag
 
         setOnMenuItemClickListener(::onOptionsItemSelected)
 
-        setToolbarTitle(R.string.country_list_title)
-
         initializeSearchView()
     }
 
     private fun initializeSearchView() {
-        searchView.layoutParams = Toolbar.LayoutParams(Gravity.END)
-
+        searchView.applyAligmentToTheRight()
         setSearchViewFor(currentRootNavigation)
     }
 }
