@@ -49,4 +49,8 @@
     <color name="blackAlpha80">#CC000000</color>
     <color name="blackAlpha90">#E6000000</color>
 
+    <!-- Indigo color -->
+    <color name="indigoTransparent">#003959C7</color>
+    <color name="indigoAlpha50">#803959C7</color>
+
 </resources>

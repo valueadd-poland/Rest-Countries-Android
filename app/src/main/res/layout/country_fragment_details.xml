@@ -16,31 +16,19 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:contentScrim="?attr/colorPrimary"
+            app:contentScrim="@color/primaryColor"
             app:expandedTitleGravity="bottom|start"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+            app:expandedTitleMarginBottom="@dimen/size_giant"
+            app:expandedTitleMarginStart="@dimen/size_giant"
+            app:expandedTitleTextAppearance="@style/AppTheme.TextAppearance.Title.Outlined"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            tools:title="USA">
 
             <!-- AppBar Content -->
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
-                <!-- Helpers -->
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guidelineStartTop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_begin="@dimen/size_giant"/>
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guidelineEndTop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_end="@dimen/size_giant"/>
 
                 <!-- Flag -->
 
@@ -54,27 +42,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="ContentDescription"
-                    tools:src="@tools:sample/backgrounds/scenic"/>
-
-                <!-- Title -->
-
-                <TextView
-                    android:id="@+id/titleTextView"
-                    style="@style/AppTheme.TextAppearance.Outlined"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLines="2"
-                    android:textColor="@color/primaryTextColor"
-                    android:textSize="@dimen/text_colossal_size"
-                    app:layout_constraintBottom_toBottomOf="@+id/flagImageView"
-                    app:layout_constraintEnd_toEndOf="@id/guidelineEndTop"
-                    app:layout_constraintHorizontal_bias="0.00"
-                    app:layout_constraintStart_toStartOf="@+id/guidelineStartTop"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.90"
-                    android:visibility="gone"
-                    tools:text="USA"/>
+                    tools:src="@tools:sample/backgrounds/scenic" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -82,7 +50,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"/>
+                app:layout_collapseMode="pin" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -109,14 +77,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_begin="@dimen/size_giant"/>
+                app:layout_constraintGuide_begin="@dimen/size_giant" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guidelineEnd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_end="@dimen/size_giant"/>
+                app:layout_constraintGuide_end="@dimen/size_giant" />
 
             <!-- Information Card -->
 
@@ -149,7 +117,7 @@
                         android:paddingBottom="@dimen/size_normal"
                         app:iconDrawable="@drawable/ic_phone_white_24dp"
                         app:iconHighlightColor="@color/primaryColor"
-                        app:title="@string/country_details_calling_codes"/>
+                        app:title="@string/country_details_calling_codes" />
 
                     <pl.valueadd.restcountries.view.PropertyView
                         android:id="@+id/domainsPropertyView"
@@ -159,7 +127,7 @@
                         android:paddingBottom="@dimen/size_normal"
                         app:iconDrawable="@drawable/ic_language_white_24dp"
                         app:iconHighlightColor="@color/primaryColor"
-                        app:title="@string/country_details_top_level_domains"/>
+                        app:title="@string/country_details_top_level_domains" />
 
                     <pl.valueadd.restcountries.view.PropertyView
                         android:id="@+id/timeZonesPropertyView"
@@ -169,7 +137,7 @@
                         android:paddingBottom="@dimen/size_normal"
                         app:iconDrawable="@drawable/ic_access_time_white_24dp"
                         app:iconHighlightColor="@color/primaryColor"
-                        app:title="@string/country_details_timezones"/>
+                        app:title="@string/country_details_timezones" />
 
                 </LinearLayout>
 
@@ -206,7 +174,7 @@
                         android:layout_marginBottom="@dimen/size_normal"
                         android:text="@string/country_details_borders"
                         android:textColor="@color/secondaryTextColor"
-                        android:textSize="@dimen/text_normal_size"/>
+                        android:textSize="@dimen/text_normal_size" />
 
                     <com.google.android.material.chip.ChipGroup
                         android:id="@+id/bordersChipGroup"
@@ -249,7 +217,7 @@
                         android:layout_marginBottom="@dimen/size_normal"
                         android:text="@string/country_details_map"
                         android:textColor="@color/secondaryTextColor"
-                        android:textSize="@dimen/text_normal_size"/>
+                        android:textSize="@dimen/text_normal_size" />
 
                     <!-- TODO Google Map here... | View is hidden -->
 

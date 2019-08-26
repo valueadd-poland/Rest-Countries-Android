@@ -13,7 +13,6 @@ import kotlinx.android.synthetic.main.country_fragment_details.domainsPropertyVi
 import kotlinx.android.synthetic.main.country_fragment_details.flagImageView
 import kotlinx.android.synthetic.main.country_fragment_details.informationCardView
 import kotlinx.android.synthetic.main.country_fragment_details.timeZonesPropertyView
-import kotlinx.android.synthetic.main.country_fragment_details.titleTextView
 import kotlinx.android.synthetic.main.country_fragment_details.toolbar
 import org.apache.commons.lang3.StringUtils.EMPTY
 import pl.valueadd.restcountries.R
@@ -24,6 +23,7 @@ import pl.valueadd.restcountries.utility.common.merge
 import pl.valueadd.restcountries.utility.image.loadSVGImage
 import pl.valueadd.restcountries.utility.reactivex.onSuccess
 import pl.valueadd.restcountries.utility.reactivex.throttleClicks
+import pl.valueadd.restcountries.utility.view.getChildAtOrNull
 import pl.valueadd.restcountries.utility.view.setVisible
 import pl.valueadd.restcountries.view.chip.BorderChip
 import javax.inject.Inject
@@ -75,7 +75,6 @@ class CountryDetailsFragment : BackMVPViewStateFragment<CountryDetailsView, Coun
     override fun bindModelToView(model: CountryModel) = model.run {
         setTitle(model.name)
         flagImageView.loadSVGImage(flagUrl)
-        titleTextView.text = name
         callingCodesPropertyView.subtitle = callingCodes.merge()
         domainsPropertyView.subtitle = topLevelDomains.merge()
         timeZonesPropertyView.subtitle = timezones.merge()
@@ -117,6 +116,10 @@ class CountryDetailsFragment : BackMVPViewStateFragment<CountryDetailsView, Coun
         setOnMenuItemClickListener(::onOptionsItemSelected)
 
         navigationIcon = ContextCompat.getDrawable(context, R.drawable.ic_arrow_back_white_24dp)
-    }
 
+        // Sets navigation icon's background
+        getChildAtOrNull(0)?.let { navigationIconView ->
+            navigationIconView.background = ContextCompat.getDrawable(requireContext(), R.drawable.country_background_navigation_icon)
+        }
+    }
 }

@@ -62,11 +62,12 @@
         <item name="itemTextColor">@color/white</item>
     </style>
 
-    <style name="AppTheme.TextAppearance.Outlined" parent="TextAppearance.AppCompat">
+    <style name="AppTheme.TextAppearance.Title.Outlined" parent="TextAppearance.AppCompat">
         <item name="android:shadowColor">@color/secondaryTextColor</item>
         <item name="android:shadowDx">1.5</item>
         <item name="android:shadowDy">1.3</item>
         <item name="android:shadowRadius">1.6</item>
+        <item name="android:textSize">@dimen/text_giant_size</item>
     </style>
 
 </resources>
