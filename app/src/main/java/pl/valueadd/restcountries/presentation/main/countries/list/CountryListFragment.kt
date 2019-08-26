@@ -79,7 +79,7 @@ class CountryListFragment : BaseMVPViewStateFragment<CountryListView, CountryLis
     override fun onQueryTextChange(newText: String?): Boolean {
         presenter.onQueryChanged(newText ?: EMPTY)
 
-        return false
+        return true
     }
 
     override fun showSortByNameDialog() =

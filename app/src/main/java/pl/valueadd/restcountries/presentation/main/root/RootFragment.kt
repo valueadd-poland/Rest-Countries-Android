@@ -13,6 +13,7 @@ import pl.valueadd.restcountries.R
 import pl.valueadd.restcountries.presentation.base.fragment.base.BaseMVPFragment
 import pl.valueadd.restcountries.presentation.base.fragment.base.IBaseFragment
 import pl.valueadd.restcountries.presentation.main.countries.list.CountryListFragment
+import pl.valueadd.restcountries.utility.view.setVisible
 import javax.inject.Inject
 
 class RootFragment : BaseMVPFragment<RootView, RootPresenter>(R.layout.root_fragment),
@@ -61,6 +62,18 @@ class RootFragment : BaseMVPFragment<RootView, RootPresenter>(R.layout.root_frag
         }
     }
 
+    private fun setSearchViewFor(@RootNavigation type: Int) {
+        val fragment = rootFragments[type]
+
+        val isSearchable = fragment is SearchView.OnQueryTextListener
+
+        if (isSearchable) {
+            searchView.setOnQueryTextListener(fragment as SearchView.OnQueryTextListener)
+        }
+
+        searchView.setVisible(isSearchable)
+    }
+
     private fun getRootFragmentClass(@RootNavigation type: Int): Class<out IBaseFragment> =
         when (type) {
             RootNavigation.COUNTRIES -> CountryListFragment::class.java
@@ -82,6 +95,8 @@ class RootFragment : BaseMVPFragment<RootView, RootPresenter>(R.layout.root_frag
         )
 
         currentRootNavigation = type
+
+        setSearchViewFor(type)
     }
 
     private fun initializeToolbar() = toolbar.run {
@@ -98,10 +113,6 @@ class RootFragment : BaseMVPFragment<RootView, RootPresenter>(R.layout.root_frag
     private fun initializeSearchView() {
         searchView.layoutParams = Toolbar.LayoutParams(Gravity.END)
 
-        val countryListFragment = rootFragments[RootNavigation.COUNTRIES]
-
-        if (countryListFragment is SearchView.OnQueryTextListener) {
-            searchView.setOnQueryTextListener(countryListFragment)
-        }
+        setSearchViewFor(currentRootNavigation)
     }
 }
