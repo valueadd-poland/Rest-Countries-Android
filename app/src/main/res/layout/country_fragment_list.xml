@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,37 +7,50 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <!-- AppBar -->
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:theme="@style/AppTheme.ThemeOverlay.ActionBar">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/sortByNameChip"
-            style="@style/Widget.MaterialComponents.Chip.Action"
-            android:layout_width="wrap_content"
+        <include layout="@layout/toolbar" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/size_normal"
-            android:text="@string/country_list_sort_by_name"
-            app:closeIcon="@drawable/ic_arrow_drop_down_white_24dp"
-            app:closeIconStartPadding="@dimen/size_none"
-            app:closeIconTint="@color/black"
-            app:closeIconVisible="true" />
+            android:padding="@dimen/size_normal"
+            android:scrollbars="none">
 
-        <com.google.android.material.chip.ChipGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            <com.google.android.material.chip.ChipGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
+                <pl.valueadd.restcountries.view.chip.ActionableChip
+                    android:id="@+id/sortByNameChip"
+                    style="@style/AppTheme.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/country_list_sort_by_name"
+                    app:closeIcon="@drawable/ic_arrow_drop_down_white_24dp"
+                    app:closeIconStartPadding="@dimen/size_none"
+                    app:closeIconTint="@color/black"
+                    app:closeIconVisible="true" />
 
-        </com.google.android.material.chip.ChipGroup>
+            </com.google.android.material.chip.ChipGroup>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/country_item" />
+        </HorizontalScrollView>
 
-    </LinearLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <!-- Content -->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/country_item" />
+
+</LinearLayout>

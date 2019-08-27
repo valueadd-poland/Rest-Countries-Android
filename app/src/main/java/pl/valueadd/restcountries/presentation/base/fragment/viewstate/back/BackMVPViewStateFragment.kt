@@ -6,19 +6,17 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
 import kotlinx.android.synthetic.main.toolbar.toolbar
+import me.yokeyword.fragmentation.anim.FragmentAnimator
 import pl.valueadd.restcountries.R
+import pl.valueadd.restcountries.presentation.base.BasePresenter
+import pl.valueadd.restcountries.presentation.base.BaseView
 import pl.valueadd.restcountries.presentation.base.fragment.back.delegation.BackFragmentDelegate
-import pl.valueadd.restcountries.presentation.base.fragment.back.delegation.BackFragmentDelegateCallback
 import pl.valueadd.restcountries.presentation.base.fragment.back.delegation.BackFragmentDelegateImpl
 import pl.valueadd.restcountries.presentation.base.fragment.viewstate.BaseViewState
 import pl.valueadd.restcountries.presentation.base.fragment.viewstate.base.BaseMVPViewStateFragment
-import me.yokeyword.fragmentation.anim.FragmentAnimator
-import pl.valueadd.restcountries.presentation.base.BasePresenter
-import pl.valueadd.restcountries.presentation.base.BaseView
 
 abstract class BackMVPViewStateFragment<V : BaseView, P : BasePresenter<V>, VS : BaseViewState<V>>(@LayoutRes layoutId: Int) :
     BaseMVPViewStateFragment<V, P, VS>(layoutId),
-    BackFragmentDelegateCallback,
     IBackViewStateFragment {
 
     private val backDelegate: BackFragmentDelegate

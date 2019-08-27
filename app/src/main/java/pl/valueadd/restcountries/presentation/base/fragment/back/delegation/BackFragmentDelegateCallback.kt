@@ -13,4 +13,12 @@ interface BackFragmentDelegateCallback {
     val navigationIcon: Int
 
     val toolbarNavigation: Toolbar
+
+    fun setTitle(@StringRes resId: Int)
+
+    fun setTitle(title: String)
+
+    fun initializeToolbarNavigation(toolbar: Toolbar)
+
+    fun initializeToolbarMenu(toolbar: Toolbar)
 }

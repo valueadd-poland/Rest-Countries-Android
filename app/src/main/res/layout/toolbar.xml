@@ -1,47 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.appbar.AppBarLayout
+<androidx.appcompat.widget.Toolbar
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/appBarLayout"
+    android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:theme="@style/AppTheme.ThemeOverlay.ActionBar">
+    android:layout_weight="1"
+    android:theme="@style/AppTheme.ThemeOverlay"
+    app:titleTextColor="@color/white">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        app:popupTheme="@style/AppTheme.ThemeOverlay">
+        android:layout_height="wrap_content"
+        android:layoutDirection="ltr"
+        android:theme="@style/AppTheme.SearchView"
+        app:queryBackground="@android:color/transparent"
+        app:queryHint="@string/common_search"
+        app:searchIcon="@drawable/ic_search_white_24dp" />
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/searchView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layoutDirection="ltr"
-            app:queryHint="@string/common_search"
-            app:searchIcon="@drawable/ic_search_white_24dp"/>
-
-    </androidx.appcompat.widget.Toolbar>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="4dp">
-
-        <me.zhanghai.android.materialprogressbar.MaterialProgressBar
-            android:id="@+id/actionBarProgress"
-            style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:indeterminate="true"
-            android:visibility="gone"
-            app:mpb_indeterminateTint="@color/secondaryColor"
-            app:mpb_progressStyle="horizontal"
-            app:mpb_useIntrinsicPadding="false"
-            tools:indeterminate="false"
-            tools:progress="20"
-            tools:visibility="visible"/>
-    </LinearLayout>
-
-</com.google.android.material.appbar.AppBarLayout>
+</androidx.appcompat.widget.Toolbar>

@@ -7,9 +7,9 @@
         <item name="android:textAppearance">@style/AppTheme.Font.Roboto</item>
     </style>
 
-    <style name="AppTheme.ThemeOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.ThemeOverlay" parent="ThemeOverlay.MaterialComponents.ActionBar"/>
 
-    <style name="AppTheme.ThemeOverlay.ActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
+    <style name="AppTheme.ThemeOverlay.ActionBar">
         <item name="android:textColorPrimary">@color/white</item>
     </style>
 
@@ -22,6 +22,10 @@
     <style name="AppTheme.Font.Roboto">
         <item name="android:fontFamily">sans-serif</item>
         <item name="fontFamily">sans-serif</item>
+    </style>
+    
+    <style name="AppTheme.SearchView" parent="Widget.AppCompat.SearchView">
+        <item name="android:textColorHint">@color/blackAlpha60</item>
     </style>
 
     <style name="AppTheme.Widget.Button" parent="Widget.MaterialComponents.Button">
@@ -56,12 +60,21 @@
         <item name="android:insetRight">0dp</item>
     </style>
 
-    <style name="AppTheme.TextAppearance.Title.Outlined" parent="TextAppearance.AppCompat">
+    <style name="AppTheme.TextAppearance" parent="TextAppearance.AppCompat" />
+
+    <style name="AppTheme.TextAppearance.Title">
+        <item name="android:textSize">@dimen/text_giant_size</item>
+    </style>
+
+    <style name="AppTheme.TextAppearance.Title.Outlined" >
         <item name="android:shadowColor">@color/secondaryTextColor</item>
         <item name="android:shadowDx">1.5</item>
         <item name="android:shadowDy">1.3</item>
         <item name="android:shadowRadius">1.6</item>
-        <item name="android:textSize">@dimen/text_giant_size</item>
+    </style>
+
+    <style name="AppTheme.Chip.Filter" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="chipBackgroundColor">@color/white</item>
     </style>
 
 </resources>
