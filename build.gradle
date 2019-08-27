@@ -34,8 +34,7 @@ allprojects {
     apply from: "$rootDir/scripts/pmd.gradle"
     apply from: "$rootDir/scripts/translations.gradle"
     apply from: "$rootDir/dependencies.gradle"
-
-
+    apply from: "$rootDir/properties.gradle"
 }
 
 /**
@@ -119,4 +118,8 @@ static def setBuildProperty(BuildType it, String name, Long value) {
 
 static def setBuildProperty(BuildType it, String name, boolean value) {
     it.buildConfigField "boolean", "${name.toUpperCase()}", "$value"
+}
+
+static def setBuildProperty(BuildType it, String name, float value) {
+    it.buildConfigField "float", "${name.toUpperCase()}", "$value" + 'f'
 }

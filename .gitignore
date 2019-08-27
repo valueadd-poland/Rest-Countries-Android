@@ -29,3 +29,6 @@ local.properties
 .DS_Store
 /captures
 .externalNativeBuild
+
+# Properties file (APIs keys, passwords etc.)
+properties.gradle

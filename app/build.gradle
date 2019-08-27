@@ -67,6 +67,13 @@ android {
 
     flavorDimensions "todo"
 
+    /**
+     * Properties
+     */
+    buildTypes.each {
+        setBuildProperty(it, "GOOGLE_MAP_DEFAULT_ZOOM", 4f)
+    }
+
     lintOptions {
         lintConfig file("$rootDir/scripts/lint-rules.xml")
     }
@@ -96,6 +103,9 @@ dependencies {
 
     // Permissions
     implementation deps.permissions.no
+
+    // Services
+    implementation deps.services.maps
     
     // View
     implementation deps.view.material_progress_bar

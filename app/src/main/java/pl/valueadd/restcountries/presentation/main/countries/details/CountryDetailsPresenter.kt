@@ -1,5 +1,7 @@
 package pl.valueadd.restcountries.presentation.main.countries.details
 
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
 import io.reactivex.rxkotlin.addTo
 import pl.valueadd.restcountries.domain.manager.CountryDomainManager
 import pl.valueadd.restcountries.domain.manager.ExceptionDomainManager
@@ -13,13 +15,16 @@ import javax.inject.Inject
 class CountryDetailsPresenter @Inject constructor(
     private val countryManager: CountryDomainManager,
     private val exceptionManager: ExceptionDomainManager
-) : BasePresenter<CountryDetailsView>() {
+) : BasePresenter<CountryDetailsView>(),
+    OnMapReadyCallback {
 
     var model: CountryModel? = null
         private set
 
     var borderModels: List<CountryFlatModel> = emptyList()
         private set
+
+    private var map: GoogleMap? = null
 
     init {
         onceViewAttached {
@@ -29,6 +34,16 @@ class CountryDetailsPresenter @Inject constructor(
 
     fun onBorderItemClick(countryId: String) = onceViewAttached {
         it.navigateToCountry(countryId)
+    }
+
+    override fun onMapReady(googleMap: GoogleMap?) {
+        map = googleMap.also { map ->
+            val model = model ?: return@also
+
+            onceViewAttached {
+                it.bindPositionDataToMapView(map, model.latLng, model.name)
+            }
+        }
     }
 
     private fun observeCountry(countryId: String) {
@@ -55,7 +70,11 @@ class CountryDetailsPresenter @Inject constructor(
 
         view.setBordersCardVisibility(model.borders.isNotEmpty())
 
+        view.setMapCardVisibility(model.latLng.hasNotDefaultValues)
+
         view.bindBordersToView(model.borders)
+
+        view.bindPositionDataToMapView(map, model.latLng, model.name)
     }
 
     private fun onObserveCountryFailed(throwable: Throwable) = onceViewAttached {

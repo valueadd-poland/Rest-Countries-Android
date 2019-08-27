@@ -52,7 +52,8 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin" />
+                app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/ic_arrow_back_white_24dp"/>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -197,6 +198,7 @@
                 android:layout_width="@dimen/size_auto"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size_giant"
+                android:layout_marginBottom="@dimen/size_giant"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
@@ -221,7 +223,10 @@
                         android:textColor="@color/secondaryTextColor"
                         android:textSize="@dimen/text_normal_size" />
 
-                    <!-- TODO Google Map here... | View is hidden -->
+                    <pl.valueadd.restcountries.view.NestedMapView
+                        android:id="@+id/googleMapView"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/google_map_height" />
 
                 </LinearLayout>
 

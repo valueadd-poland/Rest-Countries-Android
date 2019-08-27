@@ -68,6 +68,7 @@ versions.android_svg = "1.4"
 versions.fast_adapter_sticky_headers = "0.5.1-SNAPSHOT"
 versions.sticky_headers = "0.5.1"
 versions.timber = "4.7.1"
+versions.services_map = "17.0.0"
 deps.versions = versions
 ext.versions = versions
 
@@ -245,6 +246,13 @@ test.espresso_intents = "androidx.test.espresso:espresso-intents:$versions.espre
 test.mock_web_server = "com.squareup.okhttp3:mockwebserver:$versions.okhttp"
 test.robolectric = "org.robolectric:robolectric:$versions.robolectric"
 deps.test = test
+
+/**
+ * Service variables
+ */
+def services = [:]
+services.maps = "com.google.android.gms:play-services-maps:$versions.services_map"
+deps.services = services
 
 /**
  * Apply the commonly used repositories into the handler.
