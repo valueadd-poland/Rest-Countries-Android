@@ -1,9 +1,7 @@
 package pl.valueadd.restcountries.presentation.main.countries.details
 
-import com.google.android.gms.maps.GoogleMap
 import pl.valueadd.restcountries.domain.model.country.CountryFlatModel
 import pl.valueadd.restcountries.domain.model.country.CountryModel
-import pl.valueadd.restcountries.domain.model.country.LatLngModel
 import pl.valueadd.restcountries.presentation.base.BaseView
 
 interface CountryDetailsView : BaseView {
@@ -22,5 +20,5 @@ interface CountryDetailsView : BaseView {
 
     fun navigateToCountry(countryId: String)
 
-    fun bindPositionDataToMapView(map: GoogleMap?, model: LatLngModel, name: String)
+    fun bindPositionDataToMapView(model: CountryModel)
 }

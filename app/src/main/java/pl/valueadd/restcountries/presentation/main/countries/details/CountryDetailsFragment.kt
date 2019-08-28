@@ -9,6 +9,7 @@ import androidx.transition.Fade
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.country_fragment_details.appBarLayout
@@ -23,18 +24,14 @@ import kotlinx.android.synthetic.main.country_fragment_details.mapCardView
 import kotlinx.android.synthetic.main.country_fragment_details.timeZonesPropertyView
 import kotlinx.android.synthetic.main.country_fragment_details.toolbar
 import org.apache.commons.lang3.StringUtils.EMPTY
-import org.apache.commons.lang3.math.NumberUtils.INTEGER_ZERO
-import pl.valueadd.restcountries.BuildConfig
 import pl.valueadd.restcountries.R
 import pl.valueadd.restcountries.domain.model.country.CountryFlatModel
 import pl.valueadd.restcountries.domain.model.country.CountryModel
-import pl.valueadd.restcountries.domain.model.country.LatLngModel
 import pl.valueadd.restcountries.presentation.base.fragment.viewstate.back.BackMVPViewStateFragment
 import pl.valueadd.restcountries.utility.common.merge
 import pl.valueadd.restcountries.utility.image.loadSVGImage
 import pl.valueadd.restcountries.utility.reactivex.onSuccess
 import pl.valueadd.restcountries.utility.reactivex.throttleClicks
-import pl.valueadd.restcountries.utility.view.getChildAtOrNull
 import pl.valueadd.restcountries.utility.view.setVisible
 import pl.valueadd.restcountries.utility.view.toolbar.CollapsingToolbarState
 import pl.valueadd.restcountries.utility.view.toolbar.onCollapsingToolbarStateChanged
@@ -42,7 +39,8 @@ import pl.valueadd.restcountries.view.chip.BorderChip
 import javax.inject.Inject
 
 class CountryDetailsFragment : BackMVPViewStateFragment<CountryDetailsView, CountryDetailsPresenter, CountryDetailsViewState>(R.layout.country_fragment_details),
-    CountryDetailsView {
+    CountryDetailsView,
+    OnMapReadyCallback {
 
     companion object {
 
@@ -64,6 +62,8 @@ class CountryDetailsFragment : BackMVPViewStateFragment<CountryDetailsView, Coun
      * it is needed to invoke callbacks
      */
     private lateinit var mapView: MapView
+
+    private var map: GoogleMap? = null
 
     @Inject
     override lateinit var mPresenter: CountryDetailsPresenter
@@ -116,23 +116,33 @@ class CountryDetailsFragment : BackMVPViewStateFragment<CountryDetailsView, Coun
         mapView.onSaveInstanceState(outState)
     }
 
+    override fun onMapReady(googleMap: GoogleMap?) {
+        map = googleMap
+        presenter.onMapReady()
+    }
+
     override fun createViewState(): CountryDetailsViewState =
         CountryDetailsViewState()
 
     override fun onSaveViewState() {
         viewState.apply {
-            model = presenter.model
+            model = presenter.countryModel
             borders = presenter.borderModels
             isBorderCardVisible = bordersCardView.isVisible
             isInformationCardVisible = informationCardView.isVisible
+            isMapCardVisible = mapCardView.isVisible
         }
     }
 
-    override fun bindPositionDataToMapView(map: GoogleMap?, model: LatLngModel, name: String) {
+    override fun bindPositionDataToMapView(model: CountryModel) {
         map?.run {
-            val latLng = LatLng(model.lat, model.lng)
+            val latLng = LatLng(model.latLng.lat, model.latLng.lng)
 
-            val camera = CameraUpdateFactory.newLatLngZoom(latLng, BuildConfig.GOOGLE_MAP_DEFAULT_ZOOM)
+            val camera = CameraUpdateFactory.newLatLngZoom(
+                latLng,
+                6f /* TODO: calculate the zoom value */
+            )
+
             val marker = MarkerOptions()
                 .position(latLng)
 
@@ -199,19 +209,15 @@ class CountryDetailsFragment : BackMVPViewStateFragment<CountryDetailsView, Coun
         val mapViewBundle: Bundle? = savedState?.getBundle(MAP_VIEW_BUNDLE)
 
         mapView.onCreate(mapViewBundle)
-        mapView.getMapAsync(presenter)
+        mapView.getMapAsync(this)
     }
 
-    private fun setNavigationIconBackground(@CollapsingToolbarState state: Int) {
-        toolbarNavigation.getChildAtOrNull(INTEGER_ZERO)?.let { navigationIconView ->
-            when (state) {
-                CollapsingToolbarState.COLLAPSED -> {
-                    navigationIconView.setBackgroundResource(R.color.whiteTransparent)
-                }
-                CollapsingToolbarState.EXPANDED -> {
-                    navigationIconView.background = ContextCompat.getDrawable(requireContext(), R.drawable.country_background_navigation_icon)
-                }
-            }
+    private fun setNavigationIconBackground(@CollapsingToolbarState state: Int) = toolbarNavigation.run {
+        val icon = when (state) {
+            CollapsingToolbarState.COLLAPSED -> R.drawable.ic_arrow_back_white_24dp
+            else -> R.drawable.country_navigation_expanded_icon
         }
+
+        navigationIcon = ContextCompat.getDrawable(requireContext(), icon)
     }
 }

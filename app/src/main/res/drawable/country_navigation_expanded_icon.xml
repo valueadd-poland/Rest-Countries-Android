@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/blackAlpha50" />
+            <size
+                android:width="@dimen/country_navigation_icon_expanded_size"
+                android:height="@dimen/country_navigation_icon_expanded_size" />
+        </shape>
+    </item>
+    <item>
+        <inset
+            android:drawable="@drawable/ic_arrow_back_white_24dp"
+            android:insetLeft="@dimen/size_normal"
+            android:insetTop="@dimen/size_normal"
+            android:insetRight="@dimen/size_normal"
+            android:insetBottom="@dimen/size_normal" />
+    </item>
+</layer-list>

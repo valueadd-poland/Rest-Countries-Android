@@ -67,13 +67,6 @@ android {
 
     flavorDimensions "todo"
 
-    /**
-     * Properties
-     */
-    buildTypes.each {
-        setBuildProperty(it, "GOOGLE_MAP_DEFAULT_ZOOM", 4f)
-    }
-
     lintOptions {
         lintConfig file("$rootDir/scripts/lint-rules.xml")
     }

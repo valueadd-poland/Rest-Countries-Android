@@ -18,7 +18,7 @@ inline fun onCollapsingToolbarStateChanged(
 abstract class OnCollapsingToolbarStateChanged : AppBarLayout.OnOffsetChangedListener {
 
     @CollapsingToolbarState
-    private val state: Int = IDLE
+    private var state: Int = IDLE
 
     override fun onOffsetChanged(appBar: AppBarLayout, offset: Int) {
         when {
@@ -33,6 +33,7 @@ abstract class OnCollapsingToolbarStateChanged : AppBarLayout.OnOffsetChangedLis
 
     private fun invokeListener(newSate: Int, appBar: AppBarLayout) {
         if (state != newSate) {
+            state = newSate
             onStateChanged(appBar, newSate)
         }
     }

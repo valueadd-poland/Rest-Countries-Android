@@ -1,7 +1,5 @@
 package pl.valueadd.restcountries.presentation.main.countries.details
 
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
 import io.reactivex.rxkotlin.addTo
 import pl.valueadd.restcountries.domain.manager.CountryDomainManager
 import pl.valueadd.restcountries.domain.manager.ExceptionDomainManager
@@ -15,16 +13,13 @@ import javax.inject.Inject
 class CountryDetailsPresenter @Inject constructor(
     private val countryManager: CountryDomainManager,
     private val exceptionManager: ExceptionDomainManager
-) : BasePresenter<CountryDetailsView>(),
-    OnMapReadyCallback {
+) : BasePresenter<CountryDetailsView>() {
 
-    var model: CountryModel? = null
+    var countryModel: CountryModel? = null
         private set
 
     var borderModels: List<CountryFlatModel> = emptyList()
         private set
-
-    private var map: GoogleMap? = null
 
     init {
         onceViewAttached {
@@ -36,13 +31,11 @@ class CountryDetailsPresenter @Inject constructor(
         it.navigateToCountry(countryId)
     }
 
-    override fun onMapReady(googleMap: GoogleMap?) {
-        map = googleMap.also { map ->
-            val model = model ?: return@also
+    fun onMapReady() {
+        val model = countryModel ?: return
 
-            onceViewAttached {
-                it.bindPositionDataToMapView(map, model.latLng, model.name)
-            }
+        onceViewAttached {
+            it.bindPositionDataToMapView(model)
         }
     }
 
@@ -61,7 +54,7 @@ class CountryDetailsPresenter @Inject constructor(
 
         Timber.i("Country has been fetched successfully.")
 
-        this.model = model
+        this.countryModel = model
         this.borderModels = model.borders
 
         view.bindModelToView(model)
@@ -74,7 +67,7 @@ class CountryDetailsPresenter @Inject constructor(
 
         view.bindBordersToView(model.borders)
 
-        view.bindPositionDataToMapView(map, model.latLng, model.name)
+        view.bindPositionDataToMapView(model)
     }
 
     private fun onObserveCountryFailed(throwable: Throwable) = onceViewAttached {

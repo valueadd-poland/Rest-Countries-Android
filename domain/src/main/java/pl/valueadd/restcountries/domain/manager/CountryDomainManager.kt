@@ -94,10 +94,12 @@ class CountryDomainManager @Inject constructor(
         persistence
             .observeCountries(query, filter.isAscending)
             .map(mapper::mapCountryEntitiesToModels)
-            .map { list ->
+            .apply {
                 if (filter.hasComparator) {
-                    list.sortedWith(filter.comparator)
-                } else list
+                    map {
+                        it.sortedWith(filter.comparator)
+                    }
+                }
             }
 
     fun downloadAllCountries(): Completable =
