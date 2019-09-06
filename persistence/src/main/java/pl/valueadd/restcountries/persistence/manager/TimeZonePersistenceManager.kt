@@ -1,29 +1,22 @@
 package pl.valueadd.restcountries.persistence.manager
 
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.Single
-import io.reactivex.annotations.SchedulerSupport
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import pl.valueadd.restcountries.persistence.dao.TimeZoneDao
 import pl.valueadd.restcountries.persistence.entity.TimeZoneEntity
-import pl.valueadd.restcountries.utility.reactivex.subscribeOnIo
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-@SchedulerSupport(value = SchedulerSupport.IO)
 class TimeZonePersistenceManager @Inject constructor(private val dao: TimeZoneDao) {
 
-    fun saveTimezonesIds(list: List<TimeZoneEntity>): Single<List<Long>> =
+    suspend fun saveTimezonesIds(list: List<TimeZoneEntity>): List<Long> =
         dao.insertEntities(list)
-            .subscribeOnIo()
 
-    fun saveTimezones(list: List<TimeZoneEntity>): Completable =
+    suspend fun saveTimezones(list: List<TimeZoneEntity>) =
         dao.insert(list)
-            .subscribeOnIo()
 
-    fun observeTimeZones(countryId: String): Flowable<List<TimeZoneEntity>> =
+    fun observeTimeZones(countryId: String): Flow<List<TimeZoneEntity>> =
         dao.observeTimeZones(countryId)
             .distinctUntilChanged()
-            .subscribeOnIo()
 }

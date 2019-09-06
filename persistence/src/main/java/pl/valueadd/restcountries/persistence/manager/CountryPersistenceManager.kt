@@ -1,8 +1,7 @@
 package pl.valueadd.restcountries.persistence.manager
 
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.annotations.SchedulerSupport
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import org.apache.commons.lang3.StringUtils.stripAccents
 import pl.valueadd.restcountries.persistence.dao.CountryBorderDao
 import pl.valueadd.restcountries.persistence.dao.CountryCurrencyDao
@@ -17,12 +16,10 @@ import pl.valueadd.restcountries.persistence.entity.join.CountryLanguageJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryRegionalBlocJoin
 import pl.valueadd.restcountries.persistence.entity.join.CountryTimeZoneJoin
 import pl.valueadd.restcountries.persistence.model.CountryFlat
-import pl.valueadd.restcountries.utility.reactivex.subscribeOnIo
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-@SchedulerSupport(value = SchedulerSupport.IO)
 class CountryPersistenceManager @Inject constructor(
     private val dao: CountryDao,
     private val currencyDao: CountryCurrencyDao,
@@ -32,87 +29,63 @@ class CountryPersistenceManager @Inject constructor(
     private val borderDao: CountryBorderDao
 ) {
 
-    fun observeAllCountries(): Flowable<List<CountryEntity>> =
+    fun observeAllCountries(): Flow<List<CountryEntity>> =
         dao.observeAllCountries()
             .distinctUntilChanged()
-            .subscribeOnIo()
 
-    fun observeCountries(countryIds: List<String>): Flowable<List<CountryEntity>> =
+    fun observeCountries(countryIds: List<String>): Flow<List<CountryEntity>> =
         dao.observeCountries(countryIds)
             .distinctUntilChanged()
-            .subscribeOnIo()
 
-    fun observeCountries(query: String, ascendingOrder: Boolean = true): Flowable<List<CountryEntity>> =
+    fun observeCountries(query: String, ascendingOrder: Boolean = true): Flow<List<CountryEntity>> =
         dao.observeCountries(stripAccents(query), ascendingOrder)
             .distinctUntilChanged()
-            .subscribeOnIo()
 
-    fun observeCountriesFlat(countryIds: List<String>): Flowable<List<CountryFlat>> =
+    fun observeCountriesFlat(countryIds: List<String>): Flow<List<CountryFlat>> =
         dao.observeCountriesFlat(countryIds)
             .distinctUntilChanged()
-            .subscribeOnIo()
 
-    fun observeBorders(countryId: String): Flowable<List<CountryFlat>> =
+    fun observeBorders(countryId: String): Flow<List<CountryFlat>> =
         dao.observeCountriesFlat(countryId)
             .distinctUntilChanged()
-            .subscribeOnIo()
 
-    fun observeCountry(countryId: String): Flowable<CountryEntity> =
+    fun observeCountry(countryId: String): Flow<CountryEntity> =
         dao.observeCountry(countryId)
             .distinctUntilChanged()
-            .subscribeOnIo()
 
-    fun saveCountries(list: List<CountryEntity>): Completable =
+    suspend fun saveCountries(list: List<CountryEntity>) =
         dao.insert(list)
-            .subscribeOnIo()
 
-    fun saveCountry(entity: CountryEntity): Completable =
+    suspend fun saveCountry(entity: CountryEntity) =
         dao.insert(entity)
-            .subscribeOnIo()
-            .ignoreElement()
 
-    fun saveCountryCurrencyJoins(list: List<CountryCurrencyJoin>): Completable =
+    suspend fun saveCountryCurrencyJoins(list: List<CountryCurrencyJoin>) =
         currencyDao.insert(list)
-            .subscribeOnIo()
 
-    fun saveCountryLanguageJoins(list: List<CountryLanguageJoin>): Completable =
+    suspend fun saveCountryLanguageJoins(list: List<CountryLanguageJoin>) =
         languageDao.insert(list)
-            .subscribeOnIo()
 
-    fun saveCountryRegionalBlocJoins(list: List<CountryRegionalBlocJoin>): Completable =
+    suspend fun saveCountryRegionalBlocJoins(list: List<CountryRegionalBlocJoin>) =
         regionalBlocDao.insert(list)
-            .subscribeOnIo()
 
-    fun saveCountryTimeZoneJoins(list: List<CountryTimeZoneJoin>): Completable =
+    suspend fun saveCountryTimeZoneJoins(list: List<CountryTimeZoneJoin>) =
         timeZoneDao.insert(list)
-            .subscribeOnIo()
 
-    fun saveCountryBorderJoins(list: List<CountryBorderJoin>): Completable =
+    suspend fun saveCountryBorderJoins(list: List<CountryBorderJoin>) =
         borderDao.insert(list)
-            .subscribeOnIo()
 
-    fun saveCountryCurrencyJoin(entity: CountryCurrencyJoin): Completable =
+    suspend fun saveCountryCurrencyJoin(entity: CountryCurrencyJoin) =
         currencyDao.insert(entity)
-            .subscribeOnIo()
-            .ignoreElement()
 
-    fun saveCountryLanguageJoin(entity: CountryLanguageJoin): Completable =
+    suspend fun saveCountryLanguageJoin(entity: CountryLanguageJoin) =
         languageDao.insert(entity)
-            .subscribeOnIo()
-            .ignoreElement()
 
-    fun saveCountryRegionalBlocJoin(entity: CountryRegionalBlocJoin): Completable =
+    suspend fun saveCountryRegionalBlocJoin(entity: CountryRegionalBlocJoin) =
         regionalBlocDao.insert(entity)
-            .subscribeOnIo()
-            .ignoreElement()
 
-    fun saveCountryTimeZoneJoin(entity: CountryTimeZoneJoin): Completable =
+    suspend fun saveCountryTimeZoneJoin(entity: CountryTimeZoneJoin) =
         timeZoneDao.insert(entity)
-            .subscribeOnIo()
-            .ignoreElement()
 
-    fun saveCountryBorderJoin(entity: CountryBorderJoin): Completable =
+    suspend fun saveCountryBorderJoin(entity: CountryBorderJoin) =
         borderDao.insert(entity)
-            .subscribeOnIo()
-            .ignoreElement()
 }

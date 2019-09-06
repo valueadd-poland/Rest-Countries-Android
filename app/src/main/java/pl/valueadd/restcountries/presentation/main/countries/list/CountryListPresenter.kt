@@ -1,8 +1,10 @@
 package pl.valueadd.restcountries.presentation.main.countries.list
 
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.rxkotlin.addTo
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.launch
 import org.apache.commons.lang3.StringUtils.EMPTY
 import pl.valueadd.restcountries.domain.manager.CountryDomainManager
 import pl.valueadd.restcountries.domain.manager.ExceptionDomainManager
@@ -11,9 +13,7 @@ import pl.valueadd.restcountries.domain.model.helper.Filter
 import pl.valueadd.restcountries.presentation.base.BasePresenter
 import pl.valueadd.restcountries.presentation.main.countries.list.item.ClickCountryItemEventHook
 import pl.valueadd.restcountries.presentation.main.countries.list.item.CountryItem
-import pl.valueadd.restcountries.utility.reactivex.observeOnMain
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class CountryListPresenter
@@ -37,7 +37,7 @@ class CountryListPresenter
 
     var isAscending: Boolean = true
 
-    private var countriesDisposable: Disposable? = null
+    private var observeCountriesJob: Job? = null
 
     override fun onCountryItemClick(model: CountryModel) = onceViewAttached {
         it.navigateToCountryDetailsView(model.id)
@@ -59,9 +59,7 @@ class CountryListPresenter
             Filters.NameDsc
         }
 
-        countriesDisposable?.let {
-            disposables.remove(it)
-        }
+        observeCountriesJob?.cancel()
 
         observeCountries(query, true, filter)
     }
@@ -71,14 +69,12 @@ class CountryListPresenter
     }
 
     private fun downloadAllCountries() {
-        countryManager
-            .downloadAllCountries()
-            .observeOnMain()
-            .subscribe(
-                ::onDownloadAllExamplesSuccess,
-                ::onDownloadAllExamplesFailed
-            )
-            .addTo(disposables)
+        scope.launch(Dispatchers.Default + exceptionHandler(::onDownloadAllExamplesFailed)) {
+            countryManager.downloadAllCountries()
+            launch(Dispatchers.Main) {
+                onDownloadAllExamplesSuccess()
+            }
+        }
     }
 
     private fun onDownloadAllExamplesSuccess() {
@@ -96,19 +92,15 @@ class CountryListPresenter
     }
 
     private fun observeCountries(query: String = EMPTY, isDelayed: Boolean = false, filter: Filter<CountryModel> = Filters.NameAsc) {
-        countriesDisposable = countryManager
-            .observeCountries(query, filter)
-            .apply {
-                if (isDelayed) {
-                    debounce(DELAY, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                }
+        observeCountriesJob = scope.launch(exceptionHandler(::onObserveAllCountriesFailed)) {
+            var countriesFlow = countryManager.observeCountries(query, filter)
+            if (isDelayed) {
+                countriesFlow = countriesFlow.debounce(DELAY)
             }
-            .observeOnMain()
-            .subscribe(
-                ::onObserveAllCountriesSuccess,
-                ::onObserveAllCountriesFailed
-            )
-            .addTo(disposables)
+            countriesFlow.collectLatest {
+                    onObserveAllCountriesSuccess(it)
+            }
+        }
     }
 
     private fun onObserveAllCountriesSuccess(list: List<CountryModel>) = onceViewAttached { view ->

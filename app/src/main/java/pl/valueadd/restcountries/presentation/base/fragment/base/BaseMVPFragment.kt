@@ -10,14 +10,18 @@ import pl.valueadd.restcountries.utility.view.snackbar.SnackbarUtil
 import com.hannesdorfmann.mosby3.mvp.delegate.FragmentMvpDelegate
 import com.hannesdorfmann.mosby3.mvp.delegate.FragmentMvpDelegateImpl
 import com.hannesdorfmann.mosby3.mvp.delegate.MvpDelegateCallback
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
 import pl.valueadd.restcountries.presentation.base.BasePresenter
 import pl.valueadd.restcountries.presentation.base.BaseView
+import pl.valueadd.restcountries.utility.coroutines.cancelSafe
 import javax.inject.Inject
 
 abstract class BaseMVPFragment<V : BaseView, P : BasePresenter<V>>(@LayoutRes layoutId: Int) :
     BaseFragment(layoutId),
     MvpDelegateCallback<V, P>,
-    BaseView {
+    BaseView,
+    CoroutineScope by MainScope() {
 
     @Inject
     lateinit var snackBarUtil: SnackbarUtil
@@ -105,8 +109,7 @@ abstract class BaseMVPFragment<V : BaseView, P : BasePresenter<V>>(@LayoutRes la
     }
 
     override fun onDetach() {
-        presenter.clearDisposables()
-        clearDisposables()
+        cancelSafe()
 
         super.onDetach()
         mvpDelegate.onDestroy()

@@ -4,8 +4,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Update
-import io.reactivex.Completable
-import io.reactivex.Single
 
 abstract class BaseDao<E> {
 
@@ -14,47 +12,47 @@ abstract class BaseDao<E> {
      * @return id of inserted entity.
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(entity: E): Single<Long>
+    abstract suspend fun insert(entity: E): Long
 
     /**
      * Insert entities to database.
      * @return [Completable]
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(entities: Iterable<E>): Completable
+    abstract suspend fun insert(entities: Iterable<E>)
 
     /**
      * Insert entities to database.
      * @return [Single] which contains [List] of [ids][Long].
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insertEntities(entities: Collection<E>): Single<List<Long>>
+    abstract suspend fun insertEntities(entities: Collection<E>): List<Long>
 
     /**
      * Update the entity.
      * @return count of updated rows.
      */
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun update(entity: E): Single<Int>
+    abstract suspend fun update(entity: E): Int
 
     /**
      * Update the entities.
      * @return count of updated rows.
      */
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun update(entities: Iterable<E>): Completable
+    abstract suspend fun update(entities: Iterable<E>)
 
     /**
      * Delete the entity.
      * @return count of deleted rows.
      */
     @Delete
-    abstract fun remove(entity: E): Single<Int>
+    abstract suspend fun remove(entity: E): Int
 
     /**
      * Delete the entities.
      * @return count of deleted rows.
      */
     @Delete
-    abstract fun remove(entities: Iterable<E>): Completable
+    abstract suspend fun remove(entities: Iterable<E>)
 }

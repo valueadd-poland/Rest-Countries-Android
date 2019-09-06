@@ -1,27 +1,20 @@
 package pl.valueadd.restcountries.presentation.base
 
 import com.hannesdorfmann.mosby3.mvp.MvpQueuingBasePresenter
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.MainScope
+import pl.valueadd.restcountries.utility.coroutines.cancelSafe
 
 abstract class BasePresenter<V : BaseView> : MvpQueuingBasePresenter<V>() {
 
-    /**
-     * Contains disposable subscription of streams.
-     */
-    protected val disposables: CompositeDisposable
-        by lazy { CompositeDisposable() }
+    protected val scope by lazy { MainScope() }
 
-    /**
-     * Add subscription to composite.
-     */
-    protected fun addDisposable(disposable: Disposable): Boolean =
-        disposables.add(disposable)
+    fun exceptionHandler(method: (Throwable) -> Unit): CoroutineExceptionHandler {
+        return CoroutineExceptionHandler { _, throwable -> method(throwable) }
+    }
 
-    /**
-     * Clear all subscriptions.
-     */
-    fun clearDisposables() {
-        disposables.clear()
+    override fun detachView() {
+        scope.cancelSafe()
+        super.detachView()
     }
 }

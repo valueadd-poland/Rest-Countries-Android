@@ -2,7 +2,7 @@ package pl.valueadd.restcountries.persistence.dao
 
 import androidx.room.Dao
 import androidx.room.Query
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
 import pl.valueadd.restcountries.persistence.entity.CurrencyEntity
 
 @Dao
@@ -15,5 +15,5 @@ abstract class CurrencyDao : BaseDao<CurrencyEntity>() {
         ON currencies.code = country_currency_join.currency_id
         WHERE country_currency_join.country_id = :countryId
     """)
-    abstract fun observeCurriences(countryId: String): Flowable<List<CurrencyEntity>>
+    abstract fun observeCurriences(countryId: String): Flow<List<CurrencyEntity>>
 }

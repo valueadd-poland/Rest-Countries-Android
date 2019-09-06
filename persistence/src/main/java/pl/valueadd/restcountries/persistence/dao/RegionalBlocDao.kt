@@ -2,7 +2,7 @@ package pl.valueadd.restcountries.persistence.dao
 
 import androidx.room.Dao
 import androidx.room.Query
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
 import pl.valueadd.restcountries.persistence.entity.RegionalBlocEntity
 
 @Dao
@@ -15,5 +15,5 @@ abstract class RegionalBlocDao : BaseDao<RegionalBlocEntity>() {
         ON regional_blocks.name = country_regional_bloc_join.regional_bloc_id
         WHERE country_regional_bloc_join.country_id = :countryId
     """)
-    abstract fun observeRegionalBlocs(countryId: String): Flowable<List<RegionalBlocEntity>>
+    abstract fun observeRegionalBlocs(countryId: String): Flow<List<RegionalBlocEntity>>
 }

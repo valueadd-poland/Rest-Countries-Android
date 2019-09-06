@@ -1,29 +1,22 @@
 package pl.valueadd.restcountries.persistence.manager
 
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.Single
-import io.reactivex.annotations.SchedulerSupport
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import pl.valueadd.restcountries.persistence.dao.AltSpellingDao
 import pl.valueadd.restcountries.persistence.entity.AltSpellingEntity
-import pl.valueadd.restcountries.utility.reactivex.subscribeOnIo
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-@SchedulerSupport(value = SchedulerSupport.IO)
 class AltSpellingPersistenceManager @Inject constructor(private val dao: AltSpellingDao) {
 
-    fun saveAltSpellings(list: List<AltSpellingEntity>): Completable =
+    suspend fun saveAltSpellings(list: List<AltSpellingEntity>) =
         dao.insert(list)
-            .subscribeOnIo()
 
-    fun saveAltSpellingsIds(list: List<AltSpellingEntity>): Single<List<Long>> =
+    suspend fun saveAltSpellingsIds(list: List<AltSpellingEntity>): List<Long> =
         dao.insertEntities(list)
-            .subscribeOnIo()
 
-    fun observeAltSpellings(countryId: String): Flowable<List<AltSpellingEntity>> =
+    fun observeAltSpellings(countryId: String): Flow<List<AltSpellingEntity>> =
         dao.observeAltSpellings(countryId)
             .distinctUntilChanged()
-            .subscribeOnIo()
 }
