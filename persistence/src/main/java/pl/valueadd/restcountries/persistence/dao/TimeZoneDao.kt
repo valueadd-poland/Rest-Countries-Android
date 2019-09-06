@@ -2,7 +2,7 @@ package pl.valueadd.restcountries.persistence.dao
 
 import androidx.room.Dao
 import androidx.room.Query
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
 import pl.valueadd.restcountries.persistence.entity.TimeZoneEntity
 
 @Dao
@@ -15,5 +15,5 @@ abstract class TimeZoneDao : BaseDao<TimeZoneEntity>() {
         ON timezones.id = country_time_zone_join.time_zone_id
         WHERE country_time_zone_join.country_id = :countryId
     """)
-    abstract fun observeTimeZones(countryId: String): Flowable<List<TimeZoneEntity>>
+    abstract fun observeTimeZones(countryId: String): Flow<List<TimeZoneEntity>>
 }

@@ -10,8 +10,6 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import pl.valueadd.restcountries.presentation.base.activity.IBaseActivity
 import pl.valueadd.restcountries.utility.dependencyinjection.DependencyUtil
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import me.yokeyword.fragmentation.ExtraTransaction
 import me.yokeyword.fragmentation.ISupportFragment
 import me.yokeyword.fragmentation.SupportFragmentDelegate
@@ -22,25 +20,6 @@ abstract class BaseFragment(@LayoutRes protected val layoutId: Int) : Fragment()
 
     private val fragmentDelegate: SupportFragmentDelegate
         by lazy { SupportFragmentDelegate(this) }
-
-    /**
-     * Contains disposable subscriptions of streams.
-     */
-    protected val disposables: CompositeDisposable
-        by lazy { CompositeDisposable() }
-
-    /**
-     * Add subscription to composite.
-     */
-    protected fun addDisposable(disposable: Disposable): Boolean =
-        disposables.add(disposable)
-
-    /**
-     * Clear all subscriptions.
-     */
-    protected fun clearDisposables() {
-        disposables.clear()
-    }
 
     /* Life cycle */
 

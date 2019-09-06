@@ -6,7 +6,6 @@ import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import pl.valueadd.restcountries.network.adapter.LatLngTypeAdapter
-import pl.valueadd.restcountries.network.definition.CallAdapterFactory
 import pl.valueadd.restcountries.network.definition.ConverterFactory
 import pl.valueadd.restcountries.network.definition.HttpLoggingLevel
 import pl.valueadd.restcountries.network.definition.OkHttpBuilder
@@ -15,10 +14,8 @@ import pl.valueadd.restcountries.network.definition.ServerUrl
 import pl.valueadd.restcountries.network.dto.country.LatLngDto
 import pl.valueadd.restcountries.network.interceptor.HeaderAuthorizationInterceptor
 import pl.valueadd.restcountries.utility.BuildConfig
-import retrofit2.CallAdapter
 import retrofit2.Converter
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import toothpick.ProvidesSingletonInScope
 import java.util.concurrent.TimeUnit
@@ -42,14 +39,12 @@ class RetrofitProvider @Inject constructor(
 @Singleton
 @ProvidesSingletonInScope
 class RetrofitBuilderProvider @Inject constructor(
-    @CallAdapterFactory private val callAdapterFactory: CallAdapter.Factory,
     @ConverterFactory private val converterFactory: Converter.Factory,
     @pl.valueadd.restcountries.network.definition.OkHttpClientInstance private val client: OkHttpClient
 ) : Provider<Retrofit.Builder> {
 
     override fun get(): Retrofit.Builder =
         Retrofit.Builder()
-            .addCallAdapterFactory(callAdapterFactory)
             .addConverterFactory(converterFactory)
             .client(client)
 }
@@ -77,14 +72,6 @@ class OkHttpClientProvider @Inject constructor(
 
     override fun get(): OkHttpClient =
         builder.build()
-}
-
-@Singleton
-@ProvidesSingletonInScope
-class CallAdapterFactoryProvider : Provider<CallAdapter.Factory> {
-
-    override fun get(): CallAdapter.Factory =
-        RxJava2CallAdapterFactory.create()
 }
 
 @Singleton

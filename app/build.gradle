@@ -91,8 +91,9 @@ dependencies {
     implementation deps.mvp.mosby_view_state
     implementation deps.mvp.mosby_queuing
 
-    // Reactivex
-    implementation deps.rx.binding
+    // Coroutines
+    implementation deps.coroutines.core
+    implementation deps.coroutines.android
 
     // Permissions
     implementation deps.permissions.no
@@ -139,6 +140,7 @@ dependencies {
     androidTestImplementation deps.test.dexmaker_mockito
     androidTestImplementation deps.test.androidx_runner
     androidTestImplementation deps.test.androidx_rules
+
 }
 
 // Final plugins

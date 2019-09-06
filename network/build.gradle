@@ -72,8 +72,6 @@ dependencies {
     implementation deps.network.gson
     implementation deps.network.logging
     implementation deps.network.runtime
-    implementation deps.network.reactive
-    implementation deps.network.rxjava2
     implementation deps.network.gson
 
     // Unit tests

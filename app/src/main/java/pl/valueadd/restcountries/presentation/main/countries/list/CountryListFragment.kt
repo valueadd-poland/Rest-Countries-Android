@@ -22,9 +22,8 @@ import pl.valueadd.restcountries.presentation.main.countries.list.item.ClickCoun
 import pl.valueadd.restcountries.presentation.main.countries.list.item.CountryHeaderAdapter
 import pl.valueadd.restcountries.presentation.main.root.RootFragment
 import pl.valueadd.restcountries.utility.context.createBottomSheetDialog
-import pl.valueadd.restcountries.utility.reactivex.onSuccess
-import pl.valueadd.restcountries.utility.reactivex.throttleClicks
 import pl.valueadd.restcountries.utility.view.applyAligmentToTheRight
+import pl.valueadd.restcountries.utility.view.throttleClicks
 import pl.valueadd.restcountries.view.decorator.CountryItemDecoration
 import javax.inject.Inject
 
@@ -136,12 +135,10 @@ class CountryListFragment : BackMVPViewStateFragment<CountryListView, CountryLis
     }
 
     private fun initializeChipGroup() = bordersChipGroup.run {
-
         sortByNameChip
-            .throttleClicks()
-            .onSuccess(disposables, {
+            .throttleClicks(this@CountryListFragment) {
                 presenter.onSortByNameViewClick()
-            })
+            }
     }
 
     override fun initializeToolbarNavigation(toolbar: Toolbar) {

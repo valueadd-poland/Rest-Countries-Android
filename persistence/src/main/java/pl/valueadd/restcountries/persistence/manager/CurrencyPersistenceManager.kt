@@ -1,29 +1,23 @@
 package pl.valueadd.restcountries.persistence.manager
 
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.Single
-import io.reactivex.annotations.SchedulerSupport
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import pl.valueadd.restcountries.persistence.dao.CurrencyDao
 import pl.valueadd.restcountries.persistence.entity.CurrencyEntity
-import pl.valueadd.restcountries.utility.reactivex.subscribeOnIo
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-@SchedulerSupport(value = SchedulerSupport.IO)
 class CurrencyPersistenceManager @Inject constructor(private val dao: CurrencyDao) {
 
-    fun saveCurrencies(list: List<CurrencyEntity>): Completable =
+    suspend fun saveCurrencies(list: List<CurrencyEntity>) {
         dao.insert(list)
-            .subscribeOnIo()
+    }
 
-    fun saveCurrenciesIds(list: List<CurrencyEntity>): Single<List<Long>> =
+    suspend fun saveCurrenciesIds(list: List<CurrencyEntity>): List<Long> =
         dao.insertEntities(list)
-            .subscribeOnIo()
 
-    fun observeCurrencies(countryId: String): Flowable<List<CurrencyEntity>> =
+    fun observeCurrencies(countryId: String): Flow<List<CurrencyEntity>> =
         dao.observeCurriences(countryId)
             .distinctUntilChanged()
-            .subscribeOnIo()
 }

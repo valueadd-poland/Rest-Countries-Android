@@ -14,7 +14,6 @@ import pl.valueadd.restcountries.network.definition.OkHttpBuilder
 import pl.valueadd.restcountries.network.definition.OkHttpClientInstance
 import pl.valueadd.restcountries.network.definition.RetrofitBuilder
 import pl.valueadd.restcountries.network.definition.ServerUrl
-import pl.valueadd.restcountries.network.http.CallAdapterFactoryProvider
 import pl.valueadd.restcountries.network.http.ConverterFactoryProvider
 import pl.valueadd.restcountries.network.http.GsonProvider
 import pl.valueadd.restcountries.network.http.OkHttpClientBuilderProvider
@@ -50,7 +49,6 @@ class NetworkModule : Module() {
 
         bind(CallAdapter.Factory::class.java)
             .withName(CallAdapterFactory::class.java)
-            .toProviderInstance(provideCallAdapterFactoryProvider())
 
         bind(Gson::class.java)
             .withName(GsonInstance::class.java)
@@ -82,9 +80,6 @@ class NetworkModule : Module() {
 
     internal fun provideConverterFactoryProvider(): ConverterFactoryProvider =
         ConverterFactoryProvider()
-
-    internal fun provideCallAdapterFactoryProvider(): CallAdapterFactoryProvider =
-        CallAdapterFactoryProvider()
 
     internal fun provideServiceUrl(): String =
         BuildConfig.SERVER_URL

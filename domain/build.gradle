@@ -72,6 +72,9 @@ dependencies {
     implementation project(":persistence")
     implementation project(":utility")
 
+    // Coroutines
+    implementation deps.coroutines.core
+
     // Utility
     implementation deps.utility.mapstruct
 

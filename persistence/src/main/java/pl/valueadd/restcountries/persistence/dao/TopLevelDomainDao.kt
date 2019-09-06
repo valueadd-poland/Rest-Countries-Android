@@ -2,7 +2,7 @@ package pl.valueadd.restcountries.persistence.dao
 
 import androidx.room.Dao
 import androidx.room.Query
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
 import pl.valueadd.restcountries.persistence.entity.TopLevelDomainEntity
 
 @Dao
@@ -13,5 +13,5 @@ abstract class TopLevelDomainDao : BaseDao<TopLevelDomainEntity>() {
         FROM top_level_domains
         WHERE top_level_domains.country_id = :countryId
     """)
-    abstract fun observeTopLevelDomains(countryId: String): Flowable<List<TopLevelDomainEntity>>
+    abstract fun observeTopLevelDomains(countryId: String): Flow<List<TopLevelDomainEntity>>
 }

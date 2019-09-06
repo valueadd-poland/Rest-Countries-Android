@@ -71,9 +71,7 @@ dependencies {
 
     // Persistence
     implementation deps.persistence.room
-
-    // Reactivex
-    implementation deps.rx.room
+    implementation deps.persistence.room_ktx
 
     // Unit tests
     testImplementation deps.test.mockito

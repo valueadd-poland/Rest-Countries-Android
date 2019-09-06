@@ -1,12 +1,12 @@
 package pl.valueadd.restcountries.presentation.main.countries.details
 
-import io.reactivex.rxkotlin.addTo
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import pl.valueadd.restcountries.domain.manager.CountryDomainManager
 import pl.valueadd.restcountries.domain.manager.ExceptionDomainManager
 import pl.valueadd.restcountries.domain.model.country.CountryFlatModel
 import pl.valueadd.restcountries.domain.model.country.CountryModel
 import pl.valueadd.restcountries.presentation.base.BasePresenter
-import pl.valueadd.restcountries.utility.reactivex.observeOnMain
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -32,14 +32,13 @@ class CountryDetailsPresenter @Inject constructor(
     }
 
     private fun observeCountry(countryId: String) {
-        countryManager
-            .observeCountry(countryId)
-            .observeOnMain()
-            .subscribe(
-                ::onObserveCountrySuccess,
-                ::onObserveCountryFailed
-            )
-            .addTo(disposables)
+        scope.launch(exceptionHandler(::onObserveCountryFailed)) {
+            countryManager
+                .observeCountry(countryId)
+                .collectLatest {
+                    onObserveCountrySuccess(it)
+                }
+        }
     }
 
     private fun onObserveCountrySuccess(model: CountryModel) = onceViewAttached { view ->

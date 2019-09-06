@@ -10,8 +10,8 @@ import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
 import com.hannesdorfmann.mosby3.mvp.MvpActivity
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
 import me.yokeyword.fragmentation.ExtraTransaction
 import me.yokeyword.fragmentation.ISupportFragment
 import me.yokeyword.fragmentation.SupportActivityDelegate
@@ -21,6 +21,7 @@ import pl.valueadd.restcountries.R
 import pl.valueadd.restcountries.presentation.base.BasePresenter
 import pl.valueadd.restcountries.presentation.base.BaseView
 import pl.valueadd.restcountries.presentation.base.fragment.base.IBaseFragment
+import pl.valueadd.restcountries.utility.coroutines.cancelSafe
 import pl.valueadd.restcountries.utility.dependencyinjection.DependencyUtil
 import pl.valueadd.restcountries.utility.view.snackbar.SnackbarUtil
 import javax.inject.Inject
@@ -30,7 +31,8 @@ abstract class BaseMVPActivity<V : BaseView, P : BasePresenter<V>>(
 ) :
     MvpActivity<V, P>(),
     IBaseActivity,
-    BaseView {
+    BaseView,
+    CoroutineScope by MainScope() {
 
     private val delegate: SupportActivityDelegate
         by lazy { SupportActivityDelegate(this) }
@@ -44,25 +46,6 @@ abstract class BaseMVPActivity<V : BaseView, P : BasePresenter<V>>(
 
     protected open val menuLayout: Int
         get() = R.menu.main_menu
-
-    /**
-     * Contains disposable subscriptions of streams.
-     */
-    protected val disposables: CompositeDisposable
-        by lazy { CompositeDisposable() }
-
-    /**
-     * Add subscription to composite.
-     */
-    protected fun addDisposable(disposable: Disposable): Boolean =
-        disposables.add(disposable)
-
-    /**
-     * Clear all subscriptions.
-     */
-    protected fun clearDisposables() {
-        disposables.clear()
-    }
 
     protected fun showError(error: String, view: View) =
         snackBarUtil.showMessage(view, error, ContextCompat.getColor(this, R.color.red))
@@ -98,7 +81,7 @@ abstract class BaseMVPActivity<V : BaseView, P : BasePresenter<V>>(
     }
 
     override fun onDestroy() {
-        clearDisposables()
+        cancelSafe()
 
         delegate.onDestroy()
         super.onDestroy()

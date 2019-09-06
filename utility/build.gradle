@@ -91,19 +91,14 @@ dependencies {
     api deps.di.toothpick
     api deps.di.toothpick_smoothie
 
-    // Reactivex
-    api deps.rx.java
-    api deps.rx.android
-    api deps.rx.kotlin
-
     // Utility
     api deps.utility.apache_lang
     implementation deps.utility.glide
     implementation deps.utility.android_svg
     api deps.utility.timber
 
-    //Reactivex
-    implementation deps.rx.binding
+    // Coroutines
+    implementation deps.coroutines.core
 
     // View
     implementation deps.androidx.material

@@ -10,6 +10,8 @@ import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import kotlinx.coroutines.CoroutineScope
+import pl.valueadd.restcountries.utility.coroutines.throttleFirst
 
 fun View.setVisible(isVisible: Boolean, falseRes: Int = View.GONE) {
 
@@ -38,4 +40,15 @@ fun Menu.show(@IdRes idRes: Int) {
 
 fun SearchView.applyAligmentToTheRight() {
     layoutParams = Toolbar.LayoutParams(Gravity.END)
+}
+
+fun View.setOnClickListener(listener: () -> Unit) {
+    setOnClickListener { listener() }
+}
+
+inline fun View.throttleClicks(scope: CoroutineScope, crossinline onClick: () -> Unit) {
+    val onClickListener = scope.throttleFirst {
+        onClick()
+    }
+    setOnClickListener(onClickListener)
 }

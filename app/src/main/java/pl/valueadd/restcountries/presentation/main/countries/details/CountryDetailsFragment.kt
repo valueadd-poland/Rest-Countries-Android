@@ -23,10 +23,9 @@ import pl.valueadd.restcountries.domain.model.country.CountryModel
 import pl.valueadd.restcountries.presentation.base.fragment.viewstate.back.BackMVPViewStateFragment
 import pl.valueadd.restcountries.utility.common.merge
 import pl.valueadd.restcountries.utility.image.loadSVGImage
-import pl.valueadd.restcountries.utility.reactivex.onSuccess
-import pl.valueadd.restcountries.utility.reactivex.throttleClicks
 import pl.valueadd.restcountries.utility.view.getChildAtOrNull
 import pl.valueadd.restcountries.utility.view.setVisible
+import pl.valueadd.restcountries.utility.view.throttleClicks
 import pl.valueadd.restcountries.utility.view.toolbar.CollapsingToolbarState
 import pl.valueadd.restcountries.utility.view.toolbar.onCollapsingToolbarStateChanged
 import pl.valueadd.restcountries.view.chip.BorderChip
@@ -89,10 +88,9 @@ class CountryDetailsFragment : BackMVPViewStateFragment<CountryDetailsView, Coun
 
         for (model in models) {
             val chip = createBorderChip(model)
-
-            chip.throttleClicks()
-                .onSuccess(disposables, { presenter.onBorderItemClick(model.id) })
-
+            chip.throttleClicks(this) {
+                presenter.onBorderItemClick(model.id)
+            }
             bordersChipGroup.addView(chip)
         }
     }

@@ -1,10 +1,9 @@
 package pl.valueadd.restcountries.persistence.preferences
 
 import android.content.SharedPreferences
-import pl.valueadd.restcountries.utility.reactivex.immediate
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Completable
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class BaseCache @Inject constructor(private val sharedPreferences: SharedPreferences) {
@@ -58,31 +57,10 @@ class BaseCache @Inject constructor(private val sharedPreferences: SharedPrefere
     internal fun clear() =
         executeTransaction { it.clear() }
 
-    internal fun clearRx(): Completable =
-        immediate { clear() }
-
-    internal fun savePreferenceRx(key: String, value: String?): Completable =
-        immediate { savePreference(key, value) }
-
-    internal fun savePreferenceRx(key: String, valuesList: Set<String>): Completable =
-        immediate { savePreference(key, valuesList) }
-
-    internal fun savePreferenceRx(key: String, value: Int): Completable =
-        immediate { savePreference(key, value) }
-
-    internal fun savePreferenceRx(key: String, value: Float): Completable =
-        immediate { savePreference(key, value) }
-
-    internal fun savePreferenceRx(key: String, value: Long): Completable =
-        immediate { savePreference(key, value) }
-
-    internal fun savePreferenceRx(key: String, value: Boolean): Completable =
-        immediate { savePreference(key, value) }
-
     internal fun observeStringSet(
         key: String,
         defaultValue: Set<String> = emptySet()
-    ): Flowable<Set<String>> =
+    ): Flow<Set<String>> =
         observePreference(key) {
             it.getStringSet(key, defaultValue) ?: defaultValue
         }
@@ -90,7 +68,7 @@ class BaseCache @Inject constructor(private val sharedPreferences: SharedPrefere
     internal fun observeBoolean(
         key: String,
         defaultValue: Boolean = DEFAULT_BOOLEAN_VALUE
-    ): Flowable<Boolean> =
+    ): Flow<Boolean> =
         observePreference(key) {
             it.getBoolean(key, defaultValue)
         }
@@ -98,12 +76,12 @@ class BaseCache @Inject constructor(private val sharedPreferences: SharedPrefere
     internal fun observeString(
         key: String,
         defaultValue: String = DEFAULT_STRING_VALUE
-    ): Flowable<String> =
+    ): Flow<String> =
         observePreference(key) {
             it.getString(key, defaultValue) ?: defaultValue
         }
 
-    internal fun observeInt(key: String, defaultValue: Int = DEFAULT_INT_VALUE): Flowable<Int> =
+    internal fun observeInt(key: String, defaultValue: Int = DEFAULT_INT_VALUE): Flow<Int> =
         observePreference(key) {
             it.getInt(key, defaultValue)
         }
@@ -111,7 +89,7 @@ class BaseCache @Inject constructor(private val sharedPreferences: SharedPrefere
     internal fun observeLong(
         key: String,
         defaultValue: Long = DEFAULT_LONG_VALUE
-    ): Flowable<Long> =
+    ): Flow<Long> =
         observePreference(key) {
             it.getLong(key, defaultValue)
         }
@@ -119,7 +97,7 @@ class BaseCache @Inject constructor(private val sharedPreferences: SharedPrefere
     internal fun observeFloat(
         key: String,
         defaultValue: Float = DEFAULT_FLOAT_VALUE
-    ): Flowable<Float> =
+    ): Flow<Float> =
         observePreference(key) {
             it.getFloat(key, defaultValue)
         }
@@ -127,27 +105,25 @@ class BaseCache @Inject constructor(private val sharedPreferences: SharedPrefere
     private fun <T> observePreference(
         preferenceKey: String,
         function: (SharedPreferences) -> T
-    ): Flowable<T> {
-        return Flowable.create<T>({ emitter ->
-
-            val sharedPreferencesListener =
+    ): Flow<T> = channelFlow {
+        val sharedPreferencesListener =
                 SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
 
                     if (key == preferenceKey) {
-                        emitter.onNext(function(sharedPreferences))
+                        runBlocking {
+                            channel.send(function(sharedPreferences))
+                        }
                     }
                 }
 
-            emitter.setCancellable {
+            channel.invokeOnClose {
                 sharedPreferences.unregisterOnSharedPreferenceChangeListener(
                     sharedPreferencesListener
                 )
             }
-
-            emitter.onNext(function(sharedPreferences))
+            channel.send(function(sharedPreferences))
 
             sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferencesListener)
-        }, BackpressureStrategy.LATEST)
     }
 
     private inline fun executeTransaction(function: (SharedPreferences.Editor) -> Unit) {

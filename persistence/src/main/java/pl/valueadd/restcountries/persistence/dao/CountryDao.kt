@@ -2,7 +2,7 @@ package pl.valueadd.restcountries.persistence.dao
 
 import androidx.room.Dao
 import androidx.room.Query
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
 import pl.valueadd.restcountries.persistence.entity.CountryEntity
 import pl.valueadd.restcountries.persistence.model.CountryFlat
 
@@ -13,7 +13,7 @@ abstract class CountryDao : BaseDao<CountryEntity>() {
         SELECT *
         FROM countries
     """)
-    abstract fun observeAllCountries(): Flowable<List<CountryEntity>>
+    abstract fun observeAllCountries(): Flow<List<CountryEntity>>
 
     @Query(value = """
         SELECT *
@@ -22,7 +22,7 @@ abstract class CountryDao : BaseDao<CountryEntity>() {
         COLLATE NOCASE
         LIMIT 1
     """)
-    abstract fun observeCountry(countryId: String): Flowable<CountryEntity>
+    abstract fun observeCountry(countryId: String): Flow<CountryEntity>
 
     @Query(value = """
         SELECT *
@@ -30,7 +30,7 @@ abstract class CountryDao : BaseDao<CountryEntity>() {
         WHERE countries.alpha3_code IN (:countryIds)
         ORDER BY name COLLATE NOCASE ASC
     """)
-    abstract fun observeCountries(countryIds: List<String>): Flowable<List<CountryEntity>>
+    abstract fun observeCountries(countryIds: List<String>): Flow<List<CountryEntity>>
 
     @Query(value = """
         SELECT name, alpha3_code, alpha2_code, flag_url
@@ -38,7 +38,7 @@ abstract class CountryDao : BaseDao<CountryEntity>() {
         WHERE countries.alpha3_code IN (:countryIds)
         ORDER BY name COLLATE NOCASE ASC
     """)
-    abstract fun observeCountriesFlat(countryIds: List<String>): Flowable<List<CountryFlat>>
+    abstract fun observeCountriesFlat(countryIds: List<String>): Flow<List<CountryFlat>>
 
     @Query(value = """
         SELECT name, alpha3_code, alpha2_code, flag_url
@@ -47,7 +47,7 @@ abstract class CountryDao : BaseDao<CountryEntity>() {
         ON countries.alpha3_code = country_border_join.border_id
         WHERE country_border_join.country_id = :countryId
     """)
-    abstract fun observeCountriesFlat(countryId: String): Flowable<List<CountryFlat>>
+    abstract fun observeCountriesFlat(countryId: String): Flow<List<CountryFlat>>
 
     @Query("""
         SELECT *
@@ -61,5 +61,5 @@ abstract class CountryDao : BaseDao<CountryEntity>() {
             CASE WHEN :ascendingOrder = 1 THEN name END ASC,
             CASE WHEN :ascendingOrder = 0 THEN name END DESC
     """)
-    abstract fun observeCountries(query: String, ascendingOrder: Boolean): Flowable<List<CountryEntity>>
+    abstract fun observeCountries(query: String, ascendingOrder: Boolean): Flow<List<CountryEntity>>
 }

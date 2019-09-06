@@ -1,24 +1,19 @@
 package pl.valueadd.restcountries.persistence.manager
 
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.annotations.SchedulerSupport
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import pl.valueadd.restcountries.persistence.dao.RegionalBlocDao
 import pl.valueadd.restcountries.persistence.entity.RegionalBlocEntity
-import pl.valueadd.restcountries.utility.reactivex.subscribeOnIo
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-@SchedulerSupport(value = SchedulerSupport.IO)
 class RegionalBlocPersistenceManager @Inject constructor(private val dao: RegionalBlocDao) {
 
-    fun saveRegionalBlocs(list: List<RegionalBlocEntity>): Completable =
+    suspend fun saveRegionalBlocs(list: List<RegionalBlocEntity>) =
         dao.insert(list)
-            .subscribeOnIo()
 
-    fun observeRegionalBlocs(countryId: String): Flowable<List<RegionalBlocEntity>> =
+    fun observeRegionalBlocs(countryId: String): Flow<List<RegionalBlocEntity>> =
         dao.observeRegionalBlocs(countryId)
             .distinctUntilChanged()
-            .subscribeOnIo()
 }
