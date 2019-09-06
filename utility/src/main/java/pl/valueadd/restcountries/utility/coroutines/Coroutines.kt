@@ -12,6 +12,7 @@ import kotlin.experimental.ExperimentalTypeInference
 /*
  * Works like combineTransform from Zip.kt but collects more parameters.
  */
+@Suppress("LongParameterList")
 inline fun <T1, T2, T3, T4, T5, T6, T7, T8, T9, R> combineTransform(
     flow: Flow<T1>,
     flow2: Flow<T2>,
@@ -25,6 +26,7 @@ inline fun <T1, T2, T3, T4, T5, T6, T7, T8, T9, R> combineTransform(
     @UseExperimental(ExperimentalTypeInference::class)
     @BuilderInference crossinline transform: suspend FlowCollector<R>.(T1, T2, T3, T4, T5, T6, T7, T8, T9) -> Unit
 ): Flow<R> = kotlinx.coroutines.flow.combineTransform(flow, flow2, flow3, flow4, flow5, flow6, flow7, flow8, flow9) { args: Array<*> ->
+    @Suppress("MagicNumber")
     transform(
         args[0] as T1,
         args[1] as T2,

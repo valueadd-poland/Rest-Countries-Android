@@ -11,6 +11,7 @@ import java.net.UnknownHostException
 /**
  * Map common network errors.
  */
+@Suppress("ThrowsCount")
 suspend fun <T> mapNetworkErrors(method: (suspend () -> T)): T {
     try {
         return method()
