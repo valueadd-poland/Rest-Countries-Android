@@ -28,6 +28,7 @@ import pl.valueadd.restcountries.R
 import pl.valueadd.restcountries.domain.model.country.CountryFlatModel
 import pl.valueadd.restcountries.domain.model.country.CountryModel
 import pl.valueadd.restcountries.presentation.base.fragment.viewstate.back.BackMVPViewStateFragment
+import pl.valueadd.restcountries.utility.BuildConfig
 import pl.valueadd.restcountries.utility.common.merge
 import pl.valueadd.restcountries.utility.image.loadSVGImage
 import pl.valueadd.restcountries.utility.reactivex.onSuccess
@@ -140,7 +141,7 @@ class CountryDetailsFragment : BackMVPViewStateFragment<CountryDetailsView, Coun
 
             val camera = CameraUpdateFactory.newLatLngZoom(
                 latLng,
-                6f /* TODO: calculate the zoom value */
+                BuildConfig.DEFAULT_MAP_ZOOM /* TODO: calculate the zoom value */
             )
 
             val marker = MarkerOptions()

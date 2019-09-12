@@ -1,3 +1,4 @@
+import com.sun.tools.javac.util.Pair
 import java.text.SimpleDateFormat
 import com.android.build.gradle.internal.dsl.BuildType
 
@@ -104,22 +105,38 @@ static def getLastMasterGitTagVersion() {
 
 // Functions
 
-static def setBuildProperty(BuildType it, String name, String value) {
-    it.buildConfigField "String", "${name.toUpperCase()}", "\"$value\""
+static def setBuildProperty(Project project, BuildType it, String name, String defaultValue) {
+    String key = name.toUpperCase()
+    Pair<String, Boolean> property = getPropertyOrDefault(project, key, defaultValue)
+    it.buildConfigField "String", "$key", property.snd ? property.fst : "\"${property.fst}\""
 }
 
-static def setBuildProperty(BuildType it, String name, Integer value) {
-    it.buildConfigField "Integer", "${name.toUpperCase()}", "$value"
+static def setBuildProperty(Project project, BuildType it, String name, Integer defaultValue) {
+    String key = name.toUpperCase()
+    Pair<Integer, Boolean> property = getPropertyOrDefault(project, key, defaultValue)
+    it.buildConfigField "Integer", "$key", property.snd ? property.fst : "${property.fst}"
 }
 
-static def setBuildProperty(BuildType it, String name, Long value) {
-    it.buildConfigField "Long", "${name.toUpperCase()}", "$value" + 'L'
+static def setBuildProperty(Project project, BuildType it, String name, Long defaultValue) {
+    String key = name.toUpperCase()
+    Pair<Long, Boolean> property = getPropertyOrDefault(project, key, defaultValue)
+    it.buildConfigField "Long", "$key", property.snd ? property.fst : "${property.fst}" + 'L'
 }
 
-static def setBuildProperty(BuildType it, String name, boolean value) {
-    it.buildConfigField "boolean", "${name.toUpperCase()}", "$value"
+static def setBuildProperty(Project project, BuildType it, String name, Boolean defaultValue) {
+    String key = name.toUpperCase()
+    Pair<Boolean, Boolean> property = getPropertyOrDefault(project, key, defaultValue)
+    it.buildConfigField "boolean", "$key", property.snd ? property.fst : "${property.fst}"
 }
 
-static def setBuildProperty(BuildType it, String name, float value) {
-    it.buildConfigField "float", "${name.toUpperCase()}", "$value" + 'f'
+static def setBuildProperty(Project project, BuildType it, String name, Float defaultValue) {
+    String key = name.toUpperCase()
+    Pair<Float, Boolean> property = getPropertyOrDefault(project, key, defaultValue)
+    it.buildConfigField "float", "$key", property.snd ? property.fst : "${property.fst}" + 'f'
+}
+
+static <T> Pair<T, Boolean> getPropertyOrDefault(Project project, String key, T defaultValue) {
+    boolean isFromProperty = project.hasProperty(key)
+    T value = (isFromProperty) ? project.property(key) : defaultValue
+    return new Pair(value, isFromProperty)
 }
