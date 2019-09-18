@@ -35,7 +35,6 @@ allprojects {
     apply from: "$rootDir/scripts/pmd.gradle"
     apply from: "$rootDir/scripts/translations.gradle"
     apply from: "$rootDir/dependencies.gradle"
-    apply from: "$rootDir/properties.gradle"
 }
 
 /**
