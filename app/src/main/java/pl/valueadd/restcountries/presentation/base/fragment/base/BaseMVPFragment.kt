@@ -70,6 +70,9 @@ abstract class BaseMVPFragment<V : BaseView, P : BasePresenter<V>>(@LayoutRes la
     }
 
     override fun onDestroy() {
+        presenter.clearDisposables()
+        clearDisposables()
+
         super.onDestroy()
         mvpDelegate.onDestroy()
     }
@@ -105,11 +108,8 @@ abstract class BaseMVPFragment<V : BaseView, P : BasePresenter<V>>(@LayoutRes la
     }
 
     override fun onDetach() {
-        presenter.clearDisposables()
-        clearDisposables()
-
         super.onDetach()
-        mvpDelegate.onDestroy()
+        mvpDelegate.onDetach()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
