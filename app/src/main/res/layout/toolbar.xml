@@ -15,7 +15,6 @@
         android:layout_height="wrap_content"
         android:layoutDirection="ltr"
         android:theme="@style/AppTheme.SearchView"
-        app:queryBackground="@android:color/transparent"
         app:queryHint="@string/common_search"
         app:searchIcon="@drawable/ic_search_white_24dp" />
 

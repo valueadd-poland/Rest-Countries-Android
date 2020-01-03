@@ -38,5 +38,7 @@
     <!-- Component sizes -->
     <dimen name="material_cell_height">52dp</dimen>
     <dimen name="material_corner_radius">4dp</dimen>
+    <dimen name="google_map_height">350dp</dimen>
+    <dimen name="country_navigation_icon_expanded_size">32dp</dimen>
 
 </resources>

@@ -55,17 +55,19 @@ android {
      * Properties
      */
     buildTypes.each {
-        setBuildProperty(it, "DEBUG_BACKSTACK", false)
+        setBuildProperty(project, it, "DEBUG_BACKSTACK", false)
 
-        setBuildProperty(it, "SERVER_URL", "https://restcountries.eu/rest/v2/")
-        setBuildProperty(it, "SERVER_CONNECTION_TIMEOUT", 15L)
-        setBuildProperty(it, "SERVER_READ_TIMEOUT", 20L)
-        setBuildProperty(it, "SERVER_WRITE_TIMEOUT", 20L)
-        setBuildProperty(it, "SERVER_LOGGING_LEVEL", "body")
-        setBuildProperty(it, "SERVER_TIME_FORMAT", "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        setBuildProperty(project, it, "SERVER_URL", "https://restcountries.eu/rest/v2/")
+        setBuildProperty(project, it, "SERVER_CONNECTION_TIMEOUT", 15L)
+        setBuildProperty(project, it, "SERVER_READ_TIMEOUT", 20L)
+        setBuildProperty(project, it, "SERVER_WRITE_TIMEOUT", 20L)
+        setBuildProperty(project, it, "SERVER_LOGGING_LEVEL", "body")
+        setBuildProperty(project, it, "SERVER_TIME_FORMAT", "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        setBuildProperty(project, it, "DEFAULT_MAP_ZOOM", 6f)
 
         it.resValue "string", "MOCKED_LOGIN", "tester.valueadd@gmail.com"
         it.resValue "string", "MOCKED_PASSWORD", "qweQWE123"
+        it.resValue "string", "GOOGLE_API_KEY", getPropertyOrDefault(project, "GOOGLE_API_KEY", "").fst
     }
 
     lintOptions {

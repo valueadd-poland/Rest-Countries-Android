@@ -1,0 +1,8 @@
+/**
+ * Global variable.
+ */
+def props = [:]
+ext.props = props
+
+/* Properties */
+props.google_api_key = "AIzaSyBPCn2_AkDnpQYRCeTCr49Bt0ClI_LUQmQ"

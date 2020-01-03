@@ -96,6 +96,9 @@ dependencies {
 
     // Permissions
     implementation deps.permissions.no
+
+    // Services
+    implementation deps.services.maps
     
     // View
     implementation deps.view.material_progress_bar

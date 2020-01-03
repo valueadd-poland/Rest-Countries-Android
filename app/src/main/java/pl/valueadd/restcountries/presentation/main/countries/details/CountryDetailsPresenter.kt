@@ -15,7 +15,7 @@ class CountryDetailsPresenter @Inject constructor(
     private val exceptionManager: ExceptionDomainManager
 ) : BasePresenter<CountryDetailsView>() {
 
-    var model: CountryModel? = null
+    var countryModel: CountryModel? = null
         private set
 
     var borderModels: List<CountryFlatModel> = emptyList()
@@ -29,6 +29,14 @@ class CountryDetailsPresenter @Inject constructor(
 
     fun onBorderItemClick(countryId: String) = onceViewAttached {
         it.navigateToCountry(countryId)
+    }
+
+    fun onMapReady() {
+        val model = countryModel ?: return
+
+        onceViewAttached {
+            it.bindPositionDataToMapView(model)
+        }
     }
 
     private fun observeCountry(countryId: String) {
@@ -46,7 +54,7 @@ class CountryDetailsPresenter @Inject constructor(
 
         Timber.i("Country has been fetched successfully.")
 
-        this.model = model
+        this.countryModel = model
         this.borderModels = model.borders
 
         view.bindModelToView(model)
@@ -55,7 +63,11 @@ class CountryDetailsPresenter @Inject constructor(
 
         view.setBordersCardVisibility(model.borders.isNotEmpty())
 
+        view.setMapCardVisibility(model.latLng.hasNotDefaultValues)
+
         view.bindBordersToView(model.borders)
+
+        view.bindPositionDataToMapView(model)
     }
 
     private fun onObserveCountryFailed(throwable: Throwable) = onceViewAttached {

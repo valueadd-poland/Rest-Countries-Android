@@ -16,5 +16,9 @@ interface CountryDetailsView : BaseView {
 
     fun setInformationCardVisibility(isVisible: Boolean)
 
+    fun setMapCardVisibility(isVisible: Boolean)
+
     fun navigateToCountry(countryId: String)
+
+    fun bindPositionDataToMapView(model: CountryModel)
 }
